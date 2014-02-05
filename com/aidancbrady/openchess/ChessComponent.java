@@ -8,6 +8,8 @@ import com.aidancbrady.openchess.tex.Texture;
 
 public class ChessComponent extends JComponent
 {
+	private static final long serialVersionUID = 1L;
+	
 	public static Texture white = new Texture("src/resources/icon/white.png");
 	public static Texture black = new Texture("src/resources/icon/black.png");
 	

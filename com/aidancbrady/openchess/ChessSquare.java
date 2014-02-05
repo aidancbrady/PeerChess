@@ -6,6 +6,8 @@ import javax.swing.JComponent;
 
 public class ChessSquare extends JComponent
 {
+	private static final long serialVersionUID = 1L;
+	
 	public boolean color;
 	
 	public ChessSquare(boolean c, int x, int y)
