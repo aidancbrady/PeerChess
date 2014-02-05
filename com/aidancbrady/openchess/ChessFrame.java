@@ -7,8 +7,10 @@ public class ChessFrame extends JFrame
 	public ChessFrame()
 	{
 		setTitle("PeerChess");
-		setSize(768, 768);
+		setSize(768, 790);
 		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		
 		add(new ChessComponent());
 	}

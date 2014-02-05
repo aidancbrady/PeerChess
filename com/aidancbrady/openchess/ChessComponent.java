@@ -8,17 +8,50 @@ import com.aidancbrady.openchess.tex.Texture;
 
 public class ChessComponent extends JComponent
 {
-	public Texture white = new Texture("resources/icon/white.png");
-	public Texture black = new Texture("resources/icon/black.png");
+	public static Texture white = new Texture("src/resources/icon/white.png");
+	public static Texture black = new Texture("src/resources/icon/black.png");
 	
 	public ChessComponent()
 	{
+		setLayout(null);
 		
+		boolean state = false;
+		
+		for(int y = 0; y < 8; y++)
+		{			
+			for(int x = 0; x < 8; x++)
+			{
+				add(new ChessSquare(state, x, y));
+				
+				state = !state;
+			}
+			
+			state = !state;
+		}
 	}
 	
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		black.draw(g);
+		boolean state = false;
+		
+		for(int y = 0; y < 8; y++)
+		{			
+			for(int x = 0; x < 8; x++)
+			{
+				if(state)
+				{
+					black.draw(g, x*96, y*96, 96, 96);
+				}
+				else if(!state)
+				{
+					white.draw(g, x*96, y*96, 96, 96);	
+				}
+				
+				state = !state;
+			}
+			
+			state = !state;
+		}
 	}
 }

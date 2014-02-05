@@ -2,6 +2,7 @@ package com.aidancbrady.openchess.tex;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 
@@ -14,7 +15,7 @@ public class Texture
 	public Texture(String path)
 	{
 		try {
-			img = ImageIO.read(getClass().getResource(path));
+			img = ImageIO.read(new File(path));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -37,7 +38,7 @@ public class Texture
 	
 	public void draw(Graphics g, int x, int y)
 	{
-		draw(g, x, y);
+		g.drawImage(img, x, y, null);
 	}
 	
 	public void draw(Graphics g, int x, int y, int width, int height)
