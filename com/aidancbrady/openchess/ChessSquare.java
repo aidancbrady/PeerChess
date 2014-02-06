@@ -1,7 +1,6 @@
 package com.aidancbrady.openchess;
 
 import java.awt.Graphics;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,11 +12,16 @@ public class ChessSquare extends JComponent implements MouseListener
 	
 	public boolean color;
 	
+	public ChessComponent component;
+	
+	public ChessPiece housedPiece;
+	
 	public int xPos;
 	public int yPos;
 	
-	public ChessSquare(boolean c, int x, int y)
+	public ChessSquare(ChessComponent com, boolean c, int x, int y)
 	{
+		component = com;
 		color = c;
 		
 		xPos = x;
@@ -39,35 +43,42 @@ public class ChessSquare extends JComponent implements MouseListener
 		else {
 			ChessComponent.white.draw(g, 0, 0, 96, 96);	
 		}
+		
+		if(component.selected == this)
+		{
+			ChessComponent.select.draw(g, 0, 0, 96, 96);
+		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		System.out.println("hi " + xPos + " " + yPos);
+	public void mouseClicked(MouseEvent arg0) 
+	{
+
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseEntered(MouseEvent arg0) 
+	{
 		
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseExited(MouseEvent arg0) 
+	{
 		
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mousePressed(MouseEvent arg0) 
+	{
+		component.select(this);
 		
+		repaint();
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseReleased(MouseEvent arg0) 
+	{
 		
 	}
 }
