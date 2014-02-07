@@ -44,10 +44,20 @@ public class ChessSquare extends JComponent implements MouseListener
 			ChessComponent.white.draw(g, 0, 0, 96, 96);	
 		}
 		
+		if(housedPiece != null && housedPiece.texture != null)
+		{
+			housedPiece.texture.draw(g, 0, 0, 96, 96);
+		}
+		
 		if(component.selected == this)
 		{
 			ChessComponent.select.draw(g, 0, 0, 96, 96);
 		}
+	}
+	
+	public void setPiece(ChessPiece piece)
+	{
+		housedPiece = piece;
 	}
 
 	@Override
@@ -71,14 +81,17 @@ public class ChessSquare extends JComponent implements MouseListener
 	@Override
 	public void mousePressed(MouseEvent arg0) 
 	{
-		component.select(this);
 		
-		repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		
+		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
+		{
+			component.select(this);
+			
+			repaint();
+		}
 	}
 }
