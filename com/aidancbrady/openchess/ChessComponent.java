@@ -62,7 +62,7 @@ public class ChessComponent extends JComponent
 		grid[3][y].setPiece(new ChessPiece(PieceType.QUEEN, s));
 		grid[4][y].setPiece(new ChessPiece(PieceType.KING, s));
 		grid[5][y].setPiece(new ChessPiece(PieceType.BISHOP, s));
-		grid[6][y].setPiece(new ChessPiece(PieceType.QUEEN, s));
+		grid[6][y].setPiece(new ChessPiece(PieceType.KNIGHT, s));
 		grid[7][y].setPiece(new ChessPiece(PieceType.CASTLE, s));
 	}
 	
