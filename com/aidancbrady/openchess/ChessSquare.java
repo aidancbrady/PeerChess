@@ -16,19 +16,16 @@ public class ChessSquare extends JComponent implements MouseListener
 	
 	public ChessPiece housedPiece;
 	
-	public int xPos;
-	public int yPos;
+	public ChessPos pos;
 	
-	public ChessSquare(ChessComponent com, boolean c, int x, int y)
+	public ChessSquare(ChessComponent com, boolean c, ChessPos p)
 	{
 		component = com;
 		color = c;
-		
-		xPos = x;
-		yPos = y;
+		pos = p;
 		
 		setSize(96, 96);
-		setLocation(x*96, y*96);
+		setLocation(p.xPos*96, p.yPos*96);
 		setFocusable(true);
 		addMouseListener(this);
 	}

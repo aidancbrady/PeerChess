@@ -38,7 +38,7 @@ public class ChessComponent extends JComponent
 		{			
 			for(int x = 0; x < 8; x++)
 			{
-				grid[x][y] = (ChessSquare)add(new ChessSquare(this, state, x, y));
+				grid[x][y] = (ChessSquare)add(new ChessSquare(this, state, new ChessPos(x, y)));
 				
 				state = !state;
 			}
