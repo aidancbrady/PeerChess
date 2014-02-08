@@ -89,7 +89,13 @@ public class ChessSquare extends JComponent implements MouseListener
 	{
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
-			component.select(this);
+			if(housedPiece == null)
+			{
+				component.select(null);
+			}
+			else {
+				component.select(this);
+			}
 			
 			repaint();
 		}

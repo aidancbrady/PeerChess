@@ -10,4 +10,23 @@ public class ChessMove
 		fromPos = from;
 		toPos = to;
 	}
+	
+	public boolean isValidStraight(ChessSquare[][] grid)
+	{
+		if(fromPos.xPos == toPos.xPos)
+		{
+			
+		}
+		else if(fromPos.yPos == toPos.yPos)
+		{
+			
+		}
+		
+		return false;
+	}
+	
+	public boolean isValidDiagonal(ChessSquare[][] grid)
+	{
+		return false;
+	}
 }

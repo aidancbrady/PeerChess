@@ -1,6 +1,8 @@
 package com.aidancbrady.openchess;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -15,6 +17,11 @@ public class ChessComponent extends JComponent
 	public ChessSquare[][] grid = new ChessSquare[8][8];
 	
 	public ChessSquare selected;
+	
+	public List<ChessMove> moves = new ArrayList<ChessMove>();
+	
+	public List<ChessPiece> whiteTaken = new ArrayList<ChessPiece>();
+	public List<ChessPiece> blackTaken = new ArrayList<ChessPiece>();
 	
 	public static Texture white = Texture.load("src/resources/icon/white.png");
 	public static Texture black = Texture.load("src/resources/icon/black.png");
