@@ -4,19 +4,28 @@ import javax.swing.SwingUtilities;
 
 public class PeerChess
 {
-	 static ChessFrame jFrameWindow;
+	static ChessFrame jFrameWindow;
 	 
 	public static void main(String[] args)
 	{
-        Runnable doSwingLater = new Runnable(){
-            
+		initMacOSX();
+		
+        Runnable doSwingLater = new Runnable() {
             @Override
-            public void run() {
+            public void run() 
+            {
                 jFrameWindow = new ChessFrame();
                 jFrameWindow.setVisible(true);
             }
         };
          
         SwingUtilities.invokeLater(doSwingLater);
+	}
+	
+	private static void initMacOSX()
+	{
+		try {
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "PeerChess");
+		} catch(Exception e) {}
 	}
 }

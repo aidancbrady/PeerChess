@@ -26,11 +26,11 @@ public class ChessMove
 		
 		if(fromPos.xPos == toPos.xPos)
 		{
-			int y = 0;
+			int y = fromPos.yPos;
 			
 			if(fromPos.yPos < toPos.yPos)
 			{
-				while(fromPos.yPos < toPos.yPos)
+				while(y < toPos.yPos)
 				{
 					y++;
 					
@@ -44,7 +44,7 @@ public class ChessMove
 				}
 			}
 			else {
-				while(fromPos.yPos < toPos.yPos)
+				while(y < toPos.yPos)
 				{
 					y--;
 					
@@ -103,21 +103,40 @@ public class ChessMove
 			int xDiff = fromPos.xPos-toPos.xPos;
 			int yDiff = fromPos.yPos-toPos.yPos;
 			
+			int x = fromPos.xPos;
+			int y = fromPos.yPos;
+			
 			if(xDiff > 0 && yDiff > 0)
 			{
-				
+				while(x > toPos.xPos && y > toPos.yPos)
+				{
+					x--;
+					y--;
+				}
 			}
 			else if(xDiff < 0 && yDiff < 0)
 			{
-				
+				while(x < toPos.xPos && y < toPos.yPos)
+				{
+					x++;
+					y++;
+				}
 			}
 			else if(xDiff > 0 && yDiff < 0)
 			{
-				
+				while(x > toPos.xPos && y < toPos.yPos)
+				{
+					x--;
+					y++;
+				}
 			}
 			else if(xDiff < 0 && yDiff > 0)
 			{
-				
+				while(x < toPos.xPos && y > toPos.yPos)
+				{
+					x++;
+					y--;
+				}
 			}
 		}
 		

@@ -10,4 +10,10 @@ public class ChessPos
 		xPos = x;
 		yPos = y;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof ChessPos && ((ChessPos)obj).xPos == xPos && ((ChessPos)obj).yPos == yPos;
+	}
 }
