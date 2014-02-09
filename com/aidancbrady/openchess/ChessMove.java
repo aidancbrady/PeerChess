@@ -11,10 +11,25 @@ public class ChessMove
 		toPos = to;
 	}
 	
+	public ChessSquare getFromSquare(ChessSquare[][] grid)
+	{
+		return grid[fromPos.xPos][fromPos.yPos];
+	}
+	
+	public ChessSquare getToSquare(ChessSquare[][] grid)
+	{
+		return grid[toPos.xPos][toPos.yPos];
+	}
+	
+	public boolean isValidStep(ChessSquare[][] grid)
+	{
+		return Math.abs(fromPos.xPos-toPos.xPos) <= 1 && Math.abs(fromPos.yPos-toPos.yPos) <= 1;
+	}
+	
 	public boolean isValidStraight(ChessSquare[][] grid)
 	{
 		ChessSquare fromSquare = grid[fromPos.xPos][fromPos.yPos];
-		ChessSquare toSquare = grid[fromPos.xPos][fromPos.yPos];
+		ChessSquare toSquare = grid[toPos.xPos][toPos.yPos];
 		
 		if(toSquare.housedPiece != null)
 		{
@@ -98,6 +113,17 @@ public class ChessMove
 	
 	public boolean isValidDiagonal(ChessSquare[][] grid)
 	{
+		ChessSquare fromSquare = grid[fromPos.xPos][fromPos.yPos];
+		ChessSquare toSquare = grid[fromPos.xPos][fromPos.yPos];
+		
+		if(toSquare.housedPiece != null)
+		{
+			if(toSquare.housedPiece.side == fromSquare.housedPiece.side)
+			{
+				return false;
+			}
+		}
+		
 		if(Math.abs(fromPos.xPos-toPos.yPos) == Math.abs(fromPos.yPos-toPos.yPos))
 		{
 			int xDiff = fromPos.xPos-toPos.xPos;
@@ -112,6 +138,14 @@ public class ChessMove
 				{
 					x--;
 					y--;
+					
+					if(x != toPos.xPos && y != toPos.yPos)
+					{
+						if(grid[x][y].housedPiece != null)
+						{
+							return false;
+						}
+					}
 				}
 			}
 			else if(xDiff < 0 && yDiff < 0)
@@ -120,6 +154,14 @@ public class ChessMove
 				{
 					x++;
 					y++;
+					
+					if(x != toPos.xPos && y != toPos.yPos)
+					{
+						if(grid[x][y].housedPiece != null)
+						{
+							return false;
+						}
+					}
 				}
 			}
 			else if(xDiff > 0 && yDiff < 0)
@@ -128,6 +170,14 @@ public class ChessMove
 				{
 					x--;
 					y++;
+					
+					if(x != toPos.xPos && y != toPos.yPos)
+					{
+						if(grid[x][y].housedPiece != null)
+						{
+							return false;
+						}
+					}
 				}
 			}
 			else if(xDiff < 0 && yDiff > 0)
@@ -136,6 +186,14 @@ public class ChessMove
 				{
 					x++;
 					y--;
+					
+					if(x != toPos.xPos && y != toPos.yPos)
+					{
+						if(grid[x][y].housedPiece != null)
+						{
+							return false;
+						}
+					}
 				}
 			}
 		}

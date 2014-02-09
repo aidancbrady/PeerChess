@@ -8,6 +8,6 @@ public class PieceBishop implements Piece
 	@Override
 	public boolean canMove(ChessSquare[][] grid, ChessMove move)
 	{
-		return false;
+		return move.isValidDiagonal(grid);
 	}
 }

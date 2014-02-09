@@ -61,6 +61,16 @@ public class ChessComponent extends JComponent
 		}
 	}
 	
+	public ChessPiece getSelectedPiece()
+	{
+		if(selected == null)
+		{
+			return null;
+		}
+		
+		return selected.housedPiece;
+	}
+	
 	public void resetMain(Side s, int y)
 	{
 		grid[0][y].setPiece(new ChessPiece(PieceType.CASTLE, s));
