@@ -111,10 +111,8 @@ public class ChessSquare extends JComponent implements MouseListener
 						return;
 					}
 					else {
-						System.out.println(component.selected.getPos() + " " + getPos());
 						if(piece.type.getPiece().canMove(component.grid, move))
 						{
-							System.out.println("move");
 							component.selected.setPiece(null);
 							setPiece(piece);
 						}

@@ -18,6 +18,8 @@ public class ChessComponent extends JComponent
 	
 	public ChessSquare selected;
 	
+	public MoveAnimation currentAnimation;
+	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
 	public List<ChessPiece> whiteTaken = new ArrayList<ChessPiece>();
@@ -113,6 +115,17 @@ public class ChessComponent extends JComponent
 		resetMain(Side.WHITE, 7);
 	}
 	
+	public boolean isMoving()
+	{
+		return currentAnimation != null;
+	}
+	
 	@Override
-	public void paintComponent(Graphics g) {}
+	public void paintComponent(Graphics g) 
+	{
+		if(currentAnimation != null)
+		{
+			currentAnimation.render(g);
+		}
+	}
 }
