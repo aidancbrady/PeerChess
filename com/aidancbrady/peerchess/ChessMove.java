@@ -64,7 +64,7 @@ public class ChessMove
 				}
 			}
 			else {
-				while(y < toPos.yPos)
+				while(y > toPos.yPos)
 				{
 					y--;
 					

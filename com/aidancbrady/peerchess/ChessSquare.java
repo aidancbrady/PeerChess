@@ -91,6 +91,11 @@ public class ChessSquare extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
+		if(component.isMoving())
+		{
+			return;
+		}
+		
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
 			if(component.selected == null && housedPiece != null)
@@ -114,7 +119,7 @@ public class ChessSquare extends JComponent implements MouseListener
 						if(piece.type.getPiece().canMove(component.grid, move))
 						{
 							component.selected.setPiece(null);
-							setPiece(piece);
+							component.currentAnimation = new MoveAnimation(component, move, piece);
 						}
 					}
 				}

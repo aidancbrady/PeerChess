@@ -55,6 +55,6 @@ public class ChessPiece
 	
 	public String getTexturePath()
 	{
-		return "src/resources/piece/" + side.name().toLowerCase() + "_" + type.name().toLowerCase() + ".png";
+		return "resources/piece/" + side.name().toLowerCase() + "_" + type.name().toLowerCase() + ".png";
 	}
 }

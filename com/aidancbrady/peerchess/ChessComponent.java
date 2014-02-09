@@ -20,15 +20,17 @@ public class ChessComponent extends JComponent
 	
 	public MoveAnimation currentAnimation;
 	
+	public OverlayComponent overlay;
+	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
 	public List<ChessPiece> whiteTaken = new ArrayList<ChessPiece>();
 	public List<ChessPiece> blackTaken = new ArrayList<ChessPiece>();
 	
-	public static Texture white = Texture.load("src/resources/icon/white.png");
-	public static Texture black = Texture.load("src/resources/icon/black.png");
+	public static Texture white = Texture.load("resources/icon/white.png");
+	public static Texture black = Texture.load("resources/icon/black.png");
 	
-	public static Texture select = Texture.load("src/resources/icon/select.png");
+	public static Texture select = Texture.load("resources/icon/select.png");
 	
 	public ChessComponent()
 	{
@@ -36,18 +38,20 @@ public class ChessComponent extends JComponent
 		
 		boolean state = false;
 		
+		add(overlay = new OverlayComponent(this));
+		
 		for(int y = 0; y < 8; y++)
 		{			
 			for(int x = 0; x < 8; x++)
 			{
-				grid[x][y] = (ChessSquare)add(new ChessSquare(this, state, new ChessPos(x, y)));
-				
+				add(grid[x][y] = new ChessSquare(this, state, new ChessPos(x, y)));
 				state = !state;
 			}
 			
 			state = !state;
 		}
 		
+		new ChessTimer(this).start();
 		resetBoard();
 	}
 	
@@ -121,11 +125,5 @@ public class ChessComponent extends JComponent
 	}
 	
 	@Override
-	public void paintComponent(Graphics g) 
-	{
-		if(currentAnimation != null)
-		{
-			currentAnimation.render(g);
-		}
-	}
+	public void paintComponent(Graphics g) {}
 }

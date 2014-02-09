@@ -2,7 +2,6 @@ package com.aidancbrady.peerchess.tex;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public class Texture
 	
 	public Texture(String path) throws Exception
 	{
-		img = ImageIO.read(new File(path));
+		img = ImageIO.read(getClass().getClassLoader().getResource(path));
 	}
 	
 	public static Texture load(String path)

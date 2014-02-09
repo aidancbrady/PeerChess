@@ -2,9 +2,13 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 
+import com.aidancbrady.peerchess.sound.Sound;
+
 public class MoveAnimation 
 {
-	public static int FRAME_LIMIT = 2000;
+	public static Sound moveSound = new Sound("resources/sound/move.wav");
+	
+	public static final int FRAME_LIMIT = 600;
 	
 	public int frames;
 	
@@ -23,23 +27,42 @@ public class MoveAnimation
 	
 	public int getPosX()
 	{
-		int xDist = (move.fromPos.xPos-move.fromPos.xPos)*96;
+		int xDist = (move.toPos.xPos-move.fromPos.xPos)*96;
 		
-		return (int)(xDist*getPercentage());
+		return (move.fromPos.xPos*96) + (int)(xDist*getPercentage());
 	}
 	
 	public int getPosY()
 	{
-		int yDist = (move.fromPos.yPos-move.fromPos.yPos)*96;
+		int yDist = (move.toPos.yPos-move.fromPos.yPos)*96;
 		
-		return (int)(yDist*getPercentage());
+		return (move.fromPos.yPos*96) + (int)(yDist*getPercentage());
 	}
 	
 	public void update()
 	{
+		if(frames == 0)
+		{
+			moveSound.play();
+		}
+		
 		frames++;
 		
-		component.repaint();
+		if(frames == FRAME_LIMIT)
+		{
+			move();
+			component.currentAnimation = null;
+		}
+		
+		component.overlay.repaint();
+	}
+	
+	public void move()
+	{
+		move.toPos.getSquare(component.grid).setPiece(piece);
+		move.toPos.getSquare(component.grid).repaint();
+		
+		moveSound.stop();
 	}
 	
 	public float getPercentage()
