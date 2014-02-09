@@ -80,11 +80,11 @@ public class ChessMove
 		}
 		else if(fromPos.yPos == toPos.yPos)
 		{
-			int x = 0;
+			int x = fromPos.xPos;
 			
 			if(fromPos.xPos < toPos.xPos)
 			{
-				while(fromPos.xPos < toPos.xPos)
+				while(x < toPos.xPos)
 				{
 					x++;
 					
@@ -98,7 +98,7 @@ public class ChessMove
 				}
 			}
 			else {
-				while(fromPos.xPos < toPos.xPos)
+				while(x > toPos.xPos)
 				{
 					x--;
 					
@@ -112,14 +112,17 @@ public class ChessMove
 				}
 			}
 		}
+		else {
+			return false;
+		}
 		
-		return false;
+		return true;
 	}
 	
 	public boolean isValidDiagonal(ChessSquare[][] grid)
 	{
-		ChessSquare fromSquare = grid[fromPos.xPos][fromPos.yPos];
-		ChessSquare toSquare = grid[fromPos.xPos][fromPos.yPos];
+		ChessSquare fromSquare = getFromSquare(grid);
+		ChessSquare toSquare = getToSquare(grid);
 		
 		if(toSquare.housedPiece != null)
 		{
@@ -129,7 +132,7 @@ public class ChessMove
 			}
 		}
 		
-		if(Math.abs(fromPos.xPos-toPos.yPos) == Math.abs(fromPos.yPos-toPos.yPos))
+		if(Math.abs(fromPos.xPos-toPos.xPos) == Math.abs(fromPos.yPos-toPos.yPos))
 		{
 			int xDiff = fromPos.xPos-toPos.xPos;
 			int yDiff = fromPos.yPos-toPos.yPos;
@@ -202,7 +205,10 @@ public class ChessMove
 				}
 			}
 		}
+		else {
+			return false;
+		}
 		
-		return false;
+		return true;
 	}
 }
