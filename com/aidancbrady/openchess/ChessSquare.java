@@ -30,6 +30,11 @@ public class ChessSquare extends JComponent implements MouseListener
 		addMouseListener(this);
 	}
 	
+	public ChessPos getPos()
+	{
+		return pos;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -55,6 +60,8 @@ public class ChessSquare extends JComponent implements MouseListener
 	public void setPiece(ChessPiece piece)
 	{
 		housedPiece = piece;
+		
+		repaint();
 	}
 
 	@Override
@@ -86,12 +93,35 @@ public class ChessSquare extends JComponent implements MouseListener
 	{
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
-			if(housedPiece == null)
+			if(component.selected == null && housedPiece != null)
 			{
-				component.select(null);
+				component.select(this);
 			}
 			else {
-				component.select(this);
+				if(component.selected != null)
+				{
+					ChessPiece piece = component.selected.housedPiece;
+					ChessMove move = new ChessMove(component.selected.getPos(), getPos());
+					
+					if(housedPiece != null && housedPiece.side == piece.side)
+					{
+						component.select(this);
+						repaint();
+						
+						return;
+					}
+					else {
+						System.out.println(component.selected.getPos() + " " + getPos());
+						if(piece.type.getPiece().canMove(component.grid, move))
+						{
+							System.out.println("move");
+							component.selected.setPiece(null);
+							setPiece(piece);
+						}
+					}
+				}
+				
+				component.select(null);
 			}
 			
 			repaint();

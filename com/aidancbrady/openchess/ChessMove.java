@@ -13,23 +13,28 @@ public class ChessMove
 	
 	public ChessSquare getFromSquare(ChessSquare[][] grid)
 	{
-		return grid[fromPos.xPos][fromPos.yPos];
+		return fromPos.getSquare(grid);
 	}
 	
 	public ChessSquare getToSquare(ChessSquare[][] grid)
 	{
-		return grid[toPos.xPos][toPos.yPos];
+		return toPos.getSquare(grid);
 	}
 	
 	public boolean isValidStep(ChessSquare[][] grid)
 	{
+		if(getToSquare(grid).housedPiece != null && getToSquare(grid).housedPiece.side == getFromSquare(grid).housedPiece.side)
+		{
+			return false;
+		}
+		
 		return Math.abs(fromPos.xPos-toPos.xPos) <= 1 && Math.abs(fromPos.yPos-toPos.yPos) <= 1;
 	}
 	
 	public boolean isValidStraight(ChessSquare[][] grid)
 	{
-		ChessSquare fromSquare = grid[fromPos.xPos][fromPos.yPos];
-		ChessSquare toSquare = grid[toPos.xPos][toPos.yPos];
+		ChessSquare fromSquare = getFromSquare(grid);
+		ChessSquare toSquare = getToSquare(grid);
 		
 		if(toSquare.housedPiece != null)
 		{
