@@ -22,6 +22,15 @@ public class ChessPos
 	}
 	
 	@Override
+	public int hashCode() 
+	{
+		int code = 1;
+		code = 31 * code + xPos;
+		code = 31 * code + yPos;
+		return code;
+	}
+	
+	@Override
 	public boolean equals(Object obj)
 	{
 		return obj instanceof ChessPos && ((ChessPos)obj).xPos == xPos && ((ChessPos)obj).yPos == yPos;
