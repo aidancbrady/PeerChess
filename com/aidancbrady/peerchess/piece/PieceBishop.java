@@ -1,7 +1,7 @@
-package com.aidancbrady.openchess.piece;
+package com.aidancbrady.peerchess.piece;
 
-import com.aidancbrady.openchess.ChessMove;
-import com.aidancbrady.openchess.ChessSquare;
+import com.aidancbrady.peerchess.ChessMove;
+import com.aidancbrady.peerchess.ChessSquare;
 
 public class PieceBishop implements Piece
 {

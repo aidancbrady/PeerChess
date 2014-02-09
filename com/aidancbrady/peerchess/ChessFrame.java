@@ -1,4 +1,4 @@
-package com.aidancbrady.openchess;
+package com.aidancbrady.peerchess;
 
 import javax.swing.JFrame;
 

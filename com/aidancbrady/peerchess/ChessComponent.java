@@ -1,4 +1,4 @@
-package com.aidancbrady.openchess;
+package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import com.aidancbrady.openchess.ChessPiece.PieceType;
-import com.aidancbrady.openchess.ChessPiece.Side;
-import com.aidancbrady.openchess.tex.Texture;
+import com.aidancbrady.peerchess.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.tex.Texture;
 
 public class ChessComponent extends JComponent
 {

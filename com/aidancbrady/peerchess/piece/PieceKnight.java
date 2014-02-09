@@ -1,11 +1,11 @@
-package com.aidancbrady.openchess.piece;
+package com.aidancbrady.peerchess.piece;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.aidancbrady.openchess.ChessMove;
-import com.aidancbrady.openchess.ChessPos;
-import com.aidancbrady.openchess.ChessSquare;
+import com.aidancbrady.peerchess.ChessMove;
+import com.aidancbrady.peerchess.ChessPos;
+import com.aidancbrady.peerchess.ChessSquare;
 
 public class PieceKnight implements Piece
 {

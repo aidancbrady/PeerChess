@@ -1,4 +1,4 @@
-package com.aidancbrady.openchess;
+package com.aidancbrady.peerchess;
 
 public class ChessMove 
 {

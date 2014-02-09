@@ -1,4 +1,4 @@
-package com.aidancbrady.openchess.tex;
+package com.aidancbrady.peerchess.tex;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

@@ -1,13 +1,13 @@
-package com.aidancbrady.openchess;
+package com.aidancbrady.peerchess;
 
-import com.aidancbrady.openchess.piece.Piece;
-import com.aidancbrady.openchess.piece.PieceBishop;
-import com.aidancbrady.openchess.piece.PieceCastle;
-import com.aidancbrady.openchess.piece.PieceKing;
-import com.aidancbrady.openchess.piece.PieceKnight;
-import com.aidancbrady.openchess.piece.PiecePawn;
-import com.aidancbrady.openchess.piece.PieceQueen;
-import com.aidancbrady.openchess.tex.Texture;
+import com.aidancbrady.peerchess.piece.Piece;
+import com.aidancbrady.peerchess.piece.PieceBishop;
+import com.aidancbrady.peerchess.piece.PieceCastle;
+import com.aidancbrady.peerchess.piece.PieceKing;
+import com.aidancbrady.peerchess.piece.PieceKnight;
+import com.aidancbrady.peerchess.piece.PiecePawn;
+import com.aidancbrady.peerchess.piece.PieceQueen;
+import com.aidancbrady.peerchess.tex.Texture;
 
 public class ChessPiece 
 {

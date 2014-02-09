@@ -1,9 +1,9 @@
-package com.aidancbrady.openchess.piece;
+package com.aidancbrady.peerchess.piece;
 
-import com.aidancbrady.openchess.ChessMove;
-import com.aidancbrady.openchess.ChessPiece.Side;
-import com.aidancbrady.openchess.ChessPos;
-import com.aidancbrady.openchess.ChessSquare;
+import com.aidancbrady.peerchess.ChessMove;
+import com.aidancbrady.peerchess.ChessPos;
+import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.ChessPiece.Side;
 
 public class PiecePawn implements Piece
 {
