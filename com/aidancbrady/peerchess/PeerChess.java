@@ -26,6 +26,7 @@ public class PeerChess
 	{
 		try {
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "PeerChess");
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		} catch(Exception e) {}
 	}
 }
