@@ -21,6 +21,7 @@ public class ChessMenu extends JPanel
 	
 	public JButton newButton;
 	public JButton joinButton;
+	public JButton optionsButton;
 	
 	public ChessMenu(ChessFrame f)
 	{
@@ -42,6 +43,12 @@ public class ChessMenu extends JPanel
 		joinButton.setLocation(50, 280);
 		joinButton.addActionListener(new JoinButtonListener());
 		add(joinButton);
+		
+		optionsButton = new JButton("Options");
+		optionsButton.setSize(300, 60);
+		optionsButton.setLocation(50, 360);
+		optionsButton.addActionListener(new OptionsButtonListener());
+		add(optionsButton);
 		
 		JLabel version = new JLabel("v1.0");
 		version.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -80,6 +87,15 @@ public class ChessMenu extends JPanel
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			
+		}
+	}
+	
+	public class OptionsButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			frame.openOptions();
 		}
 	}
 }

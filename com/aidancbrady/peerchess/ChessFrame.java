@@ -9,6 +9,8 @@ public class ChessFrame extends JFrame
 	public ChessComponent chess;
 	public ChessMenu menu;
 	
+	public OptionsFrame options;
+	
 	public ChessFrame()
 	{
 		setTitle("PeerChess");
@@ -30,5 +32,16 @@ public class ChessFrame extends JFrame
 		
 		setSize(768, 790);
 		chess.setVisible(true);
+	}
+	
+	public void openOptions()
+	{
+		if(options == null)
+		{
+			options = new OptionsFrame();
+		}
+		else {
+			options.toFront();
+		}
 	}
 }
