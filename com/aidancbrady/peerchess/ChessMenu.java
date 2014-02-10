@@ -1,10 +1,12 @@
 package com.aidancbrady.peerchess;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.aidancbrady.peerchess.tex.Texture;
@@ -40,6 +42,19 @@ public class ChessMenu extends JPanel
 		joinButton.setLocation(50, 280);
 		joinButton.addActionListener(new JoinButtonListener());
 		add(joinButton);
+		
+		JLabel version = new JLabel("v1.0");
+		version.setFont(new Font("Helvetica", Font.BOLD, 14));
+		version.setVisible(true);
+		version.setSize(200, 40);
+		version.setLocation(340, 520);
+		add(version);
+		
+		JLabel copyright = new JLabel("© aidancbrady, 2014");
+		copyright.setVisible(true);
+		copyright.setSize(200, 40);
+		copyright.setLocation(30, 520);
+		add(copyright);
 	}
 	
 	@Override
