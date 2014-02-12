@@ -1,8 +1,17 @@
 package com.aidancbrady.peerchess;
 
-import javax.swing.JFrame;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
 
-public class ChessFrame extends JFrame
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+
+import com.aidancbrady.peerchess.file.SaveHandler;
+
+public class ChessFrame extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -19,11 +28,12 @@ public class ChessFrame extends JFrame
 		setTitle("PeerChess");
 		setSize(400, 600);
 		
-		add(menu = new MenuPanel(this));
-		
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
+		addWindowListener(this);
+		
+		add(menu = new MenuPanel(this));
 		
 		add(join = new JoinPanel(this));
 		join.setVisible(false);
@@ -41,6 +51,42 @@ public class ChessFrame extends JFrame
 		
 		setSize(1024, 790);
 		chess.setVisible(true);
+	}
+	
+	public void openSavedChess()
+	{		
+		JFileChooser chooser = new JFileChooser();
+		
+		FileFilter filter = new FileFilter() {
+			@Override
+			public boolean accept(File file) 
+			{
+				return file.getName().endsWith(".chess");
+			}
+
+			@Override
+			public String getDescription() 
+			{
+				return "PeerChess saves (.chess)";
+			}
+		};
+		
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileFilter(filter);
+		chooser.setCurrentDirectory(SaveHandler.saveDir);
+		int returnVal = chooser.showOpenDialog(this);
+		
+		if(returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			if(SaveHandler.loadGame(chess.chess, chooser.getSelectedFile()))
+			{
+				openChess();
+			}
+			else {
+				chess.chess.resetBoard();
+				JOptionPane.showMessageDialog(this, "Error loading game.");
+			}
+		}
 	}
 	
 	public void openJoin()
@@ -82,4 +128,36 @@ public class ChessFrame extends JFrame
 			options.toFront();
 		}
 	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) 
+	{
+		if(chess.isVisible())
+		{
+			if(!chess.exit())
+			{
+				return;
+			}
+		}
+		
+		System.exit(0);
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {}
 }

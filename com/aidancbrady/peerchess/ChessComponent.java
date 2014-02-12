@@ -22,6 +22,8 @@ public class ChessComponent extends JComponent
 	
 	public OverlayComponent overlay;
 	
+	public Side side;
+	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
 	public List<ChessPiece> whiteTaken = new ArrayList<ChessPiece>();
@@ -120,11 +122,17 @@ public class ChessComponent extends JComponent
 		resetMain(Side.WHITE, 7);
 		
 		currentAnimation = null;
+		side = Side.WHITE;
 	}
 	
 	public boolean isMoving()
 	{
 		return currentAnimation != null;
+	}
+	
+	public void setSide(Side s)
+	{
+		side = s;
 	}
 	
 	@Override

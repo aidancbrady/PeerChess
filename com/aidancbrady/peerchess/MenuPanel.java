@@ -20,6 +20,7 @@ public class MenuPanel extends JPanel
 	public ChessFrame frame;
 	
 	public JButton newButton;
+	public JButton loadButton;
 	public JButton joinButton;
 	public JButton optionsButton;
 	
@@ -33,19 +34,25 @@ public class MenuPanel extends JPanel
 		
 		newButton = new JButton("New Game");
 		newButton.setSize(300, 60);
-		newButton.setLocation(50, 200);
+		newButton.setLocation(50, 160);
 		newButton.addActionListener(new NewButtonListener());
 		add(newButton);
 		
+		loadButton = new JButton("Load Game");
+		loadButton.setSize(300, 60);
+		loadButton.setLocation(50, 240);
+		loadButton.addActionListener(new LoadButtonListener());
+		add(loadButton);
+		
 		joinButton = new JButton("Join Game");
 		joinButton.setSize(300, 60);
-		joinButton.setLocation(50, 280);
+		joinButton.setLocation(50, 320);
 		joinButton.addActionListener(new JoinButtonListener());
 		add(joinButton);
 		
 		optionsButton = new JButton("Options");
 		optionsButton.setSize(300, 60);
-		optionsButton.setLocation(50, 360);
+		optionsButton.setLocation(50, 400);
 		optionsButton.addActionListener(new OptionsButtonListener());
 		add(optionsButton);
 		
@@ -77,6 +84,15 @@ public class MenuPanel extends JPanel
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			frame.openChess();
+		}
+	}
+	
+	public class LoadButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			frame.openSavedChess();
 		}
 	}
 	

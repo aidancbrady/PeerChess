@@ -73,8 +73,13 @@ public class ChessPanel extends JPanel
 				break;
 			}
 		
-			SaveHandler.saveGame(chess);
-			JOptionPane.showMessageDialog(this, "Game saved as \"" + s.trim().replace(".chess", "") + ".\"");
+			if(SaveHandler.saveGame(chess, s))
+			{
+				JOptionPane.showMessageDialog(this, "Game saved as \"" + SaveHandler.getTrimmedName(s) + ".\"");
+			}
+			else {
+				JOptionPane.showMessageDialog(this, "Error saving game.");
+			}
 		}
 		
 		chess.resetBoard();
