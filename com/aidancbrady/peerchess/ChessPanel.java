@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.aidancbrady.peerchess.file.SaveHandler;
+
 public class ChessPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -37,13 +39,45 @@ public class ChessPanel extends JPanel
 		}
 		else if(returned == 0)
 		{
-			String s = JOptionPane.showInputDialog(this, "Please provide a name for this save.");
+			String s;
 			
-			if(s == null)
+			loop:
+			while(true)
 			{
-				return false;
+				s = JOptionPane.showInputDialog(this, "Please provide a name for this save.");
+
+				if(s == null)
+				{
+					return false;
+				}
+				else if(s.isEmpty())
+				{
+					JOptionPane.showMessageDialog(this, "No name entered.");
+					continue loop;
+				}
+				
+				if(SaveHandler.saveExists(s))
+				{
+					int overwrite = JOptionPane.showConfirmDialog(this, "Already exists, overwrite?");
+					
+					if(overwrite == 2)
+					{
+						return false;
+					}
+					else if(returned == 1)
+					{
+						continue loop;
+					}
+				}
+				
+				break;
 			}
+		
+			SaveHandler.saveGame(chess);
+			JOptionPane.showMessageDialog(this, "Game saved as \"" + s.trim().replace(".chess", "") + ".\"");
 		}
+		
+		chess.resetBoard();
 		
 		return true;
 	}

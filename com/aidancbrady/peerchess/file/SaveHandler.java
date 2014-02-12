@@ -15,6 +15,16 @@ public final class SaveHandler
 	
 	public static boolean saveExists(String name)
 	{
+		name = name.trim().replace(".save", "");
+		
+		for(File file : saveDir.listFiles())
+		{
+			if(file.getName().equals(name + ".save"))
+			{
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	

@@ -118,6 +118,8 @@ public class ChessComponent extends JComponent
 		
 		resetPawns(Side.WHITE, 6);
 		resetMain(Side.WHITE, 7);
+		
+		currentAnimation = null;
 	}
 	
 	public boolean isMoving()
