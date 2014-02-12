@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import com.aidancbrady.peerchess.tex.Texture;
 
-public class ChessMenu extends JPanel
+public class MenuPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -23,13 +23,12 @@ public class ChessMenu extends JPanel
 	public JButton joinButton;
 	public JButton optionsButton;
 	
-	public ChessMenu(ChessFrame f)
+	public MenuPanel(ChessFrame f)
 	{
 		frame = f;
 		
 		setSize(400, 600);
 		setVisible(true);
-		
 		setLayout(null);
 		
 		newButton = new JButton("New Game");
@@ -86,7 +85,7 @@ public class ChessMenu extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			
+			frame.openJoin();
 		}
 	}
 	

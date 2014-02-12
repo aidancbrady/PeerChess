@@ -4,9 +4,25 @@ import javax.swing.SwingUtilities;
 
 public class PeerChess
 {
-	static ChessFrame jFrameWindow;
+	private static PeerChess instance = new PeerChess();
+	
+	public ChessFrame frame;
+	
+	public int port = 26325;
+	
+	public String username;
 	 
 	public static void main(String[] args)
+	{
+		instance().init();
+	}
+	
+	public static PeerChess instance()
+	{
+		return instance;
+	}
+	
+	public void init()
 	{
 		initMacOSX();
 		
@@ -14,15 +30,14 @@ public class PeerChess
             @Override
             public void run() 
             {
-                jFrameWindow = new ChessFrame();
-                jFrameWindow.setVisible(true);
+                frame = new ChessFrame();
             }
         };
          
         SwingUtilities.invokeLater(doSwingLater);
 	}
 	
-	private static void initMacOSX()
+	private void initMacOSX()
 	{
 		try {
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "PeerChess");
