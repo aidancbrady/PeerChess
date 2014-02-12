@@ -6,7 +6,7 @@ import com.aidancbrady.peerchess.sound.Sound;
 
 public class MoveAnimation 
 {
-	public static Sound moveSound = new Sound("resources/sound/move.wav");
+	public Sound moveSound = new Sound("resources/sound/move.wav");
 	
 	public static final int FRAME_LIMIT = 600;
 	

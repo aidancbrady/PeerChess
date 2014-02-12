@@ -8,7 +8,7 @@ public class ChessFrame extends JFrame
 	
 	public ChessToolbar toolbar = new ChessToolbar(this);
 	
-	public ChessComponent chess;
+	public ChessPanel chess;
 	public MenuPanel menu;
 	public JoinPanel join;
 	
@@ -28,7 +28,7 @@ public class ChessFrame extends JFrame
 		add(join = new JoinPanel(this));
 		join.setVisible(false);
 		
-		add(chess = new ChessComponent());
+		add(chess = new ChessPanel(this));
 		chess.setVisible(false);
 		
 		setJMenuBar(toolbar.menuBar);
@@ -54,6 +54,14 @@ public class ChessFrame extends JFrame
 	
 	public void openMenu()
 	{
+		if(chess.isVisible())
+		{
+			if(!chess.exit())
+			{
+				return;
+			}
+		}
+		
 		chess.setVisible(false);
 		join.setVisible(false);
 		

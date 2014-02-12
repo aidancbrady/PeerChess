@@ -35,6 +35,7 @@ public class ChessComponent extends JComponent
 	public ChessComponent()
 	{
 		setLayout(null);
+		setSize(768, 768);
 		
 		boolean state = false;
 		

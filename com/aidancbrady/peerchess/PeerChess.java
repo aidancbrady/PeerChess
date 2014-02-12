@@ -2,6 +2,9 @@ package com.aidancbrady.peerchess;
 
 import javax.swing.SwingUtilities;
 
+import com.aidancbrady.peerchess.file.ConfigHandler;
+import com.aidancbrady.peerchess.file.SaveHandler;
+
 public class PeerChess
 {
 	private static PeerChess instance = new PeerChess();
@@ -25,6 +28,9 @@ public class PeerChess
 	public void init()
 	{
 		initMacOSX();
+		
+		ConfigHandler.init();
+		SaveHandler.init();
 		
         Runnable doSwingLater = new Runnable() {
             @Override
