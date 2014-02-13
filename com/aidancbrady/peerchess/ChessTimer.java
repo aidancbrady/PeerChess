@@ -1,13 +1,19 @@
 package com.aidancbrady.peerchess;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.aidancbrady.peerchess.net.PeerScanner;
+import com.aidancbrady.peerchess.net.PeerScanner.ThreadPing;
+
 public final class ChessTimer extends Thread
 {
-	public ChessComponent component;
+	public PeerChess chess = PeerChess.instance();
 	
-	public ChessTimer(ChessComponent c)
+	public Set<ThreadPing> pings = new HashSet<ThreadPing>();
+	
+	public ChessTimer()
 	{
-		component = c;
-		
 		setDaemon(true);
 	}
 	
@@ -17,9 +23,20 @@ public final class ChessTimer extends Thread
 		while(true)
 		{
 			try {
-				if(component.isMoving())
+				if(chess.frame.chess.chess.isMoving())
 				{
-					component.currentAnimation.update();
+					chess.frame.chess.chess.currentAnimation.update();
+				}
+				
+				for(ThreadPing ping : pings)
+				{
+					ping.pingMillis++;
+					
+					if(ping.pingMillis == PeerScanner.MAX_PING)
+					{
+						ping.invalid = true;
+						pings.remove(ping);
+					}
 				}
 				
 				Thread.sleep(1);

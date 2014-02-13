@@ -121,7 +121,6 @@ public final class SaveHandler
 						Side side = Side.values()[Integer.parseInt(data[1])];
 						
 						chess.grid[x][y].setPiece(new ChessPiece(type, side));
-						System.out.println(chess.grid[x][y].housedPiece.side);
 					}
 				}
 			}

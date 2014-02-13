@@ -53,8 +53,7 @@ public class ChessComponent extends JComponent
 			
 			state = !state;
 		}
-		
-		new ChessTimer(this).start();
+
 		resetBoard();
 	}
 	

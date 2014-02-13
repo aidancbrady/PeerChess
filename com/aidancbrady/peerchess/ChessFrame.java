@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
+import com.aidancbrady.peerchess.file.DataHandler;
 import com.aidancbrady.peerchess.file.SaveHandler;
 
 public class ChessFrame extends JFrame implements WindowListener
@@ -146,6 +147,7 @@ public class ChessFrame extends JFrame implements WindowListener
 			}
 		}
 		
+		DataHandler.save();
 		System.exit(0);
 	}
 

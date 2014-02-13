@@ -2,7 +2,7 @@ package com.aidancbrady.peerchess;
 
 import javax.swing.SwingUtilities;
 
-import com.aidancbrady.peerchess.file.ConfigHandler;
+import com.aidancbrady.peerchess.file.DataHandler;
 import com.aidancbrady.peerchess.file.SaveHandler;
 
 public class PeerChess
@@ -11,9 +11,11 @@ public class PeerChess
 	
 	public ChessFrame frame;
 	
+	public ChessTimer timer;
+	
 	public int port = 26325;
 	
-	public String username;
+	public String username = "Guest";
 	 
 	public static void main(String[] args)
 	{
@@ -29,8 +31,10 @@ public class PeerChess
 	{
 		initMacOSX();
 		
-		ConfigHandler.init();
+		DataHandler.init();
 		SaveHandler.init();
+		
+		timer = new ChessTimer();
 		
         Runnable doSwingLater = new Runnable() {
             @Override

@@ -1,5 +1,6 @@
 package com.aidancbrady.peerchess.net;
 
-public class PeerServer {
+public class HostConnection 
+{
 
 }
