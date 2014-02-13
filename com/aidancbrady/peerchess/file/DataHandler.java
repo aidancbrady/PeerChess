@@ -28,7 +28,7 @@ public final class DataHandler
 				return;
 			}
 			
-			BufferedReader reader = new BufferedReader(new FileReader(dataDir));
+			BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 			
 			PeerChess.instance().username = reader.readLine().trim();
 			
