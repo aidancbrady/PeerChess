@@ -119,33 +119,26 @@ public class ChessPanel extends JPanel implements MouseListener
 	{
 		super.paintComponent(g);
 		
-		if(shouldPawnReplace())
+		byte replace = shouldPawnReplace();
+		
+		if(replace == 0)
 		{
-			if(chess.side == Side.WHITE)
-			{
-				chess.blackTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
-			}
-			else if(chess.side == Side.BLACK)
-			{
-				chess.whiteTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
-			}
+			chess.blackTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+		}
+		else if(replace == 1)
+		{
+			chess.whiteTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
 	}
 	
-	public boolean shouldPawnReplace()
+	/**
+	 * @return -1 if no, 0 if white, 1 if black
+	 */
+	public byte shouldPawnReplace()
 	{
 		if(chess.side == Side.WHITE && chess.blackTaken.isEmpty() || chess.side == Side.BLACK && chess.whiteTaken.isEmpty())
 		{
-			return false;
-		}
-		
-		if(chess.side == Side.WHITE && pawnReplace > chess.blackTaken.size()-1)
-		{
-			pawnReplace = 0;
-		}
-		else if(chess.side == Side.BLACK && pawnReplace > chess.whiteTaken.size()-1)
-		{
-			pawnReplace = 0;
+			return -1;
 		}
 		
 		if(chess != null && chess.selected != null && chess.selected.housedPiece != null)
@@ -162,7 +155,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					
 					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
 					{
-						return true;
+						return 1;
 					}
 				}
 				else if(chess.selected.housedPiece.side == Side.WHITE && chess.selected.pos.translate(0, -1).yPos == 0)
@@ -175,13 +168,13 @@ public class ChessPanel extends JPanel implements MouseListener
 					
 					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
 					{
-						return true;
+						return 0;
 					}
 				}
 			}
 		}
 		
-		return false;
+		return -1;
 	}
 	
 	public boolean exit()
@@ -259,11 +252,24 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(x >= 830 && x <= 958 && y >= 160 && y <= 288)
 		{
-			if(shouldPawnReplace())
+			byte replace = shouldPawnReplace();
+			
+			if(replace != -1)
 			{
-				int size = chess.side == Side.WHITE ? chess.blackTaken.size()-1 : chess.whiteTaken.size()-1;
+				if(replace == 0 && pawnReplace > chess.blackTaken.size()-1)
+				{
+					pawnReplace = 0;
+				}
+				else if(replace == 1 && pawnReplace > chess.whiteTaken.size()-1)
+				{
+					pawnReplace = 0;
+				}
 				
-				pawnReplace = pawnReplace+1%size;
+				int size = replace == 0 ? chess.blackTaken.size() : chess.whiteTaken.size();
+				
+				pawnReplace = (pawnReplace+1)%size;
+				repaint();
+				System.out.println(pawnReplace);
 			}
 		}
 	}

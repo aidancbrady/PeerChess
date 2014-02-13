@@ -33,6 +33,7 @@ public class PiecePawn implements Piece
 			return false;
 		}
 		
+		int xAbs = Math.abs(move.fromPos.xPos-move.toPos.xPos);
 		int yAbs = Math.abs(move.fromPos.yPos-move.toPos.yPos);
 		
 		if(move.fromPos.yPos == yStart && (yAbs != 1 && yAbs != 2))
@@ -52,6 +53,6 @@ public class PiecePawn implements Piece
 			}
 		}
 		
-		return true;
+		return move.equals(left) || move.equals(right) || xAbs <= 1;
 	}
 }
