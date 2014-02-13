@@ -6,6 +6,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
+import com.aidancbrady.peerchess.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.ChessPiece.Side;
+
 public class ChessSquare extends JComponent implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
@@ -124,7 +127,23 @@ public class ChessSquare extends JComponent implements MouseListener
 						if(piece.type.getPiece().canMove(component.grid, move))
 						{
 							component.selected.setPiece(null);
-							component.currentAnimation = new MoveAnimation(component, move, piece);
+							ChessPiece newPiece = piece;
+							
+							if(piece.type == PieceType.PAWN)
+							{
+								if(piece.side == Side.WHITE && move.toPos.yPos == 0 && !component.blackTaken.isEmpty())
+								{
+									component.panel.pawnReplace %= component.blackTaken.size();
+									newPiece = component.blackTaken.get(component.panel.pawnReplace);
+								}
+								else if(piece.side == Side.BLACK && move.toPos.yPos == 7 && !component.whiteTaken.isEmpty())
+								{
+									component.panel.pawnReplace %= component.whiteTaken.size();
+									newPiece = component.whiteTaken.get(component.panel.pawnReplace);
+								}
+							}
+							
+							component.currentAnimation = new MoveAnimation(component, move, piece, newPiece);
 						}
 					}
 				}

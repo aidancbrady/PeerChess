@@ -17,13 +17,16 @@ public class MoveAnimation
 	
 	public ChessPiece piece;
 	
+	public ChessPiece newPiece;
+	
 	public ChessMove move;
 	
-	public MoveAnimation(ChessComponent c, ChessMove m, ChessPiece p)
+	public MoveAnimation(ChessComponent c, ChessMove m, ChessPiece p, ChessPiece np)
 	{
 		component = c;
 		move = m;
 		piece = p;
+		newPiece = np;
 	}
 	
 	public int getPosX()
@@ -71,7 +74,7 @@ public class MoveAnimation
 			}
 		}
 		
-		move.toPos.getSquare(component.grid).setPiece(piece);
+		move.toPos.getSquare(component.grid).setPiece(newPiece);
 		move.toPos.getSquare(component.grid).repaint();
 		
 		moveSound.stop();
