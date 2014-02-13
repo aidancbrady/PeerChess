@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.net.PeerConnection;
 import com.aidancbrady.peerchess.piece.Piece;
 
 public class ChessPanel extends JPanel implements MouseListener
@@ -38,6 +39,8 @@ public class ChessPanel extends JPanel implements MouseListener
 	public JLabel titleLabel;
 	public JLabel turnLabel;
 	public JLabel statusLabel;
+	
+	public PeerConnection connection;
 	
 	public JTextArea chatBox;
 	
@@ -114,6 +117,16 @@ public class ChessPanel extends JPanel implements MouseListener
 		add(statusLabel);
 	}
 	
+	public void updateText()
+	{
+		if(opponentLabel != null && titleLabel != null && statusLabel != null)
+		{
+			opponentLabel.setText("Opponent:");
+			titleLabel.setText("PeerChess - " + chess.side.name);
+			statusLabel.setText(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
+		}
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -129,6 +142,12 @@ public class ChessPanel extends JPanel implements MouseListener
 		{
 			chess.whiteTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
+	}
+
+	public void appendChat(String str) 
+	{	
+		chatBox.append(str + "\n");
+		chatBox.setCaretPosition(chatBox.getText().length() - 1);
 	}
 	
 	/**
@@ -230,7 +249,7 @@ public class ChessPanel extends JPanel implements MouseListener
 			}
 		}
 		
-		chess.resetBoard();
+		chess.resetGame();
 		
 		return true;
 	}
@@ -269,7 +288,6 @@ public class ChessPanel extends JPanel implements MouseListener
 				
 				pawnReplace = (pawnReplace+1)%size;
 				repaint();
-				System.out.println(pawnReplace);
 			}
 		}
 	}

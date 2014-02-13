@@ -5,10 +5,13 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
 public class ConnectionWaiter extends Thread
 {
+	public ChessPanel panel = PeerChess.instance().frame.chess;
+	
 	public PingResponder responseThread;
 	
 	public ServerSocket serverSocket;
@@ -20,6 +23,11 @@ public class ConnectionWaiter extends Thread
 			serverSocket = new ServerSocket(PeerChess.instance().port);
 			
 			Socket connection = serverSocket.accept();
+			
+			if(connection != null)
+			{
+				new PeerConnection(connection, panel).start();
+			}
 			
 			serverSocket.close();
 		} catch(Exception e) {

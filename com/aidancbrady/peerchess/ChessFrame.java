@@ -84,7 +84,7 @@ public class ChessFrame extends JFrame implements WindowListener
 				openChess();
 			}
 			else {
-				chess.chess.resetBoard();
+				chess.chess.resetGame();
 				JOptionPane.showMessageDialog(this, "Error loading game.");
 			}
 		}

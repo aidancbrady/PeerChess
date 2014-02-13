@@ -80,6 +80,7 @@ public class MoveAnimation
 		moveSound.stop();
 		
 		component.turn = component.turn == Side.WHITE ? Side.BLACK : Side.WHITE;
+		component.panel.updateText();
 	}
 	
 	public float getPercentage()

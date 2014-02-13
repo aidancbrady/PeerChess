@@ -59,7 +59,7 @@ public class ChessComponent extends JComponent
 			state = !state;
 		}
 
-		resetBoard();
+		resetGame();
 	}
 	
 	public void select(ChessSquare square)
@@ -115,7 +115,7 @@ public class ChessComponent extends JComponent
 		}
 	}
 	
-	public void resetBoard()
+	public void resetGame()
 	{
 		resetMain(Side.BLACK, 0);
 		resetPawns(Side.BLACK, 1);
@@ -133,6 +133,17 @@ public class ChessComponent extends JComponent
 		blackTaken.clear();
 		moves.clear();
 		panel.pawnReplace = 0;
+		panel.chatBox.setText("");
+		panel.updateText();
+		
+		if(panel.connection != null)
+		{
+			try {
+				panel.connection.socket.close();
+				panel.connection.out.interrupt();
+				panel.connection.interrupt();
+			} catch(Exception e) {}
+		}
 	}
 	
 	public boolean isMoving()
