@@ -2,6 +2,7 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 
+import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.sound.Sound;
 
 public class MoveAnimation 
@@ -20,6 +21,7 @@ public class MoveAnimation
 	
 	public MoveAnimation(ChessComponent c, ChessMove m, ChessPiece p)
 	{
+		System.out.println("now");
 		component = c;
 		move = m;
 		piece = p;
@@ -59,10 +61,13 @@ public class MoveAnimation
 	
 	public void move()
 	{
+		System.out.println("move");
 		move.toPos.getSquare(component.grid).setPiece(piece);
 		move.toPos.getSquare(component.grid).repaint();
 		
 		moveSound.stop();
+		
+		component.turn = component.turn == Side.WHITE ? Side.BLACK : Side.WHITE;
 	}
 	
 	public float getPercentage()

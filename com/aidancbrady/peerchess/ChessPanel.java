@@ -84,7 +84,7 @@ public class ChessPanel extends JPanel
 		chatField.addActionListener(new ChatListener());
 		add(chatField);
 		
-		add(chess = new ChessComponent());
+		add(chess = new ChessComponent(this));
 		chess.setVisible(true);
 	}
 	

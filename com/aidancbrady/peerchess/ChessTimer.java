@@ -20,9 +20,12 @@ public final class ChessTimer extends Thread
 		while(true)
 		{
 			try {
-				if(chess.frame.chess.chess.isMoving())
+				if(chess != null && chess.frame != null && chess.frame.chess != null && chess.frame.chess.chess != null)
 				{
-					chess.frame.chess.chess.currentAnimation.update();
+					if(chess.frame.chess.chess.isMoving())
+					{
+						chess.frame.chess.chess.currentAnimation.update();
+					}
 				}
 				
 				Set<ITicker> remove = new HashSet<ITicker>();
@@ -38,7 +41,9 @@ public final class ChessTimer extends Thread
 				tickers.removeAll(remove);
 				
 				Thread.sleep(1);
-			} catch(Exception e) {}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -57,6 +57,8 @@ public final class SaveHandler
 			
 			writer.append(Integer.toString(chess.side.ordinal()));
 			writer.newLine();
+			writer.append(Integer.toString(chess.turn.ordinal()));
+			writer.newLine();
 			
 			for(int y = 0; y < 8; y++)
 			{
@@ -102,6 +104,7 @@ public final class SaveHandler
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			chess.setSide(Side.values()[Integer.parseInt(reader.readLine())]);
+			chess.turn = Side.values()[Integer.parseInt(reader.readLine())];
 			
 			for(int y = 0; y < 8; y++)
 			{

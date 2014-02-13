@@ -14,6 +14,8 @@ public class ChessComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	
+	public ChessPanel panel;
+	
 	public ChessSquare[][] grid = new ChessSquare[8][8];
 	
 	public ChessSquare selected;
@@ -22,7 +24,8 @@ public class ChessComponent extends JComponent
 	
 	public OverlayComponent overlay;
 	
-	public Side side;
+	public Side side = Side.WHITE;
+	public Side turn = Side.WHITE;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
@@ -34,8 +37,10 @@ public class ChessComponent extends JComponent
 	
 	public static Texture select = Texture.load("resources/icon/select.png");
 	
-	public ChessComponent()
+	public ChessComponent(ChessPanel p)
 	{
+		panel = p;
+		
 		setLayout(null);
 		setSize(768, 768);
 		

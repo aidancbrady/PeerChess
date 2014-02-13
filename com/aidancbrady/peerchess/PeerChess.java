@@ -34,7 +34,7 @@ public class PeerChess
 		DataHandler.init();
 		SaveHandler.init();
 		
-		timer = new ChessTimer();
+		(timer = new ChessTimer()).start();
 		
         Runnable doSwingLater = new Runnable() {
             @Override
