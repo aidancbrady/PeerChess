@@ -1,110 +1,76 @@
 package com.aidancbrady.peerchess.net;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aidancbrady.peerchess.JoinPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
 public class PeerScanner extends Thread
 {
-	public static final int SCAN_TOTAL = 256*256;
+	public static final int MAX_PING = 2000;
 	
-	public static final int MAX_PING = 1000;
-	
-	public List<String> openServers = new ArrayList<String>();
 	public List<Server> pingedServers = new ArrayList<Server>();
 	
-	public boolean finished;
+	public boolean valid = true;
 	
-	public int scanned = 0;
+	public DatagramSocket socket;
 	
-	public PeerScanner()
+	public JoinPanel panel;
+	
+	public PeerScanner(JoinPanel p)
 	{
+		panel = p;
 		setDaemon(true);
 	}
 	
 	@Override
 	public void run()
 	{
-		Socket s;
-		
 		try {
-			String IP2 = getIP2();
+			socket = new DatagramSocket();
+			socket.setBroadcast(true);
 			
-			for(int ip3 = 0; ip3 < 256; ip3++)
+			byte[] b = new String("PING:" + PeerChess.instance().username).getBytes();
+			DatagramPacket packet = new DatagramPacket(b, b.length);
+			packet.setAddress(InetAddress.getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)255}));
+			packet.setPort(PeerChess.instance().port);
+			
+			socket.send(packet);
+			socket.setBroadcast(false);
+			
+			while(true)
 			{
-				for(int ip4 = 0; ip4 < 256; ip4++)
-				{
-					String ip = IP2 + "." + ip3 + "." + ip4;
+				try {
+					DatagramPacket response = new DatagramPacket(new byte[1024], 1024);
+					socket.setSoTimeout(MAX_PING);
+					socket.receive(response);
 					
-					s = new Socket();
-					scanned++;
-					
-					try {
-						s.connect(new InetSocketAddress(ip, PeerChess.instance().port), 10);
-						openServers.add(ip);
-						s.close();
-					} catch (Exception e) {}
-				}
+					String s = new String(response.getData());
+					pingedServers.add(new Server(s.split(":")[1], response.getAddress().getHostAddress()));
+				} catch(SocketTimeoutException e) {
+					break;
+				} catch(Exception e) {}
 			}
 			
-			finished = true;
+			doUpdate();
+			
+			socket.close();
 		} catch(Exception e) {
 			e.printStackTrace();
+			socket.close();
 		}
 	}
 	
-	public String getIP2() throws IOException
+	public void doUpdate()
 	{
-		String ip = InetAddress.getLocalHost().getHostAddress().replace(".", ":");
-		return ip.split(":")[0] + "." + ip.split(":")[1];
-	}
-	
-	public class ThreadPing extends Thread
-	{
-		public String ip;
-		
-		public Socket socket = new Socket();
-		
-		public int pingMillis;
-		
-		public boolean invalid = false;
-		
-		public ThreadPing(String s)
+		if(panel.isVisible())
 		{
-			ip = s;
-		}
-		
-		@Override
-		public void run()
-		{
-			PeerChess.instance().timer.pings.add(this);
-			
-			try {
-				InetAddress address = InetAddress.getByName(ip);
-				socket.connect(new InetSocketAddress(address, PeerChess.instance().port), 10);
-				
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-				
-				printWriter.println("PING:" + PeerChess.instance().username);
-				
-				String username = bufferedReader.readLine();
-				
-				if(username != null)
-				{
-					pingedServers.add(new Server(ip, username.trim()));
-				}
-			} catch(Exception e) {
-				invalid = true;
-			}
+			panel.populateServers(pingedServers);
 		}
 	}
 	

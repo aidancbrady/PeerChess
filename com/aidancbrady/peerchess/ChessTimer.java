@@ -3,14 +3,12 @@ package com.aidancbrady.peerchess;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.aidancbrady.peerchess.net.PeerScanner;
-import com.aidancbrady.peerchess.net.PeerScanner.ThreadPing;
 
 public final class ChessTimer extends Thread
 {
 	public PeerChess chess = PeerChess.instance();
 	
-	public Set<ThreadPing> pings = new HashSet<ThreadPing>();
+	public Set<ITicker> tickers = new HashSet<ITicker>();
 	
 	public ChessTimer()
 	{
@@ -28,19 +26,25 @@ public final class ChessTimer extends Thread
 					chess.frame.chess.chess.currentAnimation.update();
 				}
 				
-				for(ThreadPing ping : pings)
+				Set<ITicker> remove = new HashSet<ITicker>();
+				
+				for(ITicker ticker : tickers)
 				{
-					ping.pingMillis++;
-					
-					if(ping.pingMillis == PeerScanner.MAX_PING)
+					if(!ticker.tick())
 					{
-						ping.invalid = true;
-						pings.remove(ping);
+						remove.add(ticker);
 					}
 				}
+				
+				tickers.removeAll(remove);
 				
 				Thread.sleep(1);
 			} catch(Exception e) {}
 		}
+	}
+	
+	public static interface ITicker
+	{
+		public boolean tick();
 	}
 }

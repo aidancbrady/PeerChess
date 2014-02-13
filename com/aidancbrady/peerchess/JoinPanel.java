@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,6 +21,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import com.aidancbrady.peerchess.net.PeerScanner;
+import com.aidancbrady.peerchess.net.PeerScanner.Server;
+
 public class JoinPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -29,9 +35,15 @@ public class JoinPanel extends JPanel
 	public JButton joinButton;
 	public JButton connectButton;
 	
+	public PeerScanner scanner;
+	
+	public JLabel refreshLabel;
+	
 	public JTextField ipField;
 	
 	public JList serverList;
+	
+	public List<Server> serversLoaded = new ArrayList<Server>();
 	
 	public JProgressBar refreshBar;
 
@@ -60,6 +72,12 @@ public class JoinPanel extends JPanel
 		ipLabel.setSize(200, 30);
 		ipLabel.setLocation(10, 400);
 		add(ipLabel);
+		
+		refreshLabel = new JLabel("Refreshing...");
+		refreshLabel.setSize(200, 30);
+		refreshLabel.setLocation(310, 50);
+		refreshLabel.setVisible(false);
+		add(refreshLabel);
 		
 		serverList = new JList();
 		serverList.addMouseListener(new MouseAdapter()
@@ -125,6 +143,9 @@ public class JoinPanel extends JPanel
 		refreshBar = new JProgressBar();
 		refreshBar.setSize(180, 30);
 		refreshBar.setLocation(110, 330);
+		refreshBar.setMinimum(0);
+		refreshBar.setMaximum(PeerScanner.MAX_PING);
+		refreshBar.setVisible(false);
 		add(refreshBar);
 	}
 	
@@ -134,6 +155,11 @@ public class JoinPanel extends JPanel
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			frame.openMenu();
+			
+			if(scanner != null && scanner.isAlive())
+			{
+				scanner.interrupt();
+			}
 		}
 	}
 	
@@ -142,7 +168,12 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
+			refreshBar.setIndeterminate(true);
+			refreshLabel.setVisible(true);
+			refreshBar.setVisible(true);
+			refreshButton.setEnabled(false);
 			
+			(scanner = new PeerScanner(JoinPanel.this)).start();
 		}
 	}
 	
@@ -170,6 +201,27 @@ public class JoinPanel extends JPanel
 		public void actionPerformed(ActionEvent arg0)
 		{
 			
+		}
+	}
+	
+	public void populateServers(List<Server> servers)
+	{
+		refreshLabel.setVisible(false);
+		refreshBar.setVisible(false);
+		refreshButton.setEnabled(true);
+		
+		if(servers.isEmpty())
+		{
+			return;
+		}
+		
+		serversLoaded = servers;
+		
+		Vector<String> listVector = new Vector<String>();
+		
+		for(Server s : servers)
+		{
+			listVector.add(s.username + "'s Game [" + s.ip + "]");
 		}
 	}
 }
