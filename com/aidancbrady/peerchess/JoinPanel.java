@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -23,7 +24,7 @@ public class JoinPanel extends JPanel
 	
 	public ChessFrame frame;
 	
-	public JButton backButton;
+	public JButton exitButton;
 	public JButton refreshButton;
 	public JButton joinButton;
 	public JButton connectButton;
@@ -31,6 +32,8 @@ public class JoinPanel extends JPanel
 	public JTextField ipField;
 	
 	public JList serverList;
+	
+	public JProgressBar refreshBar;
 
 	public JoinPanel(ChessFrame f)
 	{
@@ -40,11 +43,11 @@ public class JoinPanel extends JPanel
 		setVisible(true);
 		setLayout(null);
 		
-		backButton = new JButton("Back");
-		backButton.setSize(60, 30);
-		backButton.setLocation(5, 5);
-		backButton.addActionListener(new BackButtonListener());
-		add(backButton);
+		JLabel titleLabel = new JLabel("Game Connection Menu");
+		titleLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
+		titleLabel.setSize(200, 30);
+		titleLabel.setLocation(100, 5);
+		add(titleLabel);
 		
 		JLabel listLabel = new JLabel("Local Server List");
 		listLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -53,9 +56,9 @@ public class JoinPanel extends JPanel
 		add(listLabel);
 		
 		JLabel ipLabel = new JLabel("Direct IP Connection");
-		listLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-		listLabel.setSize(200, 30);
-		listLabel.setLocation(10, 400);
+		ipLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+		ipLabel.setSize(200, 30);
+		ipLabel.setLocation(10, 400);
 		add(ipLabel);
 		
 		serverList = new JList();
@@ -85,31 +88,47 @@ public class JoinPanel extends JPanel
 		
 		ipField = new JTextField();
 		ipField.setFocusable(true);
-		ipField.setSize(140, 20);
-		ipField.setLocation(50, 400);
+		ipField.setSize(180, 20);
+		ipField.setLocation(5, 430);
 		ipField.addActionListener(new IPFieldListener());
 		add(ipField);
 		
+		exitButton = new JButton("Exit to Menu");
+		exitButton.setSize(200, 30);
+		exitButton.setLocation(100, 540);
+		exitButton.addActionListener(new ExitButtonListener());
+		add(exitButton);
+		
 		refreshButton = new JButton("Refresh");
 		refreshButton.setSize(100, 30);
-		refreshButton.setLocation(295, 330);
+		refreshButton.setLocation(5, 330);
 		refreshButton.addActionListener(new RefreshButtonListener());
 		add(refreshButton);
 		
 		joinButton = new JButton("Join");
 		joinButton.setSize(100, 30);
-		joinButton.setLocation(5, 330);
+		joinButton.setLocation(295, 330);
 		joinButton.addActionListener(new JoinButtonListener());
 		add(joinButton);
 		
 		connectButton = new JButton("Connect");
-		connectButton.setSize(120, 30);
-		connectButton.setLocation(5, 550);
+		connectButton.setSize(100, 20);
+		connectButton.setLocation(190, 430);
 		connectButton.addActionListener(new ConnectButtonListener());
 		add(connectButton);
+		
+		JLabel infoLabel = new JLabel("Directly connect to an IPv4 address");
+		infoLabel.setSize(300, 30);
+		infoLabel.setLocation(10, 450);
+		add(infoLabel);
+		
+		refreshBar = new JProgressBar();
+		refreshBar.setSize(180, 30);
+		refreshBar.setLocation(110, 330);
+		add(refreshBar);
 	}
 	
-	public class BackButtonListener implements ActionListener
+	public class ExitButtonListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
