@@ -1,6 +1,7 @@
 package com.aidancbrady.peerchess.net;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -12,7 +13,7 @@ import com.aidancbrady.peerchess.ChessPiece;
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.ChessPos;
-import com.aidancbrady.peerchess.MoveAnimation;
+import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.file.SaveHandler;
 
 public class PeerConnection extends Thread
@@ -27,12 +28,16 @@ public class PeerConnection extends Thread
 	
 	public ChessPanel panel;
 	
+	public String username;
+	
 	public boolean disconnected = false;
 	
 	public PeerConnection(Socket s, ChessPanel p)
 	{
 		socket = s;
 		panel = p;
+		
+		out = new OutThread();
 	}
 	
 	@Override
@@ -42,7 +47,7 @@ public class PeerConnection extends Thread
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			
-			(out = new OutThread()).start();
+			out.start();
 			
 			String reading = "";
 			
@@ -58,6 +63,10 @@ public class PeerConnection extends Thread
 				{
 					String msg = reading.split(":")[1];
 					panel.appendChat(msg);
+				}
+				else if(reading.startsWith("USER"))
+				{
+					username = reading.split(":")[1];
 				}
 				else if(reading.startsWith("MOVE"))
 				{
@@ -75,9 +84,13 @@ public class PeerConnection extends Thread
 					
 					oldPos.getSquare(panel.chess.grid).setPiece(null);
 					
-					panel.chess.currentAnimation = new MoveAnimation(panel.chess, new ChessMove(oldPos, newPos), piece, newPiece);
+					panel.chess.currentAnimation = new MoveAction(panel.chess, new ChessMove(oldPos, newPos), piece, newPiece);
 				}
 			}
+			
+			reader.close();
+			writer.close();
+			socket.close();
 			
 			disconnected = true;
 		} catch(Exception e) {}
@@ -92,11 +105,21 @@ public class PeerConnection extends Thread
 		{
 			while(!disconnected)
 			{
-				String s = outList.poll();
-				
-				if(s !=  null)
-				{
-					writer.println(s);
+				try {
+					String s = outList.poll();
+					
+					if(s !=  null)
+					{
+						if(s.equals("UPDATE"))
+						{
+							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
+						}
+						else {
+							writer.println(s);
+						}
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -105,5 +128,10 @@ public class PeerConnection extends Thread
 	public void write(String s)
 	{
 		out.outList.add(s);
+	}
+	
+	public void move(MoveAction move)
+	{
+		write(move.write());
 	}
 }

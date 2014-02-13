@@ -51,76 +51,7 @@ public final class SaveHandler
 			
 			BufferedWriter writer = new BufferedWriter(new FileWriter(save));
 			
-			if(chess.currentAnimation != null)
-			{
-				chess.currentAnimation.move();
-			}
-			
-			if(chess.whiteTaken.isEmpty())
-			{
-				writer.append("null");
-			}
-			
-			for(ChessPiece piece : chess.whiteTaken)
-			{
-				writer.append(Integer.toString(piece.type.ordinal()));
-				
-				if(chess.whiteTaken.get(chess.whiteTaken.size()-1) != piece)
-				{
-					writer.append(":");
-				}
-			}
-			
-			writer.newLine();
-			
-			if(chess.blackTaken.isEmpty())
-			{
-				writer.append("null");
-			}
-			
-			for(ChessPiece piece : chess.blackTaken)
-			{
-				writer.append(Integer.toString(piece.type.ordinal()));
-				
-				if(chess.blackTaken.get(chess.blackTaken.size()-1) != piece)
-				{
-					writer.append(":");
-				}
-			}
-			
-			writer.newLine();
-			
-			writer.append(Integer.toString(chess.side.ordinal()));
-			writer.newLine();
-			writer.append(Integer.toString(chess.turn.ordinal()));
-			writer.newLine();
-			
-			for(int y = 0; y < 8; y++)
-			{
-				StringBuilder builder = new StringBuilder();
-				
-				for(int x = 0; x < 8; x++)
-				{
-					ChessSquare square = chess.grid[x][y];
-					
-					if(square.housedPiece == null)
-					{
-						builder.append("null");
-					}
-					else {
-						ChessPiece piece = square.housedPiece;
-						builder.append(piece.type.ordinal() + "," + piece.side.ordinal());
-					}
-					
-					if(x != 7)
-					{
-						builder.append(":");
-					}
-				}
-				
-				writer.append(builder.toString());
-				writer.newLine();
-			}
+			saveToWriter(writer, chess);
 			
 			writer.flush();
 			writer.close();
@@ -147,6 +78,80 @@ public final class SaveHandler
 			System.err.println("Error while reading from file:");
 			e.printStackTrace();
 			return false;
+		}
+	}
+	
+	public static void saveToWriter(BufferedWriter writer, ChessComponent chess) throws IOException
+	{
+		if(chess.currentAnimation != null)
+		{
+			chess.currentAnimation.move();
+		}
+		
+		if(chess.whiteTaken.isEmpty())
+		{
+			writer.append("null");
+		}
+		
+		for(ChessPiece piece : chess.whiteTaken)
+		{
+			writer.append(Integer.toString(piece.type.ordinal()));
+			
+			if(chess.whiteTaken.get(chess.whiteTaken.size()-1) != piece)
+			{
+				writer.append(":");
+			}
+		}
+		
+		writer.newLine();
+		
+		if(chess.blackTaken.isEmpty())
+		{
+			writer.append("null");
+		}
+		
+		for(ChessPiece piece : chess.blackTaken)
+		{
+			writer.append(Integer.toString(piece.type.ordinal()));
+			
+			if(chess.blackTaken.get(chess.blackTaken.size()-1) != piece)
+			{
+				writer.append(":");
+			}
+		}
+		
+		writer.newLine();
+		
+		writer.append(Integer.toString(chess.side.ordinal()));
+		writer.newLine();
+		writer.append(Integer.toString(chess.turn.ordinal()));
+		writer.newLine();
+		
+		for(int y = 0; y < 8; y++)
+		{
+			StringBuilder builder = new StringBuilder();
+			
+			for(int x = 0; x < 8; x++)
+			{
+				ChessSquare square = chess.grid[x][y];
+				
+				if(square.housedPiece == null)
+				{
+					builder.append("null");
+				}
+				else {
+					ChessPiece piece = square.housedPiece;
+					builder.append(piece.type.ordinal() + "," + piece.side.ordinal());
+				}
+				
+				if(x != 7)
+				{
+					builder.append(":");
+				}
+			}
+			
+			writer.append(builder.toString());
+			writer.newLine();
 		}
 	}
 	

@@ -20,7 +20,7 @@ public class ChessComponent extends JComponent
 	
 	public ChessSquare selected;
 	
-	public MoveAnimation currentAnimation;
+	public MoveAction currentAnimation;
 	
 	public OverlayComponent overlay;
 	

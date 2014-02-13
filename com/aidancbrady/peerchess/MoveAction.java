@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.sound.Sound;
 
-public class MoveAnimation 
+public class MoveAction 
 {
 	public Sound moveSound = new Sound("resources/sound/move.wav");
 	
@@ -21,7 +21,7 @@ public class MoveAnimation
 	
 	public ChessMove move;
 	
-	public MoveAnimation(ChessComponent c, ChessMove m, ChessPiece p, ChessPiece np)
+	public MoveAction(ChessComponent c, ChessMove m, ChessPiece p, ChessPiece np)
 	{
 		component = c;
 		move = m;
@@ -91,5 +91,20 @@ public class MoveAnimation
 	public void render(Graphics g)
 	{
 		piece.texture.draw(g, getPosX(), getPosY(), 96, 96);
+	}
+	
+	public String write()
+	{
+		StringBuilder str = new StringBuilder();
+		
+		str.append(piece.type.ordinal() + "," + piece.side.ordinal());
+		str.append(":");
+		str.append(newPiece.type.ordinal() + "," + newPiece.side.ordinal());
+		str.append(":");
+		str.append(move.fromPos.xPos + "," + move.fromPos.yPos);
+		str.append(":");
+		str.append(move.toPos.xPos + "," + move.toPos.yPos);
+		
+		return str.toString();
 	}
 }

@@ -143,7 +143,7 @@ public class ChessSquare extends JComponent implements MouseListener
 								}
 							}
 							
-							component.currentAnimation = new MoveAnimation(component, move, piece, newPiece);
+							component.currentAnimation = new MoveAction(component, move, piece, newPiece);
 						}
 					}
 				}
