@@ -3,7 +3,6 @@ package com.aidancbrady.peerchess;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public final class ChessTimer extends Thread
 {
 	public PeerChess chess = PeerChess.instance();

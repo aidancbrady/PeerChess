@@ -21,8 +21,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import com.aidancbrady.peerchess.net.GameScanThread;
-import com.aidancbrady.peerchess.net.GameScanThread.Server;
+import com.aidancbrady.peerchess.net.GameScanner;
+import com.aidancbrady.peerchess.net.GameScanner.Server;
 
 public class JoinPanel extends JPanel
 {
@@ -35,7 +35,7 @@ public class JoinPanel extends JPanel
 	public JButton joinButton;
 	public JButton connectButton;
 	
-	public GameScanThread scanner;
+	public GameScanner scanner;
 	
 	public JLabel refreshLabel;
 	
@@ -144,7 +144,7 @@ public class JoinPanel extends JPanel
 		refreshBar.setSize(180, 30);
 		refreshBar.setLocation(110, 330);
 		refreshBar.setMinimum(0);
-		refreshBar.setMaximum(GameScanThread.MAX_PING);
+		refreshBar.setMaximum(GameScanner.MAX_PING);
 		refreshBar.setVisible(false);
 		add(refreshBar);
 	}
@@ -175,7 +175,7 @@ public class JoinPanel extends JPanel
 			refreshBar.setVisible(true);
 			refreshButton.setEnabled(false);
 			
-			(scanner = new GameScanThread(JoinPanel.this)).start();
+			(scanner = new GameScanner(JoinPanel.this)).start();
 		}
 	}
 	

@@ -10,7 +10,7 @@ import java.util.List;
 import com.aidancbrady.peerchess.JoinPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
-public class GameScanThread extends Thread
+public class GameScanner extends Thread
 {
 	public static final int MAX_PING = 2000;
 	
@@ -22,7 +22,7 @@ public class GameScanThread extends Thread
 	
 	public JoinPanel panel;
 	
-	public GameScanThread(JoinPanel p)
+	public GameScanner(JoinPanel p)
 	{
 		panel = p;
 		setDaemon(true);
