@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,9 +18,12 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import com.aidancbrady.peerchess.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.piece.Piece;
 
-public class ChessPanel extends JPanel
+public class ChessPanel extends JPanel implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -38,6 +43,8 @@ public class ChessPanel extends JPanel
 	
 	public JTextField chatField;
 	
+	public int pawnReplace;
+	
 	public ChessPanel(ChessFrame f)
 	{
 		frame = f;
@@ -45,6 +52,7 @@ public class ChessPanel extends JPanel
 		setSize(1024, 790);
 		setVisible(true);
 		setLayout(null);
+		addMouseListener(this);
 		
 		setBackground(Color.GRAY);
 		
@@ -111,7 +119,69 @@ public class ChessPanel extends JPanel
 	{
 		super.paintComponent(g);
 		
+		if(shouldPawnReplace())
+		{
+			if(chess.side == Side.WHITE)
+			{
+				chess.blackTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			}
+			else if(chess.side == Side.BLACK)
+			{
+				chess.whiteTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			}
+		}
+	}
+	
+	public boolean shouldPawnReplace()
+	{
+		if(chess.side == Side.WHITE && chess.blackTaken.isEmpty() || chess.side == Side.BLACK && chess.whiteTaken.isEmpty())
+		{
+			return false;
+		}
 		
+		if(chess.side == Side.WHITE && pawnReplace > chess.blackTaken.size()-1)
+		{
+			pawnReplace = 0;
+		}
+		else if(chess.side == Side.BLACK && pawnReplace > chess.whiteTaken.size()-1)
+		{
+			pawnReplace = 0;
+		}
+		
+		if(chess != null && chess.selected != null && chess.selected.housedPiece != null)
+		{
+			if(chess.selected.housedPiece.type == PieceType.PAWN)
+			{
+				if(chess.selected.housedPiece.side == Side.BLACK && chess.selected.pos.translate(0, 1).yPos == 7)
+				{
+					Piece piece = chess.selected.housedPiece.type.getPiece();
+					
+					ChessMove leftMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(-1, 1));
+					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, 1));
+					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, 1));
+					
+					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
+					{
+						return true;
+					}
+				}
+				else if(chess.selected.housedPiece.side == Side.WHITE && chess.selected.pos.translate(0, -1).yPos == 0)
+				{
+					Piece piece = chess.selected.housedPiece.type.getPiece();
+					
+					ChessMove leftMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(-1, -1));
+					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, -1));
+					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, -1));
+					
+					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public boolean exit()
@@ -180,4 +250,33 @@ public class ChessPanel extends JPanel
 			
 		}
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) 
+	{
+		int x = arg0.getX();
+		int y = arg0.getY();
+		
+		if(x >= 830 && x <= 958 && y >= 160 && y <= 288)
+		{
+			if(shouldPawnReplace())
+			{
+				int size = chess.side == Side.WHITE ? chess.blackTaken.size()-1 : chess.whiteTaken.size()-1;
+				
+				pawnReplace = pawnReplace+1%size;
+			}
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
 }

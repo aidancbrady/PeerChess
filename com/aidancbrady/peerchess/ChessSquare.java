@@ -133,12 +133,7 @@ public class ChessSquare extends JComponent implements MouseListener
 			}
 			
 			repaint();
+			component.panel.repaint();
 		}
-	}
-	
-	public void repaint()
-	{
-		super.repaint();
-		component.repaint();
 	}
 }

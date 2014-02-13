@@ -18,8 +18,6 @@ public class ChessComponent extends JComponent
 	
 	public ChessSquare[][] grid = new ChessSquare[8][8];
 	
-	public PieceType pawnReplace;
-	
 	public ChessSquare selected;
 	
 	public MoveAnimation currentAnimation;
@@ -129,6 +127,12 @@ public class ChessComponent extends JComponent
 		
 		currentAnimation = null;
 		side = Side.WHITE;
+		turn = Side.WHITE;
+		selected = null;
+		whiteTaken.clear();
+		blackTaken.clear();
+		moves.clear();
+		panel.pawnReplace = 0;
 	}
 	
 	public boolean isMoving()
