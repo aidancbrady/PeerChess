@@ -139,7 +139,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	@Override
 	public void windowClosing(WindowEvent arg0) 
 	{
-		if(chess.isVisible())
+		if(chess != null && chess.isVisible())
 		{
 			if(!chess.exit())
 			{

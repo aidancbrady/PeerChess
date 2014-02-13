@@ -35,8 +35,15 @@ public class ChessPiece
 	
 	public static enum Side
 	{
-		WHITE,
-		BLACK
+		WHITE("White"),
+		BLACK("Black");
+		
+		public String name;
+		
+		private Side(String s)
+		{
+			name = s;
+		}
 	}
 	
 	public PieceType type;

@@ -55,6 +55,40 @@ public final class SaveHandler
 				chess.currentAnimation.move();
 			}
 			
+			if(chess.whiteTaken.isEmpty())
+			{
+				writer.append("null");
+			}
+			
+			for(ChessPiece piece : chess.whiteTaken)
+			{
+				writer.append(Integer.toString(piece.type.ordinal()));
+				
+				if(chess.whiteTaken.get(chess.whiteTaken.size()-1) != piece)
+				{
+					writer.append(":");
+				}
+			}
+			
+			writer.newLine();
+			
+			if(chess.blackTaken.isEmpty())
+			{
+				writer.append("null");
+			}
+			
+			for(ChessPiece piece : chess.blackTaken)
+			{
+				writer.append(Integer.toString(piece.type.ordinal()));
+				
+				if(chess.blackTaken.get(chess.blackTaken.size()-1) != piece)
+				{
+					writer.append(":");
+				}
+			}
+			
+			writer.newLine();
+			
 			writer.append(Integer.toString(chess.side.ordinal()));
 			writer.newLine();
 			writer.append(Integer.toString(chess.turn.ordinal()));
@@ -102,6 +136,32 @@ public final class SaveHandler
 	{
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
+			
+			String whiteLine = reader.readLine();
+			
+			if(!whiteLine.equals("null"))
+			{
+				String[] whiteTaken = whiteLine.split(":");
+				
+				for(String s : whiteTaken)
+				{
+					PieceType type = PieceType.values()[Integer.parseInt(s)];
+					chess.whiteTaken.add(new ChessPiece(type, Side.BLACK));
+				}
+			}
+			
+			String blackLine = reader.readLine();
+			
+			if(!blackLine.equals("null"))
+			{
+				String[] blackTaken = blackLine.split(":");
+				
+				for(String s : blackTaken)
+				{
+					PieceType type = PieceType.values()[Integer.parseInt(s)];
+					chess.whiteTaken.add(new ChessPiece(type, Side.WHITE));
+				}
+			}
 			
 			chess.setSide(Side.values()[Integer.parseInt(reader.readLine())]);
 			chess.turn = Side.values()[Integer.parseInt(reader.readLine())];

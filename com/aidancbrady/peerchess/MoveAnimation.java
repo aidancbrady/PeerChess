@@ -21,7 +21,6 @@ public class MoveAnimation
 	
 	public MoveAnimation(ChessComponent c, ChessMove m, ChessPiece p)
 	{
-		System.out.println("now");
 		component = c;
 		move = m;
 		piece = p;
@@ -61,7 +60,17 @@ public class MoveAnimation
 	
 	public void move()
 	{
-		System.out.println("move");
+		if(move.toPos.getSquare(component.grid).housedPiece != null)
+		{
+			if(move.toPos.getSquare(component.grid).housedPiece.side == Side.WHITE)
+			{
+				component.blackTaken.add(move.toPos.getSquare(component.grid).housedPiece);
+			}
+			else {
+				component.whiteTaken.add(move.toPos.getSquare(component.grid).housedPiece);
+			}
+		}
+		
 		move.toPos.getSquare(component.grid).setPiece(piece);
 		move.toPos.getSquare(component.grid).repaint();
 		

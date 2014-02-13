@@ -1,6 +1,6 @@
 package com.aidancbrady.peerchess.net;
 
-public class ForeignConnection extends Thread
+public class PeerConnection extends Thread
 {
 	@Override
 	public void run()

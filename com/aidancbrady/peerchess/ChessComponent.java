@@ -18,6 +18,8 @@ public class ChessComponent extends JComponent
 	
 	public ChessSquare[][] grid = new ChessSquare[8][8];
 	
+	public PieceType pawnReplace;
+	
 	public ChessSquare selected;
 	
 	public MoveAnimation currentAnimation;
