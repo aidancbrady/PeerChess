@@ -10,7 +10,7 @@ import java.util.List;
 import com.aidancbrady.peerchess.JoinPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
-public class PeerScanner extends Thread
+public class GameScanThread extends Thread
 {
 	public static final int MAX_PING = 2000;
 	
@@ -22,7 +22,7 @@ public class PeerScanner extends Thread
 	
 	public JoinPanel panel;
 	
-	public PeerScanner(JoinPanel p)
+	public GameScanThread(JoinPanel p)
 	{
 		panel = p;
 		setDaemon(true);
@@ -32,6 +32,7 @@ public class PeerScanner extends Thread
 	public void run()
 	{
 		try {
+			new ThreadListenTest().start();
 			socket = new DatagramSocket();
 			socket.setBroadcast(true);
 			
@@ -51,7 +52,11 @@ public class PeerScanner extends Thread
 					socket.receive(response);
 					
 					String s = new String(response.getData());
-					pingedServers.add(new Server(s.split(":")[1], response.getAddress().getHostAddress()));
+					
+					if(s.startsWith("PING"))
+					{
+						pingedServers.add(new Server(s.split(":")[1], response.getAddress().getHostAddress()));
+					}
 				} catch(SocketTimeoutException e) {
 					break;
 				} catch(Exception e) {}
@@ -63,6 +68,28 @@ public class PeerScanner extends Thread
 		} catch(Exception e) {
 			e.printStackTrace();
 			socket.close();
+		}
+	}
+	
+	public static class ThreadListenTest extends Thread
+	{
+		public void run()
+		{
+			try {
+				byte[] receiveData = new byte[1024];
+				
+				DatagramSocket clientSocket = new DatagramSocket(PeerChess.instance().port);
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+	
+				clientSocket.receive(receivePacket);
+				System.out.println(receivePacket.getAddress().getHostAddress() + " " + new String(receivePacket.getData()));
+				
+				DatagramPacket response = new DatagramPacket(receiveData, receiveData.length);
+				response.setAddress(receivePacket.getAddress());
+				response.setPort(receivePacket.getPort());
+				response.setData(new String("PING:LOL").getBytes());
+				clientSocket.send(response);
+			} catch(Exception e) {}
 		}
 	}
 	

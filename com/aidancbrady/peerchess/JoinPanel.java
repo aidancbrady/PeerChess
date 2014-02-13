@@ -21,8 +21,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import com.aidancbrady.peerchess.net.PeerScanner;
-import com.aidancbrady.peerchess.net.PeerScanner.Server;
+import com.aidancbrady.peerchess.net.GameScanThread;
+import com.aidancbrady.peerchess.net.GameScanThread.Server;
 
 public class JoinPanel extends JPanel
 {
@@ -35,7 +35,7 @@ public class JoinPanel extends JPanel
 	public JButton joinButton;
 	public JButton connectButton;
 	
-	public PeerScanner scanner;
+	public GameScanThread scanner;
 	
 	public JLabel refreshLabel;
 	
@@ -144,7 +144,7 @@ public class JoinPanel extends JPanel
 		refreshBar.setSize(180, 30);
 		refreshBar.setLocation(110, 330);
 		refreshBar.setMinimum(0);
-		refreshBar.setMaximum(PeerScanner.MAX_PING);
+		refreshBar.setMaximum(GameScanThread.MAX_PING);
 		refreshBar.setVisible(false);
 		add(refreshBar);
 	}
@@ -168,12 +168,14 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
+			serverList.setListData(new Vector<String>());
+			
 			refreshBar.setIndeterminate(true);
 			refreshLabel.setVisible(true);
 			refreshBar.setVisible(true);
 			refreshButton.setEnabled(false);
 			
-			(scanner = new PeerScanner(JoinPanel.this)).start();
+			(scanner = new GameScanThread(JoinPanel.this)).start();
 		}
 	}
 	
@@ -223,5 +225,7 @@ public class JoinPanel extends JPanel
 		{
 			listVector.add(s.username + "'s Game [" + s.ip + "]");
 		}
+		
+		serverList.setListData(listVector);
 	}
 }
