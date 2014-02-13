@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class OptionsFrame extends JFrame
 {
@@ -15,6 +16,7 @@ public class OptionsFrame extends JFrame
 	public ChessFrame frame;
 	
 	public JButton backButton;
+	public JButton usernameButton;
 	
 	public JLabel usernameLabel;
 
@@ -32,9 +34,9 @@ public class OptionsFrame extends JFrame
 		titleLabel.setLocation(90, 6);
 		add(titleLabel);
 		
-		usernameLabel = new JLabel("Username: ");
+		usernameLabel = new JLabel("Username: " + PeerChess.instance().username);
 		usernameLabel.setSize(120, 30);
-		usernameLabel.setLocation(10, 30);
+		usernameLabel.setLocation(16, 40);
 		add(usernameLabel);
 		
 		backButton = new JButton("Close");
@@ -42,6 +44,12 @@ public class OptionsFrame extends JFrame
 		backButton.setLocation(90, 400);
 		backButton.addActionListener(new CloseButtonListener());
 		add(backButton);
+		
+		usernameButton = new JButton("Edit");
+		usernameButton.setSize(80, 30);
+		usernameButton.setLocation(210, 40);
+		usernameButton.addActionListener(new UsernameButtonListener());
+		add(usernameButton);
 		
 		setVisible(true);
 		setResizable(false);
@@ -54,6 +62,33 @@ public class OptionsFrame extends JFrame
 		{
 			setVisible(false);
 			frame.toFront();
+		}
+	}
+	
+	public class UsernameButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			while(true)
+			{
+				String result = JOptionPane.showInputDialog(OptionsFrame.this, "Enter a new username");
+				
+				if(result != null && !result.isEmpty())
+				{
+					result = result.trim();
+					
+					if(result.length() <= 16)
+					{
+						PeerChess.instance().username = result;
+						usernameLabel.setText("Username: " + PeerChess.instance().username);
+						break;
+					}
+					else {
+						JOptionPane.showMessageDialog(OptionsFrame.this, "Username must be less than 16 characters");
+					}
+				}
+			}
 		}
 	}
 }

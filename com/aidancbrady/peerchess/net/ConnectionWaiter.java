@@ -26,7 +26,9 @@ public class ConnectionWaiter extends Thread
 			
 			if(connection != null)
 			{
-				new PeerConnection(connection, panel).start();
+				(panel.connection = new PeerConnection(connection, panel)).start();
+				panel.connection.write("USER:" + PeerChess.instance().username);
+				panel.connection.write("UPDATE");
 			}
 			
 			serverSocket.close();

@@ -67,6 +67,7 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("USER"))
 				{
 					username = reading.split(":")[1];
+					
 				}
 				else if(reading.startsWith("MOVE"))
 				{

@@ -29,7 +29,7 @@ public class ChessSquare extends JComponent implements MouseListener
 		
 		setSize(96, 96);
 		setLocation(p.xPos*96, p.yPos*96);
-		setFocusable(true);
+		setFocusable(false);
 		addMouseListener(this);
 	}
 	

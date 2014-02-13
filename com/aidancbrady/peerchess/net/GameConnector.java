@@ -4,7 +4,6 @@ import java.net.Socket;
 
 import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
-import com.aidancbrady.peerchess.file.SaveHandler;
 
 public class GameConnector extends Thread
 {
@@ -27,7 +26,6 @@ public class GameConnector extends Thread
 			(panel.connection = new PeerConnection(s, panel)).start();
 			
 			panel.connection.write("USER:" + PeerChess.instance().username);
-			panel.connection.write("UPDATE");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
