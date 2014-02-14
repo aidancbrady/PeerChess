@@ -94,7 +94,7 @@ public class ChessSquare extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(component.isMoving() /*|| component.turn != component.side*/)
+		if(component.isMoving() || component.panel.connection == null || component.turn != component.side)
 		{
 			return;
 		}
@@ -103,10 +103,10 @@ public class ChessSquare extends JComponent implements MouseListener
 		{
 			if(component.selected == null && housedPiece != null)
 			{
-				/*if(component.side != housedPiece.side)
+				if(component.side != housedPiece.side)
 				{
 					return;
-				}*/
+				}
 				
 				component.select(this);
 			}
@@ -144,6 +144,7 @@ public class ChessSquare extends JComponent implements MouseListener
 							}
 							
 							component.currentAnimation = new MoveAction(component, move, piece, newPiece);
+							component.panel.connection.move(component.currentAnimation);
 						}
 					}
 				}

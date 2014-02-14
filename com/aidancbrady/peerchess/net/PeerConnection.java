@@ -58,6 +58,7 @@ public class PeerConnection extends Thread
 				if(reading.startsWith("LOAD"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
+					panel.updateText();
 				}
 				else if(reading.startsWith("MSG"))
 				{
@@ -67,7 +68,7 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("USER"))
 				{
 					username = reading.split(":")[1];
-					
+					panel.updateText();
 				}
 				else if(reading.startsWith("MOVE"))
 				{
@@ -86,6 +87,7 @@ public class PeerConnection extends Thread
 					oldPos.getSquare(panel.chess.grid).setPiece(null);
 					
 					panel.chess.currentAnimation = new MoveAction(panel.chess, new ChessMove(oldPos, newPos), piece, newPiece);
+					panel.updateText();
 				}
 			}
 			
@@ -134,5 +136,10 @@ public class PeerConnection extends Thread
 	public void move(MoveAction move)
 	{
 		write(move.write());
+	}
+	
+	public void chat(String text)
+	{
+		write("MSG:" + text.trim());
 	}
 }

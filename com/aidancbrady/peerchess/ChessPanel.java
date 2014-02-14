@@ -254,12 +254,29 @@ public class ChessPanel extends JPanel implements MouseListener
 		return true;
 	}
 	
-	public static class ChatListener implements ActionListener
+	public class ChatListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			
+			if(connection != null && !chatField.getText().isEmpty())
+			{
+				if(chatField.getText().length() <= 250)
+				{
+					String text = chatField.getText().trim();
+					
+					if(text.isEmpty())
+					{
+						return;
+					}
+					
+					connection.chat(text);
+					chatField.setText("");
+				}
+				else {
+					JOptionPane.showMessageDialog(ChessPanel.this, "Chat messages must be at most 250 characters.");
+				}
+			}
 		}
 	}
 
