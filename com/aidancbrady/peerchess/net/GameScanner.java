@@ -61,13 +61,13 @@ public class GameScanner extends Thread
 				} catch(Exception e) {}
 			}
 			
-			doUpdate();
-			
 			socket.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 			socket.close();
 		}
+		
+		doUpdate();
 	}
 	
 	public void doUpdate()

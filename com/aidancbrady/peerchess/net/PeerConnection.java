@@ -71,8 +71,8 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("USER"))
 				{
 					username = reading.split(":")[1];
-					JOptionPane.showMessageDialog(panel, username + " has connected to the game");
 					panel.updateText();
+					JOptionPane.showMessageDialog(panel, username + " has connected to the game");
 				}
 				else if(reading.startsWith("MOVE"))
 				{
@@ -95,19 +95,20 @@ public class PeerConnection extends Thread
 				}
 			}
 			
-			reader.close();
-			writer.close();
-			socket.close();
+			JOptionPane.showMessageDialog(panel.frame, username + " has disconnected.");
+			panel.frame.openMenu();
+			
+			close();
 			
 			disconnected = true;
 		} catch(Exception e) {
-			panel.updateText();
-			JOptionPane.showMessageDialog(panel, username + " has disconnected");
-			panel.frame.openMenu();
 			e.printStackTrace();
+			
+			JOptionPane.showMessageDialog(panel.frame, username + " has disconnected.");
+			panel.frame.openMenu();
+			
+			close();
 		}
-		
-		panel.connection = null;
 	}
 	
 	public class OutThread extends Thread
@@ -151,5 +152,27 @@ public class PeerConnection extends Thread
 	public void chat(String text)
 	{
 		write("MSG:" + text.trim());
+	}
+	
+	public void close()
+	{
+		if(out != null)
+		{
+			out.interrupt();
+		}
+		
+		if(socket != null)
+		{
+			try {
+				socket.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		panel.connection = null;
+		panel.updateText();
+		
+		interrupt();
 	}
 }

@@ -143,11 +143,7 @@ public class ChessComponent extends JComponent
 		
 		if(panel.connection != null)
 		{
-			try {
-				panel.connection.socket.close();
-				panel.connection.out.interrupt();
-				panel.connection.interrupt();
-			} catch(Exception e) {}
+			panel.connection.close();
 		}
 	}
 	
