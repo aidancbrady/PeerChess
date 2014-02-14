@@ -88,18 +88,7 @@ public class JoinPanel extends JPanel
 			{
 				if(event.getClickCount() == 2)
 				{
-					int index = serverList.getSelectedIndex();
-					
-					if(index != -1)
-					{
-						Server server = serversLoaded.get(index);
-						
-						if(server != null)
-						{
-							frame.connecting.setThread(new GameConnector(server, frame.chess));
-							frame.connecting.setVisible(true);
-						}
-					}
+					doConnect();
 				}
 			}
 		});
@@ -120,7 +109,7 @@ public class JoinPanel extends JPanel
 		ipField.setFocusable(true);
 		ipField.setSize(180, 20);
 		ipField.setLocation(5, 430);
-		ipField.addActionListener(new IPFieldListener());
+		ipField.addActionListener(new ConnectListener());
 		add(ipField);
 		
 		exitButton = new JButton("Exit to Menu");
@@ -144,7 +133,7 @@ public class JoinPanel extends JPanel
 		connectButton = new JButton("Connect");
 		connectButton.setSize(100, 20);
 		connectButton.setLocation(190, 430);
-		connectButton.addActionListener(new ConnectButtonListener());
+		connectButton.addActionListener(new ConnectListener());
 		add(connectButton);
 		
 		JLabel infoLabel = new JLabel("Directly connect to an IPv4 address");
@@ -159,6 +148,22 @@ public class JoinPanel extends JPanel
 		refreshBar.setMaximum(GameScanner.MAX_PING);
 		refreshBar.setVisible(false);
 		add(refreshBar);
+	}
+	
+	public void doConnect()
+	{
+		int index = serverList.getSelectedIndex();
+		
+		if(index != -1)
+		{
+			Server server = serversLoaded.get(index);
+			
+			if(server != null)
+			{
+				frame.connecting.setThread(new GameConnector(server, frame.chess));
+				frame.connecting.setVisible(true);
+			}
+		}
 	}
 	
 	public class ExitButtonListener implements ActionListener
@@ -196,23 +201,14 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			
+			doConnect();
 		}
 	}
 	
-	public class ConnectButtonListener implements ActionListener
+	public class ConnectListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
-		{
-			
-		}
-	}
-	
-	public class IPFieldListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0)
 		{
 			
 		}
