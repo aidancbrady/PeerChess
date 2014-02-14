@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileFilter;
 
 import com.aidancbrady.peerchess.file.DataHandler;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.net.ConnectionWaiter;
 
 public class ChessFrame extends JFrame implements WindowListener
 {
@@ -25,6 +26,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	public OptionsFrame options;
 	
 	public ConnectingFrame connecting = new ConnectingFrame(this);
+	public WaitingFrame waiting = new WaitingFrame(this);
 	
 	public ChessFrame()
 	{
@@ -54,6 +56,9 @@ public class ChessFrame extends JFrame implements WindowListener
 		
 		setSize(1024, 790);
 		chess.setVisible(true);
+		
+		waiting.setThread(new ConnectionWaiter(chess));
+		waiting.setVisible(true);
 	}
 	
 	public void openSavedChess()
@@ -111,6 +116,11 @@ public class ChessFrame extends JFrame implements WindowListener
 			}
 		}
 		
+		forceMenu();
+	}
+	
+	public void forceMenu()
+	{
 		chess.setVisible(false);
 		join.setVisible(false);
 		

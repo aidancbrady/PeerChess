@@ -5,16 +5,25 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
 public class ConnectionWaiter extends Thread
 {
-	public ChessPanel panel = PeerChess.instance().frame.chess;
+	public ChessPanel panel;
 	
 	public PingResponder responseThread;
 	
 	public ServerSocket serverSocket;
+	
+	public ConnectionWaiter(ChessPanel p)
+	{
+		panel = p;
+		
+		start();
+	}
 	
 	@Override
 	public void run()
@@ -28,8 +37,16 @@ public class ConnectionWaiter extends Thread
 			{
 				(panel.connection = new PeerConnection(connection, panel)).start();
 				panel.connection.write("UPDATE");
+				
+				panel.frame.waiting.setVisible(false);
 			}
-			
+		} catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(panel, "Error accepting connection.");
+			panel.frame.forceMenu();
+		}
+		
+		try {
 			serverSocket.close();
 		} catch(Exception e) {
 			e.printStackTrace();

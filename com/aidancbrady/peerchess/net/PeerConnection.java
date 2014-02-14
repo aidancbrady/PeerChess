@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.ChessPiece;
@@ -58,6 +60,7 @@ public class PeerConnection extends Thread
 				if(reading.startsWith("LOAD"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
+					panel.chess.side = panel.chess.side == Side.WHITE ? Side.BLACK : Side.WHITE;
 					panel.updateText();
 				}
 				else if(reading.startsWith("MSG"))
@@ -68,6 +71,7 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("USER"))
 				{
 					username = reading.split(":")[1];
+					JOptionPane.showMessageDialog(panel, username + " has connected to the game");
 					panel.updateText();
 				}
 				else if(reading.startsWith("MOVE"))
@@ -96,7 +100,14 @@ public class PeerConnection extends Thread
 			socket.close();
 			
 			disconnected = true;
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			panel.updateText();
+			JOptionPane.showMessageDialog(panel, username + " has disconnected");
+			panel.frame.openMenu();
+			e.printStackTrace();
+		}
+		
+		panel.connection = null;
 	}
 	
 	public class OutThread extends Thread

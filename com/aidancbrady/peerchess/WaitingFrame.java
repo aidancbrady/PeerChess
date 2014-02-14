@@ -11,9 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
-import com.aidancbrady.peerchess.net.GameConnector;
+import com.aidancbrady.peerchess.net.ConnectionWaiter;
 
-public class ConnectingFrame extends JFrame implements WindowListener
+public class WaitingFrame extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -23,9 +23,9 @@ public class ConnectingFrame extends JFrame implements WindowListener
 	
 	public JButton cancelButton;
 	
-	public GameConnector thread;
+	public ConnectionWaiter thread;
 	
-	public ConnectingFrame(ChessFrame f)
+	public WaitingFrame(ChessFrame f)
 	{
 		frame = f;
 		
@@ -39,10 +39,10 @@ public class ConnectingFrame extends JFrame implements WindowListener
 		setAlwaysOnTop(true);
 		addWindowListener(this);
 		
-		JLabel connectingLabel = new JLabel("Connecting...");
+		JLabel connectingLabel = new JLabel("Awaiting Connection...");
 		connectingLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-		connectingLabel.setSize(200, 30);
-		connectingLabel.setLocation(136, 10);
+		connectingLabel.setSize(160, 30);
+		connectingLabel.setLocation(110, 10);
 		add(connectingLabel);
 		
 		progressBar = new JProgressBar();
@@ -57,8 +57,9 @@ public class ConnectingFrame extends JFrame implements WindowListener
 			public void actionPerformed(ActionEvent arg0)
 			{
 				try {
-					thread.socket.close();
+					thread.serverSocket.close();
 					thread.interrupt();
+					frame.forceMenu();
 					setVisible(false);
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -70,29 +71,30 @@ public class ConnectingFrame extends JFrame implements WindowListener
 		add(cancelButton);
 	}
 	
-	public ConnectingFrame setThread(GameConnector c)
+	public WaitingFrame setThread(ConnectionWaiter c)
 	{
 		thread = c;
 		
 		return this;
 	}
-	
+
 	@Override
 	public void windowActivated(WindowEvent arg0) {}
 
 	@Override
-	public void windowClosed(WindowEvent arg0) 
+	public void windowClosed(WindowEvent arg0) {}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) 
 	{
 		try {
-			thread.socket.close();
+			thread.serverSocket.close();
 			thread.interrupt();
+			frame.forceMenu();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public void windowClosing(WindowEvent arg0) {}
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {}

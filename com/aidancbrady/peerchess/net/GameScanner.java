@@ -32,7 +32,6 @@ public class GameScanner extends Thread
 	public void run()
 	{
 		try {
-			new ThreadListenTest().start();
 			socket = new DatagramSocket();
 			socket.setBroadcast(true);
 			
@@ -68,28 +67,6 @@ public class GameScanner extends Thread
 		} catch(Exception e) {
 			e.printStackTrace();
 			socket.close();
-		}
-	}
-	
-	public static class ThreadListenTest extends Thread
-	{
-		public void run()
-		{
-			try {
-				byte[] receiveData = new byte[1024];
-				
-				DatagramSocket clientSocket = new DatagramSocket(PeerChess.instance().port);
-				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-	
-				clientSocket.receive(receivePacket);
-				System.out.println(receivePacket.getAddress().getHostAddress() + " " + new String(receivePacket.getData()));
-				
-				DatagramPacket response = new DatagramPacket(receiveData, receiveData.length);
-				response.setAddress(receivePacket.getAddress());
-				response.setPort(receivePacket.getPort());
-				response.setData(new String("PING:LOL").getBytes());
-				clientSocket.send(response);
-			} catch(Exception e) {}
 		}
 	}
 	
