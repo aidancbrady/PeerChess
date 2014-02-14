@@ -57,7 +57,7 @@ public class PeerConnection extends Thread
 			{
 				reading = reading.trim();
 				
-				if(reading.startsWith("LOAD"))
+				if(reading.startsWith("UPDATE"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
 					panel.chess.side = panel.chess.side == Side.WHITE ? Side.BLACK : Side.WHITE;
@@ -66,7 +66,7 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("MSG"))
 				{
 					String msg = reading.split(":")[1];
-					panel.appendChat(msg);
+					panel.appendChat(username + ": " + msg);
 				}
 				else if(reading.startsWith("USER"))
 				{
@@ -78,10 +78,10 @@ public class PeerConnection extends Thread
 				{
 					String[] split = reading.split(":");
 					
-					String[] strPiece = split[0].split(",");
-					String[] strNew = split[1].split(",");
-					String[] strOldPos = split[2].split(",");
-					String[] strNewPos = split[3].split(",");
+					String[] strPiece = split[1].split(",");
+					String[] strNew = split[2].split(",");
+					String[] strOldPos = split[3].split(",");
+					String[] strNewPos = split[4].split(",");
 					
 					ChessPiece piece = new ChessPiece(PieceType.values()[Integer.parseInt(strPiece[0])], Side.values()[Integer.parseInt(strPiece[1])]);
 					ChessPiece newPiece = new ChessPiece(PieceType.values()[Integer.parseInt(strNew[0])], Side.values()[Integer.parseInt(strNew[1])]);
@@ -124,12 +124,11 @@ public class PeerConnection extends Thread
 					
 					if(s !=  null)
 					{
+						writer.println(s);
+						
 						if(s.equals("UPDATE"))
 						{
 							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
-						}
-						else {
-							writer.println(s);
 						}
 					}
 				} catch(Exception e) {

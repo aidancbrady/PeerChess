@@ -95,7 +95,7 @@ public class MoveAction
 	
 	public String write()
 	{
-		StringBuilder str = new StringBuilder();
+		StringBuilder str = new StringBuilder("MOVE:");
 		
 		str.append(piece.type.ordinal() + "," + piece.side.ordinal());
 		str.append(":");

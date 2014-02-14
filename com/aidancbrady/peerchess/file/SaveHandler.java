@@ -152,6 +152,8 @@ public final class SaveHandler
 			
 			writer.append(builder.toString());
 			writer.newLine();
+			
+			writer.flush();
 		}
 	}
 	

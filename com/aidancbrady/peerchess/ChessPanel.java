@@ -272,6 +272,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					
 					connection.chat(text);
 					chatField.setText("");
+					appendChat(PeerChess.instance().username + ": " + text);
 				}
 				else {
 					JOptionPane.showMessageDialog(ChessPanel.this, "Chat messages must be at most 250 characters.");
