@@ -21,6 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import com.aidancbrady.peerchess.net.GameConnector;
 import com.aidancbrady.peerchess.net.GameScanner;
 import com.aidancbrady.peerchess.net.GameScanner.Server;
 
@@ -87,7 +88,18 @@ public class JoinPanel extends JPanel
 			{
 				if(event.getClickCount() == 2)
 				{
+					int index = serverList.getSelectedIndex();
 					
+					if(index != -1)
+					{
+						Server server = serversLoaded.get(index);
+						
+						if(server != null)
+						{
+							frame.connecting.setThread(new GameConnector(server, frame.chess));
+							frame.connecting.setVisible(true);
+						}
+					}
 				}
 			}
 		});

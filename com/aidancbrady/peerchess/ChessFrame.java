@@ -24,7 +24,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public OptionsFrame options;
 	
-	public ConnectingFrame connecting;
+	public ConnectingFrame connecting = new ConnectingFrame(this);
 	
 	public ChessFrame()
 	{

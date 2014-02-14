@@ -23,18 +23,18 @@ public class ConnectingFrame extends JFrame
 	
 	public GameConnector thread;
 	
-	public ConnectingFrame(ChessFrame f, GameConnector c)
+	public ConnectingFrame(ChessFrame f)
 	{
 		frame = f;
-		thread = c;
 		
 		setTitle("Connection");
 		setSize(360, 180);
 		
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//HIDE_ON_CLOSE);
+		setVisible(false);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setResizable(false);
 		setLayout(null);
+		setAlwaysOnTop(true);
 		
 		JLabel connectingLabel = new JLabel("Connecting...");
 		connectingLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -64,5 +64,12 @@ public class ConnectingFrame extends JFrame
 		cancelButton.setSize(120, 30);
 		cancelButton.setLocation(120, 110);
 		add(cancelButton);
+	}
+	
+	public ConnectingFrame setThread(GameConnector c)
+	{
+		thread = c;
+		
+		return this;
 	}
 }
