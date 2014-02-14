@@ -6,10 +6,12 @@ import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
 
 public class GameConnector extends Thread
-{
+{	
+	public ChessPanel panel;
+	
 	public String ip;
 	
-	public ChessPanel panel;
+	public Socket socket;
 	
 	public GameConnector(String s, ChessPanel p)
 	{
@@ -21,9 +23,9 @@ public class GameConnector extends Thread
 	public void run()
 	{
 		try {
-			Socket s = new Socket(ip, PeerChess.instance().port);
+			socket = new Socket(ip, PeerChess.instance().port);
 			
-			(panel.connection = new PeerConnection(s, panel)).start();
+			(panel.connection = new PeerConnection(socket, panel)).start();
 			
 			panel.connection.write("USER:" + PeerChess.instance().username);
 		} catch(Exception e) {

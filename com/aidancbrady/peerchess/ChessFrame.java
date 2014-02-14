@@ -24,6 +24,8 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public OptionsFrame options;
 	
+	public ConnectingFrame connecting;
+	
 	public ChessFrame()
 	{
 		setTitle("PeerChess");
