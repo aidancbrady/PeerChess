@@ -29,6 +29,7 @@ public class ConnectionWaiter extends Thread
 	public void run()
 	{
 		try {
+			(responseThread = new PingResponder()).start();
 			serverSocket = new ServerSocket(PeerChess.instance().port);
 			
 			Socket connection = serverSocket.accept();
@@ -55,24 +56,26 @@ public class ConnectionWaiter extends Thread
 	
 	public class PingResponder extends Thread
 	{
+		public DatagramSocket socket;
+		
 		@Override
 		public void run()
 		{
 			try {
 				byte[] receiveData = new byte[1024];
 				
-				DatagramSocket clientSocket = new DatagramSocket(PeerChess.instance().port);
+				socket = new DatagramSocket(PeerChess.instance().port);
 				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 	
 				while(true)
 				{
-					clientSocket.receive(receivePacket);
+					socket.receive(receivePacket);
 					
 					DatagramPacket response = new DatagramPacket(receiveData, receiveData.length);
 					response.setAddress(receivePacket.getAddress());
 					response.setPort(receivePacket.getPort());
 					response.setData(new String("PING:" + PeerChess.instance().username).getBytes());
-					clientSocket.send(response);
+					socket.send(response);
 				}
 			} catch(Exception e) {
 				e.printStackTrace();

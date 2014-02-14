@@ -35,7 +35,7 @@ public class OptionsFrame extends JFrame
 		add(titleLabel);
 		
 		usernameLabel = new JLabel("Username: " + PeerChess.instance().username);
-		usernameLabel.setSize(120, 30);
+		usernameLabel.setSize(240, 30);
 		usernameLabel.setLocation(16, 40);
 		add(usernameLabel);
 		

@@ -42,7 +42,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 		JLabel connectingLabel = new JLabel("Awaiting Connection...");
 		connectingLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
 		connectingLabel.setSize(160, 30);
-		connectingLabel.setLocation(110, 10);
+		connectingLabel.setLocation(106, 10);
 		add(connectingLabel);
 		
 		progressBar = new JProgressBar();

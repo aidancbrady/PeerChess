@@ -51,14 +51,19 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public void openChess()
 	{
+		forceChess();
+		
+		waiting.setThread(new ConnectionWaiter(chess));
+		waiting.setVisible(true);
+	}
+	
+	public void forceChess()
+	{
 		menu.setVisible(false);
 		join.setVisible(false);
 		
 		setSize(1024, 790);
 		chess.setVisible(true);
-		
-		waiting.setThread(new ConnectionWaiter(chess));
-		waiting.setVisible(true);
 	}
 	
 	public void openSavedChess()

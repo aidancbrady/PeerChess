@@ -104,7 +104,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		titleLabel.setLocation(820, 5);
 		add(titleLabel);
 		
-		opponentLabel = new JLabel("Opponent:");
+		opponentLabel = new JLabel("Opponent: waiting");
 		opponentLabel.setFont(new Font("Helvetica", Font.PLAIN, 16));
 		opponentLabel.setSize(200, 40);
 		opponentLabel.setLocation(774, 40);

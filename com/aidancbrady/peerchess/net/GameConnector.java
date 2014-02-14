@@ -37,6 +37,8 @@ public class GameConnector extends Thread
 			
 			panel.connection.write("USER:" + PeerChess.instance().username);
 			panel.frame.connecting.setVisible(false);
+			
+			panel.frame.forceChess();
 		} catch(Exception e) {
 			panel.frame.connecting.setVisible(false);
 			JOptionPane.showMessageDialog(panel, "Couldn't connect to server: " + e.getLocalizedMessage());

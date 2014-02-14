@@ -136,6 +136,11 @@ public class ChessComponent extends JComponent
 		panel.chatBox.setText("");
 		panel.updateText();
 		
+		if(panel.opponentLabel != null)
+		{
+			panel.opponentLabel.setText("Opponent: waiting");
+		}
+		
 		if(panel.connection != null)
 		{
 			try {
