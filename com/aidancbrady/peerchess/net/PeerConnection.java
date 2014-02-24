@@ -32,6 +32,8 @@ public class PeerConnection extends Thread
 	
 	public String username;
 	
+	public boolean host = false;
+	
 	public boolean disconnected = false;
 	
 	public PeerConnection(Socket s, ChessPanel p)
@@ -72,7 +74,14 @@ public class PeerConnection extends Thread
 				{
 					username = reading.split(":")[1];
 					panel.updateText();
-					JOptionPane.showMessageDialog(panel, username + " has connected to the game");
+					
+					if(host)
+					{
+						JOptionPane.showMessageDialog(panel, username + " has connected to the game");
+					}
+					else {
+						JOptionPane.showMessageDialog(panel, "You have joined " + username + "'s game");
+					}
 				}
 				else if(reading.startsWith("MOVE"))
 				{

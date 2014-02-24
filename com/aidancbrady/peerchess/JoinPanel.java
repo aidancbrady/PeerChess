@@ -88,7 +88,7 @@ public class JoinPanel extends JPanel
 			{
 				if(event.getClickCount() == 2)
 				{
-					doConnect();
+					doLocalConnect();
 				}
 			}
 		});
@@ -150,7 +150,7 @@ public class JoinPanel extends JPanel
 		add(refreshBar);
 	}
 	
-	public void doConnect()
+	public void doLocalConnect()
 	{
 		int index = serverList.getSelectedIndex();
 		
@@ -163,6 +163,18 @@ public class JoinPanel extends JPanel
 				frame.connecting.setThread(new GameConnector(server, frame.chess));
 				frame.connecting.setVisible(true);
 			}
+		}
+	}
+	
+	public void doRemoteConnect()
+	{
+		String s = ipField.getText();
+		
+		if(PeerUtils.isValidIP(s))
+		{
+			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chess));
+			frame.connecting.setVisible(true);
+			ipField.setText("");
 		}
 	}
 	
@@ -201,7 +213,7 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			doConnect();
+			doLocalConnect();
 		}
 	}
 	
@@ -210,7 +222,7 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			
+			doRemoteConnect();
 		}
 	}
 	

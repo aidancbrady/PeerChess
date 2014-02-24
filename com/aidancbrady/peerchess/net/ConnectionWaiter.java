@@ -38,6 +38,8 @@ public class ConnectionWaiter extends Thread
 			{
 				(panel.connection = new PeerConnection(connection, panel)).start();
 				panel.connection.write("UPDATE");
+				panel.connection.write("USER:" + PeerChess.instance().username);
+				panel.connection.host = true;
 				
 				panel.frame.waiting.setVisible(false);
 			}

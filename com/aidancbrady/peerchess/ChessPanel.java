@@ -79,12 +79,13 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		chatBox = new JTextArea();
 		chatBox.setEditable(false);
-		chatBox.setBorder(new TitledBorder(new EtchedBorder(), "Chatbox"));
 		chatBox.setAutoscrolls(true);
 		chatBox.setBackground(Color.LIGHT_GRAY);
 		JScrollPane chatScroll = new JScrollPane(chatBox);
 		chatScroll.setSize(256, 256);
 		chatScroll.setLocation(768, 484);
+		chatScroll.setBorder(new TitledBorder(new EtchedBorder(), "Chatbox"));
+		chatScroll.setBackground(Color.LIGHT_GRAY);
 		add(chatScroll);
 		
 		chatField = new JTextField();
