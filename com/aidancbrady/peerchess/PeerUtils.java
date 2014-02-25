@@ -101,7 +101,14 @@ public final class PeerUtils
 				
 				if(piece.side != side)
 				{
-					
+					if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1)
+					{
+						return true;
+					}
+					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
 				}
 				
 				break;
@@ -120,7 +127,14 @@ public final class PeerUtils
 				
 				if(piece.side != side)
 				{
-					
+					if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1)
+					{
+						return true;
+					}
+					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
 				}
 				
 				break;
@@ -139,7 +153,14 @@ public final class PeerUtils
 				
 				if(piece.side != side)
 				{
-					
+					if(piece.type == PieceType.KING && Math.abs(pos.yPos-yPointer) == 1)
+					{
+						return true;
+					}
+					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
 				}
 				
 				break;
@@ -158,7 +179,14 @@ public final class PeerUtils
 				
 				if(piece.side != side)
 				{
-					
+					if(piece.type == PieceType.KING && Math.abs(pos.yPos-yPointer) == 1)
+					{
+						return true;
+					}
+					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
 				}
 				
 				break;
