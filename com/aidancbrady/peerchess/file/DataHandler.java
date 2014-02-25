@@ -31,6 +31,7 @@ public final class DataHandler
 			BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 			
 			PeerChess.instance().username = reader.readLine().trim();
+			PeerChess.instance().enableSoundEffects = Boolean.parseBoolean(reader.readLine().trim());
 			
 			reader.close();
 		} catch(Exception e) {
@@ -52,6 +53,10 @@ public final class DataHandler
 			BufferedWriter writer = new BufferedWriter(new FileWriter(dataFile));
 			
 			writer.append(PeerChess.instance().username.trim());
+			writer.newLine();
+			
+			writer.append(Boolean.toString(PeerChess.instance().enableSoundEffects));
+			writer.newLine();
 			
 			writer.flush();
 			writer.close();

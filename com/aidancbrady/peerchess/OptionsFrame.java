@@ -3,13 +3,16 @@ package com.aidancbrady.peerchess;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class OptionsFrame extends JFrame
+public class OptionsFrame extends JFrame implements ItemListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -17,6 +20,9 @@ public class OptionsFrame extends JFrame
 	
 	public JButton backButton;
 	public JButton usernameButton;
+	
+	public JCheckBox soundEffectsBox;
+	public JCheckBox animationsBox;
 	
 	public JLabel usernameLabel;
 
@@ -50,6 +56,18 @@ public class OptionsFrame extends JFrame
 		usernameButton.setLocation(210, 40);
 		usernameButton.addActionListener(new UsernameButtonListener());
 		add(usernameButton);
+		
+		soundEffectsBox = new JCheckBox();
+		soundEffectsBox.setSelected(PeerChess.instance().enableSoundEffects);
+		soundEffectsBox.setSize(24, 24);
+		soundEffectsBox.setLocation(16, 90);
+		soundEffectsBox.addItemListener(this);
+		add(soundEffectsBox);
+		
+		JLabel soundEffectsLabel = new JLabel("Enable sound effects");
+		soundEffectsLabel.setSize(200, 30);
+		soundEffectsLabel.setLocation(40, 86);
+		add(soundEffectsLabel);
 		
 		setVisible(true);
 		setResizable(false);
@@ -86,9 +104,23 @@ public class OptionsFrame extends JFrame
 					}
 					else {
 						JOptionPane.showMessageDialog(OptionsFrame.this, "Username must be less than 16 characters");
+						continue;
 					}
 				}
+				else if(result == null)
+				{
+					break;
+				}
 			}
+		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent arg0) 
+	{
+		if(arg0.getSource() == soundEffectsBox)
+		{
+			PeerChess.instance().enableSoundEffects = arg0.getStateChange() == 1;
 		}
 	}
 }

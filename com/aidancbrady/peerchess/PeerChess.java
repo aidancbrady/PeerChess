@@ -16,6 +16,8 @@ public class PeerChess
 	public int port = 26325;
 	
 	public String username = "Guest";
+	
+	public boolean enableSoundEffects = true;
 	 
 	public static void main(String[] args)
 	{

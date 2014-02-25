@@ -1,6 +1,6 @@
 package com.aidancbrady.peerchess;
 
-public class ChessPos 
+public class ChessPos
 {
 	public int xPos;
 	public int yPos;
@@ -19,6 +19,12 @@ public class ChessPos
 	public ChessSquare getSquare(ChessSquare[][] grid)
 	{
 		return grid[xPos][yPos];
+	}
+	
+	@Override
+	public ChessPos clone()
+	{
+		return new ChessPos(xPos, yPos);
 	}
 	
 	@Override

@@ -8,6 +8,11 @@ public class PieceKing implements Piece
 	@Override
 	public boolean canMove(ChessSquare[][] grid, ChessMove move)
 	{
-		return move.isValidStep(grid);
+		if(move.isValidStep(grid))
+		{
+			
+		}
+		
+		return false;
 	}
 }

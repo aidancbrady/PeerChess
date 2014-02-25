@@ -45,7 +45,7 @@ public class MoveAction
 	
 	public void update()
 	{
-		if(frames == 0)
+		if(frames == 0 && PeerChess.instance().enableSoundEffects)
 		{
 			moveSound.play();
 		}
@@ -55,7 +55,6 @@ public class MoveAction
 		if(frames == FRAME_LIMIT)
 		{
 			move();
-			component.currentAnimation = null;
 		}
 		
 		component.overlay.repaint();
@@ -81,6 +80,8 @@ public class MoveAction
 		
 		component.turn = component.turn == Side.WHITE ? Side.BLACK : Side.WHITE;
 		component.panel.updateText();
+		
+		component.currentAnimation = null;
 	}
 	
 	public float getPercentage()
