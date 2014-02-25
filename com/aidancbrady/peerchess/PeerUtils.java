@@ -64,12 +64,10 @@ public final class PeerUtils
 	}
 	
 	public static boolean isInCheck(Side side, ChessPos pos, ChessSquare[][] grid)
-	{
-		int pointer = pos.xPos;
+	{		
+		Set<ChessPos> moves = getValidKnightMoves(pos);
 		
-		Set<ChessPos> knightMoves = getValidKnightMoves(pos);
-		
-		for(ChessPos iterPos : knightMoves)
+		for(ChessPos iterPos : moves)
 		{
 			if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side)
 			{
@@ -77,52 +75,188 @@ public final class PeerUtils
 			}
 		}
 		
-		while(pointer < 7)
+		moves = getValidPawnMoves(pos, side);
+		
+		for(ChessPos iterPos : moves)
 		{
-			pointer++;
-			
-			if(grid[pointer][pos.yPos].housedPiece != null && grid[pointer][pos.yPos].housedPiece.side != side)
+			if(iterPos.xPos != pos.xPos)
 			{
-				ChessPiece piece = grid[pointer][pos.yPos].housedPiece;
+				if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side)
+				{
+					return true;
+				}
+			}
+		}
+		
+		int xPointer = pos.xPos;
+		int yPointer = pos.yPos;
+		
+		while(xPointer < 7)
+		{
+			xPointer++;
+			
+			if(grid[xPointer][pos.yPos].housedPiece != null)
+			{
+				ChessPiece piece = grid[xPointer][pos.yPos].housedPiece;
+				
+				if(piece.side != side)
+				{
+					
+				}
+				
 				break;
 			}
 		}
 		
-		pointer = pos.xPos;
+		xPointer = pos.xPos;
 		
-		while(pointer > 0)
+		while(xPointer > 0)
 		{
-			pointer--;
+			xPointer--;
 			
-			if(grid[pointer][pos.yPos].housedPiece != null && grid[pointer][pos.yPos].housedPiece.side != side)
+			if(grid[xPointer][pos.yPos].housedPiece != null)
 			{
-				ChessPiece piece = grid[pointer][pos.yPos].housedPiece;
+				ChessPiece piece = grid[xPointer][pos.yPos].housedPiece;
+				
+				if(piece.side != side)
+				{
+					
+				}
+				
 				break;
 			}
 		}
 		
-		pointer = pos.yPos;
+		yPointer = pos.yPos;
 		
-		while(pointer < 7)
+		while(yPointer < 7)
 		{
-			pointer++;
+			yPointer++;
 			
-			if(grid[pointer][pos.yPos].housedPiece != null && grid[pointer][pos.yPos].housedPiece.side != side)
+			if(grid[pos.xPos][yPointer].housedPiece != null)
 			{
-				ChessPiece piece = grid[pointer][pos.yPos].housedPiece;
+				ChessPiece piece = grid[pos.xPos][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					
+				}
+				
 				break;
 			}
 		}
 		
-		pointer = pos.yPos;
+		yPointer = pos.yPos;
 		
-		while(pointer > 0)
+		while(yPointer > 0)
 		{
-			pointer--;
+			yPointer--;
 			
-			if(grid[pointer][pos.yPos].housedPiece != null && grid[pointer][pos.yPos].housedPiece.side != side)
+			if(grid[pos.xPos][yPointer].housedPiece != null)
 			{
-				ChessPiece piece = grid[pointer][pos.yPos].housedPiece;
+				ChessPiece piece = grid[pos.xPos][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					
+				}
+				
+				break;
+			}
+		}
+		
+		xPointer = pos.xPos;
+		yPointer = pos.yPos;
+		
+		while(xPointer < 7 && yPointer < 7)
+		{
+			xPointer++;
+			yPointer++;
+			
+			if(grid[xPointer][yPointer].housedPiece != null)
+			{
+				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
+				}
+				
+				break;
+			}
+		}
+		
+		xPointer = pos.xPos;
+		yPointer = pos.yPos;
+		
+		while(xPointer > 0 && yPointer > 0)
+		{
+			xPointer--;
+			yPointer--;
+			
+			if(grid[xPointer][yPointer].housedPiece != null)
+			{
+				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
+				}
+				
+				break;
+			}
+		}
+		
+		xPointer = pos.xPos;
+		yPointer = pos.yPos;
+		
+		while(xPointer < 7 && yPointer > 0)
+		{
+			xPointer++;
+			yPointer--;
+			
+			if(grid[xPointer][yPointer].housedPiece != null)
+			{
+				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
+				}
+				
+				break;
+			}
+		}
+		
+		xPointer = pos.xPos;
+		yPointer = pos.yPos;
+		
+		while(xPointer > 0 && yPointer < 7)
+		{
+			xPointer--;
+			yPointer++;
+			
+			if(grid[xPointer][yPointer].housedPiece != null)
+			{
+				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				
+				if(piece.side != side)
+				{
+					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
+					{
+						return true;
+					}
+				}
+				
 				break;
 			}
 		}
@@ -147,6 +281,36 @@ public final class PeerUtils
 		}
 		
 		return null;
+	}
+	
+	public static Set<ChessPos> getValidPawnMoves(ChessPos pos, Side side)
+	{
+		Set<ChessPos> validDests = new HashSet<ChessPos>();
+		
+		if(side == Side.BLACK)
+		{
+			validDests.add(new ChessPos(pos.xPos+1, pos.yPos+1));
+			validDests.add(new ChessPos(pos.xPos, pos.yPos+1));
+			validDests.add(new ChessPos(pos.xPos-1, pos.yPos+1));
+		}
+		else if(side == Side.WHITE)
+		{
+			validDests.add(new ChessPos(pos.xPos+1, pos.yPos-1));
+			validDests.add(new ChessPos(pos.xPos, pos.yPos-1));
+			validDests.add(new ChessPos(pos.xPos-1, pos.yPos-1));
+		}
+		
+		for(Iterator<ChessPos> iter = validDests.iterator(); iter.hasNext();)
+		{
+			ChessPos iterPos = iter.next();
+			
+			if(iterPos.xPos < 0 || iterPos.xPos > 7 || iterPos.yPos < 0 || iterPos.yPos > 7)
+			{
+				iter.remove();
+			}
+		}
+		
+		return validDests;
 	}
 	
 	public static Set<ChessPos> getValidKnightMoves(ChessPos pos)

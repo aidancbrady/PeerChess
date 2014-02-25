@@ -44,6 +44,11 @@ public class ChessPiece
 		{
 			name = s;
 		}
+		
+		public Side getOpposite()
+		{
+			return this == WHITE ? BLACK : WHITE;
+		}
 	}
 	
 	public PieceType type;
