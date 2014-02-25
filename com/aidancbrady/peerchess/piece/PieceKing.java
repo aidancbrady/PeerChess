@@ -2,6 +2,7 @@ package com.aidancbrady.peerchess.piece;
 
 import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.PeerUtils;
 
 public class PieceKing implements Piece
 {
@@ -10,7 +11,10 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(grid))
 		{
-			
+			if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, move.fromPos, grid))
+			{
+				return false;
+			}
 		}
 		
 		return false;

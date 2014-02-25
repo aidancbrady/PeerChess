@@ -26,6 +26,7 @@ public class ChessComponent extends JComponent
 	
 	public Side side = Side.WHITE;
 	public Side turn = Side.WHITE;
+	public Side inCheck = null;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	

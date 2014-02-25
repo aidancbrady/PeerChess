@@ -49,6 +49,11 @@ public class PeerChess
         SwingUtilities.invokeLater(doSwingLater);
 	}
 	
+	public ChessComponent getChess()
+	{
+		return frame.chess.chess;
+	}
+	
 	private void initMacOSX()
 	{
 		try {

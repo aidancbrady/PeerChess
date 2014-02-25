@@ -126,6 +126,8 @@ public final class SaveHandler
 		writer.newLine();
 		writer.append(Integer.toString(chess.turn.ordinal()));
 		writer.newLine();
+		writer.append(chess.inCheck != null ? Integer.toString(chess.inCheck.ordinal()) : "-1");
+		writer.newLine();
 		
 		for(int y = 0; y < 8; y++)
 		{
@@ -187,6 +189,9 @@ public final class SaveHandler
 		
 		chess.setSide(Side.values()[Integer.parseInt(reader.readLine())]);
 		chess.turn = Side.values()[Integer.parseInt(reader.readLine())];
+		
+		int check = Integer.parseInt(reader.readLine());
+		chess.inCheck = check == -1 ? null : Side.values()[check];
 		
 		for(int y = 0; y < 8; y++)
 		{

@@ -3,6 +3,7 @@ package com.aidancbrady.peerchess.piece;
 import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 
 public class PiecePawn implements Piece
@@ -10,6 +11,13 @@ public class PiecePawn implements Piece
 	@Override
 	public boolean canMove(ChessSquare[][] grid, ChessMove move)
 	{
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).housedPiece.side, grid);
+		
+		if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, pos, grid))
+		{
+			return false;
+		}
+		
 		Side side = move.getFromSquare(grid).housedPiece.side;
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
