@@ -211,4 +211,23 @@ public class ChessMove
 		
 		return true;
 	}
+	
+	public ChessSquare[][] getFakeGrid(ChessSquare[][] grid)
+	{
+		ChessSquare[][] fakeGrid = new ChessSquare[8][8];
+		
+		for(int x = 0; x < 8; x++)
+		{
+			for(int y = 0; y < 8; y++)
+			{
+				fakeGrid[x][y] = new ChessSquare(PeerChess.instance().getChess(), false, new ChessPos(x, y));
+				fakeGrid[x][y].housedPiece = grid[x][y].housedPiece;
+			}
+		}
+		
+		getFromSquare(fakeGrid).housedPiece = null;
+		getToSquare(fakeGrid).housedPiece = getFromSquare(grid).housedPiece;
+		
+		return fakeGrid;
+	}
 }

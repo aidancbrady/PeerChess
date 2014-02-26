@@ -11,7 +11,7 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(grid))
 		{
-			if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, move.fromPos, grid))
+			if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, move.fromPos, move.getFakeGrid(grid)))
 			{
 				return false;
 			}

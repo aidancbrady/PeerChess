@@ -64,7 +64,7 @@ public final class PeerUtils
 	}
 	
 	public static boolean isInCheck(Side side, ChessPos pos, ChessSquare[][] grid)
-	{		
+	{
 		Set<ChessPos> moves = getValidKnightMoves(pos);
 		
 		for(ChessPos iterPos : moves)

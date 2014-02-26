@@ -12,7 +12,7 @@ public class PieceBishop implements Piece
 	{
 		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).housedPiece.side, grid);
 		
-		if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, pos, grid))
+		if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, pos, move.getFakeGrid(grid)))
 		{
 			return false;
 		}
