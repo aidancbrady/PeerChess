@@ -69,8 +69,9 @@ public final class PeerUtils
 		
 		for(ChessPos iterPos : moves)
 		{
-			if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side)
+			if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side && iterPos.getSquare(grid).housedPiece.type == PieceType.KNIGHT)
 			{
+				System.out.println("Knight " + iterPos);
 				return true;
 			}
 		}
@@ -81,8 +82,9 @@ public final class PeerUtils
 		{
 			if(iterPos.xPos != pos.xPos)
 			{
-				if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side)
+				if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side && iterPos.getSquare(grid).housedPiece.type == PieceType.PAWN)
 				{
+					System.out.println("Pawn " + iterPos);
 					return true;
 				}
 			}
@@ -103,10 +105,12 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -116,6 +120,7 @@ public final class PeerUtils
 		}
 		
 		xPointer = pos.xPos;
+		yPointer = pos.yPos;
 		
 		while(xPointer > 0)
 		{
@@ -129,10 +134,12 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -141,6 +148,7 @@ public final class PeerUtils
 			}
 		}
 		
+		xPointer = pos.xPos;
 		yPointer = pos.yPos;
 		
 		while(yPointer < 7)
@@ -155,10 +163,12 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.KING && Math.abs(pos.yPos-yPointer) == 1)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -181,10 +191,12 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.KING && Math.abs(pos.yPos-yPointer) == 1)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 					else if(piece.type == PieceType.CASTLE || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Linear " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -209,6 +221,7 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Diagonal " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -233,6 +246,7 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Diagonal " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -257,6 +271,7 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Diagonal " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -281,6 +296,7 @@ public final class PeerUtils
 				{
 					if(piece.type == PieceType.BISHOP || piece.type == PieceType.QUEEN)
 					{
+						System.out.println("Diagonal " + xPointer + " " + yPointer);
 						return true;
 					}
 				}
@@ -318,13 +334,11 @@ public final class PeerUtils
 		if(side == Side.BLACK)
 		{
 			validDests.add(new ChessPos(pos.xPos+1, pos.yPos+1));
-			validDests.add(new ChessPos(pos.xPos, pos.yPos+1));
 			validDests.add(new ChessPos(pos.xPos-1, pos.yPos+1));
 		}
 		else if(side == Side.WHITE)
 		{
 			validDests.add(new ChessPos(pos.xPos+1, pos.yPos-1));
-			validDests.add(new ChessPos(pos.xPos, pos.yPos-1));
 			validDests.add(new ChessPos(pos.xPos-1, pos.yPos-1));
 		}
 		
