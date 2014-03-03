@@ -63,6 +63,13 @@ public final class PeerUtils
 		}
 	}
 	
+	public static boolean isCheckMate(Side side, ChessSquare[][] grid)
+	{
+		ChessPos pos = findKing(side, grid);
+		
+		return false;
+	}
+	
 	public static boolean isInCheck(Side side, ChessPos pos, ChessSquare[][] grid)
 	{
 		Set<ChessPos> moves = getValidKnightMoves(pos);
