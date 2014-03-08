@@ -26,7 +26,7 @@ public class ChessComponent extends JComponent
 	
 	public Side side = Side.WHITE;
 	public Side turn = Side.WHITE;
-	public Side inCheck = null;
+	public Side winner = null;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
@@ -136,6 +136,7 @@ public class ChessComponent extends JComponent
 		panel.pawnReplace = 0;
 		panel.chatBox.setText("");
 		panel.updateText();
+		winner = null;
 		
 		if(panel.opponentLabel != null)
 		{

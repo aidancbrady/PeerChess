@@ -94,7 +94,7 @@ public class ChessSquare extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(component.isMoving() || component.panel.connection == null || component.turn != component.side)
+		if(component.isMoving() || component.panel.connection == null || component.turn != component.side || component.winner != null)
 		{
 			return;
 		}

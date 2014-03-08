@@ -79,8 +79,17 @@ public class MoveAction
 		moveSound.stop();
 		
 		component.turn = component.turn == Side.WHITE ? Side.BLACK : Side.WHITE;
-		component.panel.updateText();
 		
+		if(PeerUtils.isCheckMate(Side.WHITE, component.grid))
+		{
+			component.winner = Side.BLACK;
+		}
+		else if(PeerUtils.isCheckMate(Side.BLACK, component.grid))
+		{
+			component.winner = Side.WHITE;
+		}
+		
+		component.panel.updateText();
 		component.currentAnimation = null;
 	}
 	

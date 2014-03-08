@@ -124,7 +124,14 @@ public class ChessPanel extends JPanel implements MouseListener
 		{
 			opponentLabel.setText("Opponent: " + (connection != null ? connection.username : "disconnected"));
 			titleLabel.setText("PeerChess - " + chess.side.name);
-			statusLabel.setText(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
+			
+			if(chess.winner == null)
+			{
+				statusLabel.setText(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
+			}
+			else {
+				statusLabel.setText(chess.winner == chess.side ? "You win the game!" : "You lost the game.");
+			}
 		}
 	}
 	
