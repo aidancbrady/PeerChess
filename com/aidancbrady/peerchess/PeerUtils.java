@@ -67,15 +67,23 @@ public final class PeerUtils
 	{
 		ChessPos pos = findKing(side, grid);
 		
-		for(ChessPos iterPos : getValidStepMoves(pos))
+		for(int x = 0; x < 8; x++)
 		{
-			if(iterPos.getSquare(grid).housedPiece == null || iterPos.getSquare(grid).housedPiece.side != side)
+			for(int y = 0; y < 8; y++)
 			{
-				ChessMove move = new ChessMove(pos, iterPos);
-				
-				if(!isInCheck(side, iterPos, move.getFakeGrid(grid)))
+				if(grid[x][y].housedPiece != null && grid[x][y].housedPiece.side == side)
 				{
-					return false;
+					ChessPiece piece = grid[x][y].housedPiece;
+					
+					for(ChessPos newPos : piece.type.getPiece().getCurrentPossibleMoves(grid, new ChessPos(x, y)))
+					{
+						ChessMove move = new ChessMove(new ChessPos(x, y), newPos);
+						
+						if(!isInCheck(side, pos, move.getFakeGrid(grid)))
+						{
+							return false;
+						}
+					}
 				}
 			}
 		}
@@ -95,7 +103,7 @@ public final class PeerUtils
 			}
 		}
 		
-		moves = getValidPawnMoves(pos, side);
+		moves = getValidPawnAttackMoves(pos, side);
 		
 		for(ChessPos iterPos : moves)
 		{
@@ -333,7 +341,7 @@ public final class PeerUtils
 		return null;
 	}
 	
-	public static Set<ChessPos> getValidPawnMoves(ChessPos pos, Side side)
+	public static Set<ChessPos> getValidPawnAttackMoves(ChessPos pos, Side side)
 	{
 		Set<ChessPos> validDests = new HashSet<ChessPos>();
 		

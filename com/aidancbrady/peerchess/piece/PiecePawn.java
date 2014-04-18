@@ -1,5 +1,7 @@
 package com.aidancbrady.peerchess.piece;
 
+import java.util.Set;
+
 import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
@@ -62,5 +64,11 @@ public class PiecePawn implements Piece
 		}
 		
 		return move.equals(left) || move.equals(right) || xAbs <= 1;
+	}
+	
+	@Override
+	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos)
+	{
+		return null;
 	}
 }

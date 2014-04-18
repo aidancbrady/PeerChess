@@ -30,9 +30,6 @@ public class ChessComponent extends JComponent
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
-	public List<ChessPiece> whiteTaken = new ArrayList<ChessPiece>();
-	public List<ChessPiece> blackTaken = new ArrayList<ChessPiece>();
-	
 	public static Texture white = Texture.load("resources/icon/white.png");
 	public static Texture black = Texture.load("resources/icon/black.png");
 	
@@ -130,8 +127,6 @@ public class ChessComponent extends JComponent
 		side = Side.WHITE;
 		turn = Side.WHITE;
 		selected = null;
-		whiteTaken.clear();
-		blackTaken.clear();
 		moves.clear();
 		panel.pawnReplace = 0;
 		panel.chatBox.setText("");

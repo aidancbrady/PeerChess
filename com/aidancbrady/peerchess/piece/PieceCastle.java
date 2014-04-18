@@ -1,8 +1,13 @@
 package com.aidancbrady.peerchess.piece;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aidancbrady.peerchess.ChessMove;
+import com.aidancbrady.peerchess.ChessPiece;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 
 public class PieceCastle implements Piece
@@ -18,5 +23,105 @@ public class PieceCastle implements Piece
 		}
 		
 		return move.isValidStraight(grid);
+	}
+	
+	@Override
+	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos)
+	{
+		Set<ChessPos> ret = new HashSet<ChessPos>();
+		
+		int x = origPos.xPos;
+		int y = origPos.yPos;
+		
+		if(x != 7)
+		{
+			for(x = x+1; x <= 7; x++)
+			{
+				ChessPiece piece = grid[x][y].housedPiece;
+				
+				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				{
+					break;
+				}
+				
+				ret.add(new ChessPos(x, y));
+				
+				if(piece != null)
+				{
+					break;
+				}
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		if(x != 0)
+		{
+			for(x = x-1; x >= 0; x--)
+			{
+				ChessPiece piece = grid[x][y].housedPiece;
+				
+				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				{
+					break;
+				}
+				
+				ret.add(new ChessPos(x, y));
+				
+				if(piece != null)
+				{
+					break;
+				}
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		if(y != 7)
+		{
+			for(y = y+1; y <= 7; y++)
+			{
+				ChessPiece piece = grid[x][y].housedPiece;
+				
+				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				{
+					break;
+				}
+				
+				ret.add(new ChessPos(x, y));
+				
+				if(piece != null)
+				{
+					break;
+				}
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		if(y != 0)
+		{
+			for(y = y-1; y >= 0; y--)
+			{
+				ChessPiece piece = grid[x][y].housedPiece;
+				
+				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				{
+					break;
+				}
+				
+				ret.add(new ChessPos(x, y));
+				
+				if(piece != null)
+				{
+					break;
+				}
+			}
+		}
+		
+		return ret;
 	}
 }

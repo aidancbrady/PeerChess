@@ -131,15 +131,15 @@ public class ChessSquare extends JComponent implements MouseListener
 							
 							if(piece.type == PieceType.PAWN)
 							{
-								if(piece.side == Side.WHITE && move.toPos.yPos == 0 && !component.blackTaken.isEmpty())
+								if(piece.side == Side.WHITE && move.toPos.yPos == 0)
 								{
-									component.panel.pawnReplace %= component.blackTaken.size();
-									newPiece = component.blackTaken.get(component.panel.pawnReplace);
+									component.panel.pawnReplace %= PieceType.values().length;
+									newPiece = ChessPiece.getPieceList(Side.BLACK).get(component.panel.pawnReplace);
 								}
-								else if(piece.side == Side.BLACK && move.toPos.yPos == 7 && !component.whiteTaken.isEmpty())
+								else if(piece.side == Side.BLACK && move.toPos.yPos == 7)
 								{
-									component.panel.pawnReplace %= component.whiteTaken.size();
-									newPiece = component.whiteTaken.get(component.panel.pawnReplace);
+									component.panel.pawnReplace %= PieceType.values().length;
+									newPiece = ChessPiece.getPieceList(Side.WHITE).get(component.panel.pawnReplace);
 								}
 							}
 							

@@ -62,31 +62,16 @@ public class MoveAction
 	
 	public void move()
 	{
-		if(move.toPos.getSquare(component.grid).housedPiece != null)
-		{
-			if(move.toPos.getSquare(component.grid).housedPiece.side == Side.WHITE)
-			{
-				component.blackTaken.add(move.toPos.getSquare(component.grid).housedPiece);
-			}
-			else {
-				component.whiteTaken.add(move.toPos.getSquare(component.grid).housedPiece);
-			}
-		}
-		
 		move.toPos.getSquare(component.grid).setPiece(newPiece);
 		move.toPos.getSquare(component.grid).repaint();
 		
 		moveSound.stop();
 		
-		component.turn = component.turn == Side.WHITE ? Side.BLACK : Side.WHITE;
+		component.turn = component.turn.getOpposite();
 		
-		if(PeerUtils.isCheckMate(Side.WHITE, component.grid))
+		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
 		{
 			component.winner = Side.BLACK;
-		}
-		else if(PeerUtils.isCheckMate(Side.BLACK, component.grid))
-		{
-			component.winner = Side.WHITE;
 		}
 		
 		component.panel.updateText();
@@ -101,6 +86,11 @@ public class MoveAction
 	public void render(Graphics g)
 	{
 		piece.texture.draw(g, getPosX(), getPosY(), 96, 96);
+	}
+	
+	public Side getSide()
+	{
+		return piece.side;
 	}
 	
 	public String write()

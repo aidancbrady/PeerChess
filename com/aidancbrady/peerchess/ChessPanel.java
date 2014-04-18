@@ -144,11 +144,11 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(replace == 0)
 		{
-			chess.blackTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
 		else if(replace == 1)
 		{
-			chess.whiteTaken.get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
 	}
 
@@ -163,11 +163,6 @@ public class ChessPanel extends JPanel implements MouseListener
 	 */
 	public byte shouldPawnReplace()
 	{
-		if(chess.side == Side.WHITE && chess.blackTaken.isEmpty() || chess.side == Side.BLACK && chess.whiteTaken.isEmpty())
-		{
-			return -1;
-		}
-		
 		if(chess != null && chess.selected != null && chess.selected.housedPiece != null)
 		{
 			if(chess.selected.housedPiece.type == PieceType.PAWN)
@@ -301,18 +296,12 @@ public class ChessPanel extends JPanel implements MouseListener
 			
 			if(replace != -1)
 			{
-				if(replace == 0 && pawnReplace > chess.blackTaken.size()-1)
-				{
-					pawnReplace = 0;
-				}
-				else if(replace == 1 && pawnReplace > chess.whiteTaken.size()-1)
+				if(replace == 0 && pawnReplace > PieceType.values().length)
 				{
 					pawnReplace = 0;
 				}
 				
-				int size = replace == 0 ? chess.blackTaken.size() : chess.whiteTaken.size();
-				
-				pawnReplace = (pawnReplace+1)%size;
+				pawnReplace = (pawnReplace+1)%PieceType.values().length;
 				repaint();
 			}
 		}

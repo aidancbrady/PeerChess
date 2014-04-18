@@ -140,6 +140,8 @@ public class PeerConnection extends Thread
 						{
 							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
 						}
+						
+						writer.flush();
 					}
 				} catch(Exception e) {
 					e.printStackTrace();

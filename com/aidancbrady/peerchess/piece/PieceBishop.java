@@ -1,8 +1,13 @@
 package com.aidancbrady.peerchess.piece;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aidancbrady.peerchess.ChessMove;
+import com.aidancbrady.peerchess.ChessPiece;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 
 public class PieceBishop implements Piece
@@ -18,5 +23,105 @@ public class PieceBishop implements Piece
 		}
 		
 		return move.isValidDiagonal(grid);
+	}
+	
+	@Override
+	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos)
+	{
+		Set<ChessPos> ret = new HashSet<ChessPos>();
+		
+		int x = origPos.xPos;
+		int y = origPos.yPos;
+		
+		while(x < 7 && y > 0)
+		{
+			x++;
+			y--;
+			
+			ChessPiece piece = grid[x][y].housedPiece;
+			
+			if(piece != null && piece.side == PeerChess.instance().getChess().side)
+			{
+				break;
+			}
+			
+			ret.add(new ChessPos(x, y));
+			
+			if(piece != null)
+			{
+				break;
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		while(x > 0 && y < 7)
+		{
+			x--;
+			y++;
+			
+			ChessPiece piece = grid[x][y].housedPiece;
+			
+			if(piece != null && piece.side == PeerChess.instance().getChess().side)
+			{
+				break;
+			}
+			
+			ret.add(new ChessPos(x, y));
+			
+			if(piece != null)
+			{
+				break;
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		while(x < 7 && y < 7)
+		{
+			x++;
+			y++;
+			
+			ChessPiece piece = grid[x][y].housedPiece;
+			
+			if(piece != null && piece.side == PeerChess.instance().getChess().side)
+			{
+				break;
+			}
+			
+			ret.add(new ChessPos(x, y));
+			
+			if(piece != null)
+			{
+				break;
+			}
+		}
+		
+		x = origPos.xPos;
+		y = origPos.yPos;
+		
+		while(x > 0 && y > 0)
+		{
+			x--;
+			y--;
+			
+			ChessPiece piece = grid[x][y].housedPiece;
+			
+			if(piece != null && piece.side == PeerChess.instance().getChess().side)
+			{
+				break;
+			}
+			
+			ret.add(new ChessPos(x, y));
+			
+			if(piece != null)
+			{
+				break;
+			}
+		}
+		
+		return ret;
 	}
 }
