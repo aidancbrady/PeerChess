@@ -7,7 +7,6 @@ import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPiece;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
-import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 
 public class PieceCastle implements Piece
@@ -39,7 +38,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = grid[x][y].housedPiece;
 				
-				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
 				{
 					break;
 				}
@@ -62,7 +61,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = grid[x][y].housedPiece;
 				
-				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
 				{
 					break;
 				}
@@ -85,7 +84,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = grid[x][y].housedPiece;
 				
-				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
 				{
 					break;
 				}
@@ -108,7 +107,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = grid[x][y].housedPiece;
 				
-				if(piece != null && piece.side == PeerChess.instance().getChess().side)
+				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
 				{
 					break;
 				}

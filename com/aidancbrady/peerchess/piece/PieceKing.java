@@ -6,7 +6,6 @@ import java.util.Set;
 import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
-import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 
 public class PieceKing implements Piece
@@ -34,7 +33,7 @@ public class PieceKing implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(grid).housedPiece != null && pos.getSquare(grid).housedPiece.side == PeerChess.instance().getChess().side)
+			if(pos.getSquare(grid).housedPiece != null && pos.getSquare(grid).housedPiece.side == origPos.getSquare(grid).housedPiece.side)
 			{
 				iter.remove();
 			}

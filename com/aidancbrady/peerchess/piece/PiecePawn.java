@@ -7,7 +7,6 @@ import com.aidancbrady.peerchess.ChessMove;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.ChessSquare;
-import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 
 public class PiecePawn implements Piece
@@ -73,7 +72,7 @@ public class PiecePawn implements Piece
 	{
 		Set<ChessPos> possibleMoves = new HashSet<ChessPos>();
 		
-		Side side = PeerChess.instance().getChess().side;
+		Side side = origPos.getSquare(grid).housedPiece.side;
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
 		ChessPos left = origPos.translate(1, side == Side.BLACK ? 1 : -1);
