@@ -71,7 +71,7 @@ public class MoveAction
 		
 		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
 		{
-			component.winner = Side.BLACK;
+			component.winner = getSide();
 		}
 		
 		component.panel.updateText();
