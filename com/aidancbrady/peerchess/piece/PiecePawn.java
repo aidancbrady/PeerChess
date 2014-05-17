@@ -79,12 +79,12 @@ public class PiecePawn implements Piece
 		ChessPos left = origPos.translate(1, side == Side.BLACK ? 1 : -1);
 		ChessPos right = origPos.translate(-1, side == Side.BLACK ? 1 : -1);
 		
-		if(left.getSquare(grid).housedPiece != null && left.getSquare(grid).housedPiece.side != side)
+		if(left.isInRange() && left.getSquare(grid).housedPiece != null && left.getSquare(grid).housedPiece.side != side)
 		{
 			possibleMoves.add(left);
 		}
 		
-		if(right.getSquare(grid).housedPiece != null && right.getSquare(grid).housedPiece.side != side)
+		if(right.isInRange() && right.getSquare(grid).housedPiece != null && right.getSquare(grid).housedPiece.side != side)
 		{
 			possibleMoves.add(right);
 		}

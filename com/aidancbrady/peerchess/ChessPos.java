@@ -21,6 +21,11 @@ public class ChessPos
 		return grid[xPos][yPos];
 	}
 	
+	public boolean isInRange()
+	{
+		return xPos >= 0 && xPos <= 7 && yPos >= 0 && yPos <= 7;
+	}
+	
 	@Override
 	public ChessPos clone()
 	{
