@@ -54,7 +54,7 @@ public class GameScanner extends Thread
 					
 					if(s.startsWith("PING"))
 					{
-						pingedServers.add(new Server(s.split(":")[1], response.getAddress().getHostAddress()));
+						pingedServers.add(new Server(s.split(":")[1].trim(), response.getAddress().getHostAddress()));
 					}
 				} catch(SocketTimeoutException e) {
 					break;
