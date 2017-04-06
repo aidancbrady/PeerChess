@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -63,7 +64,7 @@ public class MenuPanel extends JPanel
 		version.setLocation(340, 520);
 		add(version);
 		
-		JLabel copyright = new JLabel("© aidancbrady, 2014");
+		JLabel copyright = new JLabel("© aidancbrady, " + PeerChess.instance().calendar.get(Calendar.YEAR));
 		copyright.setVisible(true);
 		copyright.setSize(200, 40);
 		copyright.setLocation(30, 520);

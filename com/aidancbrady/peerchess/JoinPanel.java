@@ -42,7 +42,7 @@ public class JoinPanel extends JPanel
 	
 	public JTextField ipField;
 	
-	public JList serverList;
+	public JList<String> serverList;
 	
 	public List<Server> serversLoaded = new ArrayList<Server>();
 	
@@ -80,7 +80,7 @@ public class JoinPanel extends JPanel
 		refreshLabel.setVisible(false);
 		add(refreshLabel);
 		
-		serverList = new JList();
+		serverList = new JList<String>();
 		serverList.addMouseListener(new MouseAdapter()
 		{
 			@Override

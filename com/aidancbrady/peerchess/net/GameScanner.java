@@ -58,7 +58,9 @@ public class GameScanner extends Thread
 					}
 				} catch(SocketTimeoutException e) {
 					break;
-				} catch(Exception e) {}
+				} catch(Exception e) {
+				    e.printStackTrace();
+				}
 			}
 			
 			socket.close();

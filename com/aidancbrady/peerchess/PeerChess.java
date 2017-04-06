@@ -1,5 +1,7 @@
 package com.aidancbrady.peerchess;
 
+import java.util.Calendar;
+
 import javax.swing.SwingUtilities;
 
 import com.aidancbrady.peerchess.file.DataHandler;
@@ -18,6 +20,8 @@ public class PeerChess
 	public String username = "Guest";
 	
 	public boolean enableSoundEffects = true;
+	
+	public Calendar calendar = Calendar.getInstance();
 	 
 	public static void main(String[] args)
 	{
