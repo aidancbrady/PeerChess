@@ -183,7 +183,5 @@ public class PeerConnection extends Thread
 		
 		panel.connection = null;
 		panel.updateText();
-		
-		interrupt();
 	}
 }
