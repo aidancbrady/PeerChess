@@ -78,11 +78,12 @@ public final class PeerUtils
 					for(ChessPos newPos : piece.type.getPiece().getCurrentPossibleMoves(grid, new ChessPos(x, y)))
 					{
 						ChessMove move = new ChessMove(new ChessPos(x, y), newPos);
+						ChessPos kingPos = piece.type == PieceType.KING ? newPos : pos;
 						
-						if(!isInCheck(side, pos, move.getFakeGrid(grid)))
+						if(!isInCheck(side, kingPos, move.getFakeGrid(grid)))
 						{
 						    PeerUtils.debug(side + " is not in checkmate.");
-						    PeerUtils.debug("Valid move: " + piece + move.fromPos + " to " + move.toPos);
+						    PeerUtils.debug("Valid move: " + piece + " at " + move.fromPos + " to " + move.toPos);
 							return false;
 						}
 					}
