@@ -127,7 +127,7 @@ public class PeerConnection extends Thread
 	
 	public class OutThread extends Thread
 	{
-		public LinkedList<String> outList = new LinkedList<String>();
+		public final LinkedList<String> outList = new LinkedList<String>();
 		
 		@Override
 		public void run()
@@ -150,6 +150,8 @@ public class PeerConnection extends Thread
 						
 						writer.flush();
 					}
+					
+					Thread.sleep(1);
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
