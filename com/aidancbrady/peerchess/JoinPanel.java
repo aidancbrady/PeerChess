@@ -53,7 +53,6 @@ public class JoinPanel extends JPanel
 		frame = f;
 		
 		setSize(400, 600);
-		setVisible(true);
 		setLayout(null);
 		
 		JLabel titleLabel = new JLabel("Game Connection Menu");
@@ -160,8 +159,11 @@ public class JoinPanel extends JPanel
 			
 			if(server != null)
 			{
-				frame.connecting.setThread(new GameConnector(server, frame.chess));
-				frame.connecting.setVisible(true);
+			    synchronized(frame.connecting)
+			    {
+    				frame.connecting.setThread(new GameConnector(server, frame.chess));
+    				frame.connecting.setVisible(true);
+			    }
 			}
 		}
 	}
@@ -172,8 +174,12 @@ public class JoinPanel extends JPanel
 		
 		if(PeerUtils.isValidIP(s))
 		{
-			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chess));
-			frame.connecting.setVisible(true);
+		    synchronized(frame.connecting)
+		    {
+    			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chess));
+    			frame.connecting.setVisible(true);
+		    }
+		    
 			ipField.setText("");
 		}
 	}
@@ -197,14 +203,7 @@ public class JoinPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			serverList.setListData(new Vector<String>());
-			
-			refreshBar.setIndeterminate(true);
-			refreshLabel.setVisible(true);
-			refreshBar.setVisible(true);
-			refreshButton.setEnabled(false);
-			
-			(scanner = new GameScanner(JoinPanel.this)).start();
+			doRefresh();
 		}
 	}
 	
@@ -224,6 +223,21 @@ public class JoinPanel extends JPanel
 		{
 			doRemoteConnect();
 		}
+	}
+	
+	public void doRefresh()
+	{
+	    if(refreshButton.isEnabled())
+	    {
+    	    serverList.setListData(new Vector<String>());
+            
+            refreshBar.setIndeterminate(true);
+            refreshLabel.setVisible(true);
+            refreshBar.setVisible(true);
+            refreshButton.setEnabled(false);
+            
+            (scanner = new GameScanner(JoinPanel.this)).start();
+	    }
 	}
 	
 	public void populateServers(List<Server> servers)
@@ -247,5 +261,16 @@ public class JoinPanel extends JPanel
 		}
 		
 		serverList.setListData(listVector);
+	}
+	
+	@Override
+	public void setVisible(boolean visible)
+	{
+	    super.setVisible(visible);
+	    
+	    if(visible)
+	    {
+	        doRefresh();
+	    }
 	}
 }

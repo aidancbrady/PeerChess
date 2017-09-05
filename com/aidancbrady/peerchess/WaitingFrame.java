@@ -58,6 +58,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 			{
 				try {
 					thread.serverSocket.close();
+					thread.responseThread.socket.close();
 					thread.interrupt();
 					frame.forceMenu();
 					setVisible(false);

@@ -36,8 +36,12 @@ public class GameConnector extends Thread
 			panel.connection.username = server.username;
 			
 			panel.connection.write("USER:" + PeerChess.instance().username);
-			panel.frame.connecting.setVisible(false);
 			panel.updateText();
+			
+			synchronized(panel.frame.connecting)
+			{
+			    panel.frame.connecting.setVisible(false);
+			}
 			
 			panel.frame.forceChess();
 		} catch(Exception e) {

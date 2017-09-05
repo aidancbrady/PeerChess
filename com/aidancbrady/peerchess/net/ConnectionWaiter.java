@@ -44,8 +44,12 @@ public class ConnectionWaiter extends Thread
 				panel.frame.waiting.setVisible(false);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(panel, "Error accepting connection.");
+		    if(!e.getMessage().contains("Socket closed")) // ignore
+            {
+    			e.printStackTrace();
+    			JOptionPane.showMessageDialog(panel, "Error accepting connection.");
+            }
+		    
 			panel.frame.forceMenu();
 		}
 		
@@ -80,7 +84,10 @@ public class ConnectionWaiter extends Thread
 					socket.send(response);
 				}
 			} catch(Exception e) {
-				e.printStackTrace();
+			    if(!e.getMessage().contains("Socket closed")) // ignore
+			    {
+			        e.printStackTrace();
+			    }
 			}
 		}
 	}

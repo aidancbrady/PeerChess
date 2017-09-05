@@ -111,7 +111,10 @@ public class PeerConnection extends Thread
 			
 			disconnected = true;
 		} catch(Exception e) {
-			e.printStackTrace();
+		    if(!e.getMessage().contains("Socket closed")) // ignore
+            {
+		        e.printStackTrace();
+            }
 			
 			JOptionPane.showMessageDialog(panel.frame, username + " has disconnected.");
 			panel.frame.openMenu();
@@ -132,7 +135,7 @@ public class PeerConnection extends Thread
 				try {
 					String s = outList.poll();
 					
-					if(s !=  null)
+					if(s != null)
 					{
 						writer.println(s);
 						
