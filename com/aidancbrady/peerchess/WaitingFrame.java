@@ -56,15 +56,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				try {
-					thread.serverSocket.close();
-					thread.responseThread.socket.close();
-					thread.interrupt();
-					frame.forceMenu();
-					setVisible(false);
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
+				close();
 			}
 		});
 		cancelButton.setSize(120, 30);
@@ -77,6 +69,25 @@ public class WaitingFrame extends JFrame implements WindowListener
 		thread = c;
 		
 		return this;
+	}
+	
+	public void close()
+	{
+	    try {
+            thread.serverSocket.close();
+            
+            if(thread.responseThread != null)
+            {
+                thread.responseThread.socket.close();
+            }
+            
+            thread.interrupt();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+	    
+	    frame.forceMenu();
+        setVisible(false);
 	}
 
 	@Override

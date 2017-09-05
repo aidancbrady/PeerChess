@@ -142,6 +142,8 @@ public class ChessComponent extends JComponent
 		{
 			panel.connection.close();
 		}
+		
+		panel.frame.waiting.close();
 	}
 	
 	public boolean isMoving()

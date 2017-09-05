@@ -154,6 +154,8 @@ public class PeerConnection extends Thread
 					e.printStackTrace();
 				}
 			}
+			
+			PeerUtils.debug("Ending output stream");
 		}
 	}
 	
