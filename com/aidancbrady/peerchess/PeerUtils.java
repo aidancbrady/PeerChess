@@ -419,4 +419,12 @@ public final class PeerUtils
 		
 		return validDests;
 	}
+	
+	public static void debug(String s)
+	{
+	    if(PeerChess.instance().debug)
+	    {
+	        System.out.println("[DEBUG] " + s);
+	    }
+	}
 }

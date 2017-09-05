@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.net.GameScanner.Server;
 
 public class GameConnector extends Thread
@@ -37,6 +38,8 @@ public class GameConnector extends Thread
 			
 			panel.connection.write("USER:" + PeerChess.instance().username);
 			panel.updateText();
+			
+			PeerUtils.debug("Connected to " + server.ip);
 			
 			synchronized(panel.frame.connecting)
 			{

@@ -16,6 +16,7 @@ import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.MoveAction;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
 
 public class PeerConnection extends Thread
@@ -58,6 +59,7 @@ public class PeerConnection extends Thread
 			while((reading = reader.readLine()) != null && !disconnected)
 			{
 				reading = reading.trim();
+				PeerUtils.debug("Received message: " + reading);
 				
 				if(reading.startsWith("UPDATE"))
 				{
@@ -143,6 +145,8 @@ public class PeerConnection extends Thread
 						{
 							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
 						}
+						
+						PeerUtils.debug("Sent message: " + s);
 						
 						writer.flush();
 					}

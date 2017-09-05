@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 
 public class ConnectionWaiter extends Thread
 {
@@ -40,6 +41,8 @@ public class ConnectionWaiter extends Thread
 				panel.connection.write("UPDATE");
 				panel.connection.write("USER:" + PeerChess.instance().username);
 				panel.connection.host = true;
+				
+				PeerUtils.debug("Received connection from " + connection.getInetAddress() + ":" + connection.getPort());
 				
 				panel.frame.waiting.setVisible(false);
 			}
@@ -82,6 +85,8 @@ public class ConnectionWaiter extends Thread
 					response.setPort(receivePacket.getPort());
 					response.setData(new String("PING:" + PeerChess.instance().username).getBytes());
 					socket.send(response);
+					
+					PeerUtils.debug("Sending response datagram to " + receivePacket.getAddress() + ":" + receivePacket.getPort());
 				}
 			} catch(Exception e) {
 			    if(!e.getMessage().contains("Socket closed")) // ignore

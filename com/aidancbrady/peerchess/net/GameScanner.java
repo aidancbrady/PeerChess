@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.aidancbrady.peerchess.JoinPanel;
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 
 public class GameScanner extends Thread
 {
@@ -43,6 +44,8 @@ public class GameScanner extends Thread
 			socket.send(packet);
 			socket.setBroadcast(false);
 			
+			PeerUtils.debug("Datagram broadcast complete");
+			
 			while(true)
 			{
 				try {
@@ -55,6 +58,7 @@ public class GameScanner extends Thread
 					if(s.startsWith("PING"))
 					{
 						pingedServers.add(new Server(s.split(":")[1].trim(), response.getAddress().getHostAddress()));
+						PeerUtils.debug("Received datagram response from " + response.getAddress().getHostAddress());
 					}
 				} catch(SocketTimeoutException e) {
 					break;

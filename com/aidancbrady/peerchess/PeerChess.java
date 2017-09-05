@@ -22,6 +22,8 @@ public class PeerChess
 	public boolean enableSoundEffects = true;
 	
 	public Calendar calendar = Calendar.getInstance();
+	
+	public boolean debug = true;
 	 
 	public static void main(String[] args)
 	{
