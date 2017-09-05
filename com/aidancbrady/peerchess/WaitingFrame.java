@@ -57,6 +57,8 @@ public class WaitingFrame extends JFrame implements WindowListener
 			public void actionPerformed(ActionEvent arg0)
 			{
 				close();
+				frame.forceMenu();
+		        setVisible(false);
 			}
 		});
 		cancelButton.setSize(120, 30);
@@ -91,9 +93,6 @@ public class WaitingFrame extends JFrame implements WindowListener
         } catch(Exception e) {
             e.printStackTrace();
         }
-	    
-	    frame.forceMenu();
-        setVisible(false);
 	}
 
 	@Override
