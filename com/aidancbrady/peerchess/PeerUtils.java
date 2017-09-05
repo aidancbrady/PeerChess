@@ -81,6 +81,8 @@ public final class PeerUtils
 						
 						if(!isInCheck(side, pos, move.getFakeGrid(grid)))
 						{
+						    PeerUtils.debug(side + " is not in checkmate.");
+						    PeerUtils.debug("Valid move: " + piece + move.fromPos + " to " + move.toPos);
 							return false;
 						}
 					}

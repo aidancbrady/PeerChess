@@ -52,6 +52,12 @@ public class ChessPiece
 		{
 			return this == WHITE ? BLACK : WHITE;
 		}
+		
+		@Override
+		public String toString()
+		{
+		    return name;
+		}
 	}
 	
 	private static List<ChessPiece> cachedWhitePieces = new ArrayList<ChessPiece>();
@@ -104,5 +110,11 @@ public class ChessPiece
 		}
 		
 		return ret;
+	}
+	
+	@Override
+	public String toString()
+	{
+	    return type.toString();
 	}
 }
