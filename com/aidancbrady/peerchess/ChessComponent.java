@@ -14,6 +14,8 @@ public class ChessComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	
+	public ChessAI chessAI = new ChessAI(this);
+	
 	public ChessPanel panel;
 	
 	public ChessSquare[][] grid = new ChessSquare[8][8];
@@ -27,6 +29,8 @@ public class ChessComponent extends JComponent
 	public Side side = Side.WHITE;
 	public Side turn = Side.WHITE;
 	public Side winner = null;
+	
+	public boolean multiplayer;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
@@ -132,6 +136,7 @@ public class ChessComponent extends JComponent
 		panel.chatBox.setText("");
 		panel.updateText();
 		winner = null;
+		chessAI.reset();
 		
 		if(panel.opponentLabel != null)
 		{

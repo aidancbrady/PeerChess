@@ -122,7 +122,14 @@ public class ChessPanel extends JPanel implements MouseListener
 	{
 		if(opponentLabel != null && titleLabel != null && statusLabel != null)
 		{
-			opponentLabel.setText("Opponent: " + (connection != null ? connection.username : "disconnected"));
+		    String opponentName = "Computer";
+		    
+		    if(chess.multiplayer)
+		    {
+		        opponentName = connection != null ? connection.username : "disconnected";
+		    }
+		    
+			opponentLabel.setText("Opponent: " + opponentName);
 			titleLabel.setText("PeerChess - " + chess.side.name);
 			
 			if(chess.winner == null)
@@ -144,11 +151,11 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(replace == 0)
 		{
-			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
 		else if(replace == 1)
 		{
-			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
 		}
 	}
 

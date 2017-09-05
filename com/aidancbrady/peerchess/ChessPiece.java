@@ -63,6 +63,14 @@ public class ChessPiece
 	private static List<ChessPiece> cachedWhitePieces = new ArrayList<ChessPiece>();
 	private static List<ChessPiece> cachedBlackPieces = new ArrayList<ChessPiece>();
 	
+	static {
+	    for(PieceType type : PieceType.values())
+        {
+            cachedWhitePieces.add(new ChessPiece(type, Side.WHITE));
+            cachedBlackPieces.add(new ChessPiece(type, Side.BLACK));
+        }
+	}
+	
 	public PieceType type;
 	
 	public Texture texture;
@@ -84,32 +92,7 @@ public class ChessPiece
 	
 	public static List<ChessPiece> getPieceList(Side s)
 	{
-		if(s == Side.BLACK && cachedBlackPieces != null)
-		{
-			return cachedBlackPieces;
-		}
-		else if(s == Side.WHITE && cachedWhitePieces != null)
-		{
-			return cachedWhitePieces;
-		}
-		
-		List<ChessPiece> ret = new ArrayList<ChessPiece>();
-		
-		for(PieceType type : PieceType.values())
-		{
-			ret.add(new ChessPiece(type, s));
-		}
-		
-		if(s == Side.BLACK)
-		{
-			cachedBlackPieces = ret;
-		}
-		else if(s == Side.WHITE)
-		{
-			cachedWhitePieces = ret;
-		}
-		
-		return ret;
+	    return s == Side.WHITE ? cachedWhitePieces : cachedBlackPieces;
 	}
 	
 	@Override

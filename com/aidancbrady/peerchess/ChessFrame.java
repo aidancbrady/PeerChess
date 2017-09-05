@@ -49,12 +49,20 @@ public class ChessFrame extends JFrame implements WindowListener
 		setJMenuBar(toolbar.menuBar);
 	}
 	
-	public void openChess()
+	public void openChess(boolean mp)
 	{
 		forceChess();
 		
-		waiting.setThread(new ConnectionWaiter(chess));
-		waiting.setVisible(true);
+		chess.chess.multiplayer = mp;
+		
+		if(mp)
+		{
+    		waiting.setThread(new ConnectionWaiter(chess));
+    		waiting.setVisible(true);
+		}
+		else {
+		    chess.updateText();
+		}
 	}
 	
 	public void forceChess()
@@ -93,7 +101,7 @@ public class ChessFrame extends JFrame implements WindowListener
 		{
 			if(SaveHandler.loadGame(chess.chess, chooser.getSelectedFile()))
 			{
-				openChess();
+				openChess(true);
 			}
 			else {
 				chess.chess.resetGame();

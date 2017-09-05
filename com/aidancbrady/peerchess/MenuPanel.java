@@ -22,6 +22,7 @@ public class MenuPanel extends JPanel
 	
 	public JButton newButton;
 	public JButton loadButton;
+	public JButton hostButton;
 	public JButton joinButton;
 	public JButton optionsButton;
 	
@@ -34,27 +35,33 @@ public class MenuPanel extends JPanel
 		setLayout(null);
 		
 		newButton = new JButton("New Game");
-		newButton.setSize(300, 60);
-		newButton.setLocation(50, 160);
-		newButton.addActionListener(new NewButtonListener());
-		add(newButton);
+        newButton.setSize(300, 60);
+        newButton.setLocation(50, 140);
+        newButton.addActionListener(e -> frame.openChess(false));
+        add(newButton);
 		
-		loadButton = new JButton("Load Game");
-		loadButton.setSize(300, 60);
-		loadButton.setLocation(50, 240);
-		loadButton.addActionListener(new LoadButtonListener());
-		add(loadButton);
+		hostButton = new JButton("Host Game");
+		hostButton.setSize(300, 60);
+		hostButton.setLocation(50, 210);
+		hostButton.addActionListener(e -> frame.openChess(true));
+		add(hostButton);
 		
 		joinButton = new JButton("Join Game");
 		joinButton.setSize(300, 60);
-		joinButton.setLocation(50, 320);
-		joinButton.addActionListener(new JoinButtonListener());
+		joinButton.setLocation(50, 280);
+		joinButton.addActionListener(e -> frame.openJoin());
 		add(joinButton);
+		
+        loadButton = new JButton("Load Game");
+        loadButton.setSize(300, 60);
+        loadButton.setLocation(50, 350);
+        loadButton.addActionListener(e -> frame.openSavedChess());
+        add(loadButton);
 		
 		optionsButton = new JButton("Options");
 		optionsButton.setSize(300, 60);
-		optionsButton.setLocation(50, 400);
-		optionsButton.addActionListener(new OptionsButtonListener());
+		optionsButton.setLocation(50, 420);
+		optionsButton.addActionListener(e -> frame.openOptions());
 		add(optionsButton);
 		
 		JLabel version = new JLabel("v1.0");
@@ -77,41 +84,5 @@ public class MenuPanel extends JPanel
 		super.paintComponent(g);
 		
 		logo.draw(g, 50, 50, 300, 46);
-	}
-	
-	public class NewButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			frame.openChess();
-		}
-	}
-	
-	public class LoadButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			frame.openSavedChess();
-		}
-	}
-	
-	public class JoinButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			frame.openJoin();
-		}
-	}
-	
-	public class OptionsButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			frame.openOptions();
-		}
 	}
 }

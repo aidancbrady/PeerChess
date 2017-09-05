@@ -76,6 +76,11 @@ public class MoveAction
 		
 		component.panel.updateText();
 		component.currentAnimation = null;
+		
+		if(component.winner == null && !component.multiplayer && component.turn != component.side)
+		{
+		    component.chessAI.triggerMove();
+		}
 	}
 	
 	public float getPercentage()

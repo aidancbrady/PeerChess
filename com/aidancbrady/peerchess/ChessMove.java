@@ -230,4 +230,24 @@ public class ChessMove
 		
 		return fakeGrid;
 	}
+
+    @Override
+    public int hashCode() 
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + fromPos.hashCode();
+        result = prime * result + toPos.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        
+        ChessMove other = (ChessMove)obj;
+        return other.fromPos.equals(fromPos) && other.toPos.equals(toPos);
+    }
 }

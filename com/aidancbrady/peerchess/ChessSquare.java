@@ -94,9 +94,19 @@ public class ChessSquare extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(component.isMoving() || component.panel.connection == null || component.turn != component.side || component.winner != null)
+		if(component.isMoving() || component.turn != component.side || component.winner != null)
 		{
 			return;
+		}
+		
+		if(component.multiplayer && component.panel.connection == null)
+		{
+		    return;
+		}
+		
+		if(component.selected != null && component.selected.housedPiece == null)
+		{
+		    component.select(null);
 		}
 		
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
@@ -134,17 +144,21 @@ public class ChessSquare extends JComponent implements MouseListener
 								if(piece.side == Side.WHITE && move.toPos.yPos == 0)
 								{
 									component.panel.pawnReplace %= PieceType.values().length;
-									newPiece = ChessPiece.getPieceList(Side.BLACK).get(component.panel.pawnReplace);
+									newPiece = ChessPiece.getPieceList(Side.WHITE).get(component.panel.pawnReplace);
 								}
 								else if(piece.side == Side.BLACK && move.toPos.yPos == 7)
 								{
 									component.panel.pawnReplace %= PieceType.values().length;
-									newPiece = ChessPiece.getPieceList(Side.WHITE).get(component.panel.pawnReplace);
+									newPiece = ChessPiece.getPieceList(Side.BLACK).get(component.panel.pawnReplace);
 								}
 							}
 							
 							component.currentAnimation = new MoveAction(component, move, piece, newPiece);
-							component.panel.connection.move(component.currentAnimation);
+							
+							if(component.multiplayer)
+							{
+							    component.panel.connection.move(component.currentAnimation);
+							}
 						}
 					}
 				}
