@@ -377,6 +377,10 @@ public final class PeerUtils
 		validDests.add(new ChessPos(pos.xPos-1, pos.yPos));
 		validDests.add(new ChessPos(pos.xPos, pos.yPos+1));
 		validDests.add(new ChessPos(pos.xPos, pos.yPos-1));
+		validDests.add(new ChessPos(pos.xPos-1, pos.yPos-1));
+		validDests.add(new ChessPos(pos.xPos-1, pos.yPos+1));
+		validDests.add(new ChessPos(pos.xPos+1, pos.yPos+1));
+		validDests.add(new ChessPos(pos.xPos+1, pos.yPos-1));
 		
 		for(Iterator<ChessPos> iter = validDests.iterator(); iter.hasNext();)
 		{
