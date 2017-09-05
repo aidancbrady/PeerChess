@@ -74,14 +74,20 @@ public class WaitingFrame extends JFrame implements WindowListener
 	public void close()
 	{
 	    try {
-            thread.serverSocket.close();
-            
-            if(thread.responseThread != null)
-            {
-                thread.responseThread.socket.close();
-            }
-            
-            thread.interrupt();
+	        if(thread != null)
+	        {
+	            if(thread.serverSocket != null)
+	            {
+	                thread.serverSocket.close();
+	            }
+                
+                if(thread.responseThread != null)
+                {
+                    thread.responseThread.socket.close();
+                }
+                
+                thread.interrupt();
+	        }
         } catch(Exception e) {
             e.printStackTrace();
         }
