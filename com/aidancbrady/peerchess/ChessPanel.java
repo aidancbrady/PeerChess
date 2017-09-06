@@ -2,7 +2,6 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -160,11 +159,11 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(replace == 0)
 		{
-			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, x, y, size, size);
+			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).getTexture().draw(g, x, y, size, size);
 		}
 		else if(replace == 1)
 		{
-			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, x, y, size, size);
+			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).getTexture().draw(g, x, y, size, size);
 		}
 	}
 
@@ -191,7 +190,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, 1));
 					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, 1));
 					
-					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
+					if(piece.validateMove(chess.grid, leftMove) || piece.validateMove(chess.grid, centerMove) || piece.validateMove(chess.grid, rightMove))
 					{
 						return 1;
 					}
@@ -204,7 +203,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, -1));
 					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, -1));
 					
-					if(piece.canMove(chess.grid, leftMove) || piece.canMove(chess.grid, centerMove) || piece.canMove(chess.grid, rightMove))
+					if(piece.validateMove(chess.grid, leftMove) || piece.validateMove(chess.grid, centerMove) || piece.validateMove(chess.grid, rightMove))
 					{
 						return 0;
 					}

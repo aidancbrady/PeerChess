@@ -109,7 +109,7 @@ public final class SaveHandler
 				}
 				else {
 					ChessPiece piece = square.housedPiece;
-					builder.append(piece.type.ordinal() + "," + piece.side.ordinal());
+					builder.append(piece.type.ordinal() + "," + piece.side.ordinal() + "," + piece.moves);
 				}
 				
 				if(x != 7)
@@ -149,8 +149,10 @@ public final class SaveHandler
 					
 					PieceType type = PieceType.values()[Integer.parseInt(data[0])];
 					Side side = Side.values()[Integer.parseInt(data[1])];
+					ChessPiece piece = new ChessPiece(type, side);
+					piece.moves = Integer.parseInt(data[2]);
 					
-					chess.grid[x][y].setPiece(new ChessPiece(type, side));
+					chess.grid[x][y].setPiece(piece);
 				}
 			}
 		}

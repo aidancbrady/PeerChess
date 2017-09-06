@@ -49,9 +49,9 @@ public class ChessSquare extends JComponent implements MouseListener
 			ChessComponent.white.draw(g, 0, 0, getWidth(), getHeight());	
 		}
 		
-		if(housedPiece != null && housedPiece.texture != null)
+		if(housedPiece != null && housedPiece.getTexture() != null)
 		{
-			housedPiece.texture.draw(g, 0, 0, getWidth(), getHeight());
+			housedPiece.getTexture().draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
 		if(component.selected == this)
@@ -68,28 +68,16 @@ public class ChessSquare extends JComponent implements MouseListener
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) 
-	{
-
-	}
+	public void mouseClicked(MouseEvent arg0) {}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) 
-	{
-		
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) 
-	{
-		
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) 
-	{
-		
-	}
+	public void mousePressed(MouseEvent arg0) {}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
@@ -134,9 +122,8 @@ public class ChessSquare extends JComponent implements MouseListener
 						return;
 					}
 					else {
-						if(piece.type.getPiece().canMove(component.grid, move))
+						if(piece.type.getPiece().validateMove(component.grid, move))
 						{
-							component.selected.setPiece(null);
 							ChessPiece newPiece = piece;
 							
 							if(piece.type == PieceType.PAWN)
@@ -145,11 +132,13 @@ public class ChessSquare extends JComponent implements MouseListener
 								{
 									component.panel.pawnReplace %= PieceType.values().length;
 									newPiece = ChessPiece.getPieceList(Side.WHITE).get(component.panel.pawnReplace);
+									newPiece = newPiece.copyWithMoves(piece.moves);
 								}
 								else if(piece.side == Side.BLACK && move.toPos.yPos == 7)
 								{
 									component.panel.pawnReplace %= PieceType.values().length;
 									newPiece = ChessPiece.getPieceList(Side.BLACK).get(component.panel.pawnReplace);
+									newPiece = newPiece.copyWithMoves(piece.moves);
 								}
 							}
 							

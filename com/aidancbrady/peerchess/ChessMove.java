@@ -5,10 +5,19 @@ public class ChessMove
 	public ChessPos fromPos;
 	public ChessPos toPos;
 	
+	public ChessPos fromPosCastle;
+	public ChessPos toPosCastle;
+	
 	public ChessMove(ChessPos from, ChessPos to)
 	{
 		fromPos = from;
 		toPos = to;
+	}
+	
+	public void setCastle(ChessPos from, ChessPos to)
+	{
+	    fromPosCastle = from;
+	    toPosCastle = to;
 	}
 	
 	public ChessSquare getFromSquare(ChessSquare[][] grid)
@@ -227,6 +236,12 @@ public class ChessMove
 		
 		getFromSquare(fakeGrid).housedPiece = null;
 		getToSquare(fakeGrid).housedPiece = getFromSquare(grid).housedPiece;
+		
+		if(fromPosCastle != null)
+		{
+		    fromPosCastle.getSquare(fakeGrid).housedPiece = null;
+		    toPosCastle.getSquare(fakeGrid).housedPiece = fromPosCastle.getSquare(grid).housedPiece;
+		}
 		
 		return fakeGrid;
 	}

@@ -12,7 +12,7 @@ import com.aidancbrady.peerchess.PeerUtils;
 public class PiecePawn implements Piece
 {
 	@Override
-	public boolean canMove(ChessSquare[][] grid, ChessMove move)
+	public boolean validateMove(ChessSquare[][] grid, ChessMove move)
 	{
 		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).housedPiece.side, grid);
 		
@@ -106,5 +106,11 @@ public class PiecePawn implements Piece
 		}
 		
 		return possibleMoves;
+	}
+	
+	@Override
+	public int getPointValue()
+	{
+	    return 10;
 	}
 }

@@ -34,7 +34,7 @@ public class ChessAI
                     {
                         ChessMove move = new ChessMove(origPos, pos);
                         
-                        if(piece.type.getPiece().canMove(chess.grid, move))
+                        if(piece.type.getPiece().validateMove(chess.grid, move))
                         {
                             possibleMoves.add(move);
                         }
@@ -45,8 +45,6 @@ public class ChessAI
         
         ChessMove move = possibleMoves.get(rand.nextInt(possibleMoves.size()));
         ChessPiece piece = move.fromPos.getSquare(chess.grid).housedPiece;
-        
-        move.fromPos.getSquare(chess.grid).setPiece(null);
         
         chess.currentAnimation = new MoveAction(chess, move, piece, piece);
         chess.panel.updateText();

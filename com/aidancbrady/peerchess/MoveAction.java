@@ -19,6 +19,8 @@ public class MoveAction
 	
 	public ChessPiece newPiece;
 	
+	public ChessPiece newCastle;
+	
 	public ChessMove move;
 	
 	public MoveAction(ChessComponent c, ChessMove m, ChessPiece p, ChessPiece np)
@@ -27,6 +29,19 @@ public class MoveAction
 		move = m;
 		piece = p;
 		newPiece = np;
+		
+		start();
+	}
+	
+	public void start()
+	{
+	    if(move.fromPosCastle != null)
+        {
+            newCastle = move.fromPosCastle.getSquare(component.grid).housedPiece;
+            move.fromPosCastle.getSquare(component.grid).setPiece(null);
+        }
+	    
+	    move.fromPos.getSquare(component.grid).setPiece(null);
 	}
 	
 	public int getScale()
@@ -34,18 +49,24 @@ public class MoveAction
 	    return (int)(96*(double)component.getWidth()/768D);
 	}
 	
-	public int getPosX()
+	public int getPosX(boolean castle)
 	{
-		int xDist = (move.toPos.xPos-move.fromPos.xPos)*getScale();
+	    ChessPos fromPos = castle ? move.fromPosCastle : move.fromPos;
+	    ChessPos toPos = castle ? move.toPosCastle : move.toPos;
+	    
+		int xDist = (toPos.xPos-fromPos.xPos)*getScale();
 		
-		return (move.fromPos.xPos*getScale()) + (int)(xDist*getPercentage());
+		return (fromPos.xPos*getScale()) + (int)(xDist*getPercentage());
 	}
 	
-	public int getPosY()
+	public int getPosY(boolean castle)
 	{
-		int yDist = (move.toPos.yPos-move.fromPos.yPos)*getScale();
+	    ChessPos fromPos = castle ? move.fromPosCastle : move.fromPos;
+        ChessPos toPos = castle ? move.toPosCastle : move.toPos;
+        
+		int yDist = (toPos.yPos-fromPos.yPos)*getScale();
 		
-		return (move.fromPos.yPos*getScale()) + (int)(yDist*getPercentage());
+		return (fromPos.yPos*getScale()) + (int)(yDist*getPercentage());
 	}
 	
 	public void update()
@@ -67,8 +88,16 @@ public class MoveAction
 	
 	public void move()
 	{
+	    newPiece.move();
+	    
 		move.toPos.getSquare(component.grid).setPiece(newPiece);
 		move.toPos.getSquare(component.grid).repaint();
+		
+		if(move.toPosCastle != null)
+		{
+		    move.toPosCastle.getSquare(component.grid).setPiece(newCastle);
+		    move.toPosCastle.getSquare(component.grid).repaint();
+		}
 		
 		moveSound.stop();
 		
@@ -95,7 +124,12 @@ public class MoveAction
 	
 	public void render(Graphics g)
 	{
-		piece.texture.draw(g, getPosX(), getPosY(), getScale(), getScale());
+		piece.getTexture().draw(g, getPosX(false), getPosY(false), getScale(), getScale());
+		
+		if(newCastle != null)
+		{
+		    newCastle.getTexture().draw(g, getPosX(true), getPosY(true), getScale(), getScale());
+		}
 	}
 	
 	public Side getSide()
