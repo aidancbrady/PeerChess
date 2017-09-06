@@ -20,6 +20,7 @@ public class PeerChess
 	public String username = "Guest";
 	
 	public boolean enableSoundEffects = true;
+	public boolean enableVisualGuides = true;
 	
 	public Calendar calendar = Calendar.getInstance();
 	

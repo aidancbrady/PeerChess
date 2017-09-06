@@ -32,6 +32,7 @@ public final class DataHandler
 			
 			PeerChess.instance().username = reader.readLine().trim();
 			PeerChess.instance().enableSoundEffects = Boolean.parseBoolean(reader.readLine().trim());
+			PeerChess.instance().enableVisualGuides = Boolean.parseBoolean(reader.readLine().trim());
 			
 			reader.close();
 		} catch(Exception e) {
@@ -56,6 +57,9 @@ public final class DataHandler
 			writer.newLine();
 			
 			writer.append(Boolean.toString(PeerChess.instance().enableSoundEffects));
+			writer.newLine();
+			
+			writer.append(Boolean.toString(PeerChess.instance().enableVisualGuides));
 			writer.newLine();
 			
 			writer.flush();

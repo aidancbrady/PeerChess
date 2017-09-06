@@ -111,6 +111,16 @@ public class MoveAction
 		component.panel.updateText();
 		component.currentAnimation = null;
 		
+		ChessPos kingPos = PeerUtils.findKing(newPiece.side.getOpposite(), component.grid);
+		
+		if(PeerUtils.isInCheck(newPiece.side.getOpposite(), kingPos, component.grid))
+		{
+		    component.sideInCheck = newPiece.side.getOpposite();
+		}
+		else {
+		    component.sideInCheck = null;
+		}
+		
 		if(component.winner == null && !component.multiplayer && component.turn != component.side)
 		{
 		    component.chessAI.triggerMove();

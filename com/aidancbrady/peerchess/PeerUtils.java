@@ -1,11 +1,14 @@
 package com.aidancbrady.peerchess;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.piece.Piece;
 
 public final class PeerUtils
 {
@@ -244,6 +247,10 @@ public final class PeerUtils
 					{
 						return true;
 					}
+					else if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1 && Math.abs(pos.yPos-yPointer) == 1)
+					{
+					    return true;
+					}
 				}
 				
 				break;
@@ -268,6 +275,10 @@ public final class PeerUtils
 					{
 						return true;
 					}
+					else if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1 && Math.abs(pos.yPos-yPointer) == 1)
+                    {
+                        return true;
+                    }
 				}
 				
 				break;
@@ -292,6 +303,10 @@ public final class PeerUtils
 					{
 						return true;
 					}
+					else if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1 && Math.abs(pos.yPos-yPointer) == 1)
+                    {
+                        return true;
+                    }
 				}
 				
 				break;
@@ -316,6 +331,10 @@ public final class PeerUtils
 					{
 						return true;
 					}
+					else if(piece.type == PieceType.KING && Math.abs(pos.xPos-xPointer) == 1 && Math.abs(pos.yPos-yPointer) == 1)
+                    {
+                        return true;
+                    }
 				}
 				
 				break;
@@ -433,5 +452,24 @@ public final class PeerUtils
 	    {
 	        System.out.println("[DEBUG] " + s);
 	    }
+	}
+	
+	public static List<ChessPos> getValidatedMoves(ChessComponent chess)
+	{
+	    List<ChessPos> ret = new ArrayList<>();
+	    
+	    Piece piece = chess.getSelectedPiece().type.getPiece();
+	    
+	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess.grid, chess.selected.pos))
+	    {
+	        ChessMove move = new ChessMove(chess.selected.pos, pos);
+	        
+	        if(piece.validateMove(chess.grid, move))
+	        {
+	            ret.add(pos);
+	        }
+	    }
+	    
+	    return ret;
 	}
 }

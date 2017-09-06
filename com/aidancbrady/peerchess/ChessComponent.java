@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -35,6 +37,9 @@ public class ChessComponent extends JComponent
 	public Side turn = Side.WHITE;
 	public Side winner = null;
 	
+	public Set<ChessPos> possibleMoves = new HashSet<>();
+	public Side sideInCheck = null;
+	
 	public boolean multiplayer;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
@@ -43,6 +48,8 @@ public class ChessComponent extends JComponent
 	public static Texture black = Texture.load("resources/icon/black.png");
 	
 	public static Texture select = Texture.load("resources/icon/select.png");
+	public static Texture possible = Texture.load("resources/icon/possible.png");
+	public static Texture check = Texture.load("resources/icon/check.png");
 	
 	public ChessComponent(ChessPanel p)
 	{
@@ -83,6 +90,15 @@ public class ChessComponent extends JComponent
 		{
 			prev.repaint();
 		}
+		
+		possibleMoves.clear();
+		
+		if(selected != null)
+		{
+		    possibleMoves.addAll(PeerUtils.getValidatedMoves(this));
+		}
+		
+		repaint();
 	}
 	
 	public ChessPiece getSelectedPiece()
@@ -146,6 +162,9 @@ public class ChessComponent extends JComponent
 		panel.updateText();
 		winner = null;
 		chessAI.reset();
+		
+		possibleMoves.clear();
+		sideInCheck = null;
 		
 		if(panel.opponentLabel != null)
 		{

@@ -22,7 +22,7 @@ public class OptionsFrame extends JFrame implements ItemListener
 	public JButton usernameButton;
 	
 	public JCheckBox soundEffectsBox;
-	public JCheckBox animationsBox;
+	public JCheckBox visualGuidesBox;
 	
 	public JLabel usernameLabel;
 
@@ -64,10 +64,22 @@ public class OptionsFrame extends JFrame implements ItemListener
 		soundEffectsBox.addItemListener(this);
 		add(soundEffectsBox);
 		
+		visualGuidesBox = new JCheckBox();
+        visualGuidesBox.setSelected(PeerChess.instance().enableVisualGuides);
+        visualGuidesBox.setSize(24, 24);
+        visualGuidesBox.setLocation(16, 110);
+        visualGuidesBox.addItemListener(this);
+        add(visualGuidesBox);
+		
 		JLabel soundEffectsLabel = new JLabel("Enable sound effects");
 		soundEffectsLabel.setSize(200, 30);
 		soundEffectsLabel.setLocation(40, 86);
 		add(soundEffectsLabel);
+		
+		JLabel visualGuidesLabel = new JLabel("Enable visual guides");
+        visualGuidesLabel.setSize(200, 30);
+        visualGuidesLabel.setLocation(40, 106);
+        add(visualGuidesLabel);
 		
 		setVisible(true);
 		setResizable(false);
@@ -121,6 +133,10 @@ public class OptionsFrame extends JFrame implements ItemListener
 		if(arg0.getSource() == soundEffectsBox)
 		{
 			PeerChess.instance().enableSoundEffects = arg0.getStateChange() == 1;
+		}
+		else if(arg0.getSource() == visualGuidesBox)
+		{
+		    PeerChess.instance().enableVisualGuides = arg0.getStateChange() == 1;
 		}
 	}
 }

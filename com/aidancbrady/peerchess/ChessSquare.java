@@ -54,6 +54,22 @@ public class ChessSquare extends JComponent implements MouseListener
 			housedPiece.getTexture().draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
+		if(PeerChess.instance().enableVisualGuides)
+		{
+    	    if(housedPiece != null && housedPiece.type == PieceType.KING && component.sideInCheck == housedPiece.side)
+    	    {
+    	        if(component.currentAnimation == null)
+    	        {
+    	            ChessComponent.check.draw(g, 0, 0, getWidth(), getHeight());
+    	        }
+    	    }
+    	    
+    	    if(component.possibleMoves.contains(pos))
+    	    {
+    	        ChessComponent.possible.draw(g, 0, 0, getWidth(), getHeight());
+    	    }
+		}
+		
 		if(component.selected == this)
 		{
 			ChessComponent.select.draw(g, 0, 0, getWidth(), getHeight());
