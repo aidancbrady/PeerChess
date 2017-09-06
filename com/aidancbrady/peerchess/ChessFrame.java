@@ -51,9 +51,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public void openChess(boolean mp)
 	{
-		forceChess();
-		
-		chess.chess.multiplayer = mp;
+		forceChess(mp);
 		
 		if(mp)
 		{
@@ -65,10 +63,12 @@ public class ChessFrame extends JFrame implements WindowListener
 		}
 	}
 	
-	public void forceChess()
+	public void forceChess(boolean mp)
 	{
 		menu.setVisible(false);
 		join.setVisible(false);
+		
+		chess.chess.multiplayer = mp;
 		
 		setSize(1024, 790);
 		chess.setVisible(true);
