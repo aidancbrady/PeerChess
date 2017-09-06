@@ -1,10 +1,13 @@
 package com.aidancbrady.peerchess;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
@@ -26,6 +29,8 @@ public class ChessComponent extends JComponent
 	
 	public OverlayComponent overlay;
 	
+	public JPanel chessboard;
+	
 	public Side side = Side.WHITE;
 	public Side turn = Side.WHITE;
 	public Side winner = null;
@@ -43,23 +48,27 @@ public class ChessComponent extends JComponent
 	{
 		panel = p;
 		
-		setLayout(null);
+		setLayout(new BorderLayout());
 		setSize(768, 768);
 		
 		boolean state = false;
 		
-		add(overlay = new OverlayComponent(this));
+		chessboard = new JPanel(new GridLayout(8, 8));
+		
+		add(overlay = new OverlayComponent(this), BorderLayout.CENTER);
 		
 		for(int y = 0; y < 8; y++)
 		{			
 			for(int x = 0; x < 8; x++)
 			{
-				add(grid[x][y] = new ChessSquare(this, state, new ChessPos(x, y)));
+				chessboard.add(grid[x][y] = new ChessSquare(this, state, new ChessPos(x, y)));
 				state = !state;
 			}
 			
 			state = !state;
 		}
+		
+		add(chessboard, BorderLayout.CENTER);
 
 		resetGame();
 	}

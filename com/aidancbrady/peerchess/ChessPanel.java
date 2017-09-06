@@ -2,6 +2,7 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +44,7 @@ public class ChessPanel extends JPanel implements MouseListener
 	public PeerConnection connection;
 	
 	public JTextArea chatBox;
+	public JScrollPane chatScroll;
 	
 	public JTextField chatField;
 	
@@ -81,7 +83,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		chatBox.setEditable(false);
 		chatBox.setAutoscrolls(true);
 		chatBox.setBackground(Color.LIGHT_GRAY);
-		JScrollPane chatScroll = new JScrollPane(chatBox);
+		chatScroll = new JScrollPane(chatBox);
 		chatScroll.setSize(256, 256);
 		chatScroll.setLocation(768, 484);
 		chatScroll.setBorder(new TitledBorder(new EtchedBorder(), "Chatbox"));
@@ -113,8 +115,8 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		statusLabel = new JLabel(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
 		statusLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-		statusLabel.setSize(200, 40);
 		statusLabel.setLocation(815, 420);
+		statusLabel.setSize(200, 40);
 		add(statusLabel);
 	}
 	
@@ -149,13 +151,20 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		byte replace = shouldPawnReplace();
 		
+		int width = frame.getContentPane().getWidth();
+		int size = (int)((width-chess.getWidth())*(2D/3D));
+		int yStart = opponentLabel.getY()+opponentLabel.getHeight()+15;
+		size = Math.min(size, (statusLabel.getY()-yStart)/2);
+		int x = chess.getWidth() + (width-chess.getWidth())/2 - size/2;
+		int y = yStart + (int)((statusLabel.getY()-yStart)*(1D/3D)) - size/2;
+		
 		if(replace == 0)
 		{
-			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).texture.draw(g, x, y, size, size);
 		}
 		else if(replace == 1)
 		{
-			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, 830, 160, 128, 128);
+			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).texture.draw(g, x, y, size, size);
 		}
 	}
 
@@ -294,10 +303,15 @@ public class ChessPanel extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent arg0) 
 	{
-		int x = arg0.getX();
-		int y = arg0.getY();
+	    int x = chess.getWidth();
+	    int y = opponentLabel.getY()+opponentLabel.getHeight();
+	    int xMax = frame.getContentPane().getWidth();
+	    int yMax = statusLabel.getY();
+        
+		int mouseX = arg0.getX();
+		int mouseY = arg0.getY();
 		
-		if(x >= 830 && x <= 958 && y >= 160 && y <= 288)
+		if(mouseX >= x && mouseX <= xMax && mouseY >= y && mouseY <= yMax)
 		{
 			byte replace = shouldPawnReplace();
 			
@@ -325,4 +339,49 @@ public class ChessPanel extends JPanel implements MouseListener
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
+	
+	@Override
+	public void setVisible(boolean visible)
+	{
+	    super.setVisible(visible);
+	    
+	    frame.setResizable(visible);
+	}
+	
+	protected void onWindowResized()
+	{
+	    int width = frame.getContentPane().getWidth();
+        int height = frame.getContentPane().getHeight();
+        
+        int size = Math.min(width, height);
+        
+        double minRatio = 1024D/768D;
+        double ratio = (double)width/(double)height;
+        
+        if(ratio < minRatio)
+        {
+            size = (int)(width*(768D/1024D));
+        }
+        
+        chess.setSize(size, size);
+        chess.chessboard.setSize(size, size);
+        chess.overlay.setSize(size, size);
+        
+        chatScroll.setLocation(size, (int)(size*0.6));
+        chatScroll.setSize(width-size, (int)(size*0.4)-30);
+        
+        exitButton.setLocation(size, chatScroll.getY()-30);
+        exitButton.setSize(width-size, 30);
+        
+        chatField.setLocation(size, chatScroll.getY()+chatScroll.getHeight());
+        chatField.setSize(width-size-60, 30);
+        
+        sendButton.setLocation(size+chatField.getWidth(), chatField.getY());
+        
+        int textCenter = size + (width-size)/2;
+        
+        statusLabel.setLocation(textCenter - (int)(statusLabel.getPreferredSize().getWidth()/2), exitButton.getY()-40);
+        titleLabel.setLocation(textCenter - (int)(titleLabel.getPreferredSize().getWidth()/2), 5);
+        opponentLabel.setLocation(size + 6, 40);
+	}
 }

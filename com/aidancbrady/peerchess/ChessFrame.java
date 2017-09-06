@@ -1,5 +1,7 @@
 package com.aidancbrady.peerchess;
 
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -47,6 +49,22 @@ public class ChessFrame extends JFrame implements WindowListener
 		chess.setVisible(false);
 		
 		setJMenuBar(toolbar.menuBar);
+		addComponentListener(new ComponentListener() {
+		    @Override
+		    public void componentResized(ComponentEvent e)
+		    {
+		        onWindowResized();
+		    }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {}
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+		});
 	}
 	
 	public void openChess(boolean mp)
@@ -60,6 +78,8 @@ public class ChessFrame extends JFrame implements WindowListener
 		}
 		else {
 		    chess.updateText();
+		    revalidate();
+		    onWindowResized();
 		}
 	}
 	
@@ -187,4 +207,9 @@ public class ChessFrame extends JFrame implements WindowListener
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {}
+	
+	protected void onWindowResized()
+	{
+	    chess.onWindowResized();
+	}
 }

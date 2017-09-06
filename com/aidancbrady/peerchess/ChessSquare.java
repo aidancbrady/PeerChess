@@ -43,20 +43,20 @@ public class ChessSquare extends JComponent implements MouseListener
 	{
 		if(color)
 		{
-			ChessComponent.black.draw(g, 0, 0, 96, 96);
+			ChessComponent.black.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		else {
-			ChessComponent.white.draw(g, 0, 0, 96, 96);	
+			ChessComponent.white.draw(g, 0, 0, getWidth(), getHeight());	
 		}
 		
 		if(housedPiece != null && housedPiece.texture != null)
 		{
-			housedPiece.texture.draw(g, 0, 0, 96, 96);
+			housedPiece.texture.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
 		if(component.selected == this)
 		{
-			ChessComponent.select.draw(g, 0, 0, 96, 96);
+			ChessComponent.select.draw(g, 0, 0, getWidth(), getHeight());
 		}
 	}
 	

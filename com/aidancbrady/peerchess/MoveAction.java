@@ -29,18 +29,23 @@ public class MoveAction
 		newPiece = np;
 	}
 	
+	public int getScale()
+	{
+	    return (int)(96*(double)component.getWidth()/768D);
+	}
+	
 	public int getPosX()
 	{
-		int xDist = (move.toPos.xPos-move.fromPos.xPos)*96;
+		int xDist = (move.toPos.xPos-move.fromPos.xPos)*getScale();
 		
-		return (move.fromPos.xPos*96) + (int)(xDist*getPercentage());
+		return (move.fromPos.xPos*getScale()) + (int)(xDist*getPercentage());
 	}
 	
 	public int getPosY()
 	{
-		int yDist = (move.toPos.yPos-move.fromPos.yPos)*96;
+		int yDist = (move.toPos.yPos-move.fromPos.yPos)*getScale();
 		
-		return (move.fromPos.yPos*96) + (int)(yDist*getPercentage());
+		return (move.fromPos.yPos*getScale()) + (int)(yDist*getPercentage());
 	}
 	
 	public void update()
@@ -90,7 +95,7 @@ public class MoveAction
 	
 	public void render(Graphics g)
 	{
-		piece.texture.draw(g, getPosX(), getPosY(), 96, 96);
+		piece.texture.draw(g, getPosX(), getPosY(), getScale(), getScale());
 	}
 	
 	public Side getSide()
