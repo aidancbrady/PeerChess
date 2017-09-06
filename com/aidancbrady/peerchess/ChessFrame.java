@@ -78,9 +78,10 @@ public class ChessFrame extends JFrame implements WindowListener
 		}
 		else {
 		    chess.updateText();
-		    revalidate();
-		    onWindowResized();
 		}
+		
+		revalidate();
+        onWindowResized();
 	}
 	
 	public void forceChess(boolean mp)
