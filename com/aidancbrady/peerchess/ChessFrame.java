@@ -209,7 +209,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	@Override
 	public void windowOpened(WindowEvent arg0) {}
 	
-	protected void onWindowResized()
+	public void onWindowResized()
 	{
 	    chess.onWindowResized();
 	}

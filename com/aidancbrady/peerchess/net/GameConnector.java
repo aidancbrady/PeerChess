@@ -47,6 +47,9 @@ public class GameConnector extends Thread
 			}
 			
 			panel.frame.forceChess(true);
+			
+			panel.frame.revalidate();
+	        panel.frame.onWindowResized();
 		} catch(Exception e) {
 			panel.frame.connecting.setVisible(false);
 			JOptionPane.showMessageDialog(panel, "Couldn't connect to server: " + e.getLocalizedMessage());

@@ -104,7 +104,7 @@ public class PeerConnection extends Thread
 					ChessMove move = new ChessMove(oldPos, newPos);
 					oldPos.getSquare(panel.chess.grid).housedPiece.type.getPiece().validateMove(panel.chess.grid, move);
 					
-					panel.chess.currentAnimation = new MoveAction(panel.chess, new ChessMove(oldPos, newPos), piece, newPiece);
+					panel.chess.currentAnimation = new MoveAction(panel.chess, move, piece, newPiece);
 					panel.updateText();
 				}
 			}
