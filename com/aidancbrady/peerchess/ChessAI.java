@@ -12,6 +12,7 @@ public class ChessAI
     private Side side = Side.BLACK;
     private int MAX_DEPTH = 3;
     public int evaluations = 0;
+    public boolean terminate = false;
     
     public ChessAI(ChessComponent component)
     {
@@ -20,12 +21,16 @@ public class ChessAI
     
     public void triggerMove()
     {
+        terminate = false; // thread safety
         ChessMove move = minimax();
         ChessPiece piece = move.fromPos.getSquare(chess.grid).housedPiece;
         evaluations = 0;
         
-        chess.currentAnimation = new MoveAction(chess, move, piece, piece);
-        chess.panel.updateText();
+        if(!terminate)
+        {
+            chess.currentAnimation = new MoveAction(chess, move, piece, piece);
+            chess.panel.updateText();
+        }
     }
     
     public ChessMove minimax()
@@ -181,7 +186,10 @@ public class ChessAI
         return ret;
     }
     
-    public void reset() {}
+    public void reset() 
+    {
+        terminate = true;
+    }
     
     public static double[][] pawnEvalWhite = {
         {0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0},
