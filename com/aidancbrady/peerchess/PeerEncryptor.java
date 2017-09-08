@@ -1,5 +1,7 @@
 package com.aidancbrady.peerchess;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -24,7 +26,7 @@ public class PeerEncryptor
     
     private byte[] secretKey;
     
-    public boolean init()
+    public boolean init(PeerConnection connection)
     {
         try {
             random = SecureRandom.getInstance("SHA1PRNG", "SUN");
@@ -39,13 +41,26 @@ public class PeerEncryptor
         publicKey = pair.getPublic();
         privateKey = pair.getPrivate();
         
-        return true;
+        return sendPublicKey(connection);
     }
     
-    public boolean receiveKey(String textKey)
+    public boolean parseHandshake(PeerConnection connection)
     {
         try {
-            PublicKey otherKey = KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(textKey.getBytes()));
+            DataInputStream in = new DataInputStream(connection.socket.getInputStream());
+            byte[] bytes = new byte[in.readInt()];
+            in.readFully(bytes);
+            
+            return receiveKey(bytes);
+        } catch(Exception e) {
+            return false;
+        }
+    }
+    
+    public boolean receiveKey(byte[] keyBytes)
+    {
+        try {
+            PublicKey otherKey = KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(keyBytes));
             
             KeyAgreement agreement = KeyAgreement.getInstance("DH");
             agreement.init(privateKey);
@@ -55,6 +70,8 @@ public class PeerEncryptor
             byte[] finalKey = new byte[8];
             System.arraycopy(key, 0, finalKey, 0, finalKey.length);
             secretKey = finalKey;
+            
+            PeerUtils.debug("Completed security handshake process.");
             
             return true;
         } catch(Exception e) {
@@ -81,8 +98,19 @@ public class PeerEncryptor
         return new String(cipher.doFinal(s.getBytes()));
     }
     
-    public void sendPublicKey(PeerConnection connection)
+    public boolean sendPublicKey(PeerConnection connection)
     {
-        connection.write("HANDSHAKE:" + new String(publicKey.getEncoded()));
+        byte[] encoded = publicKey.getEncoded();
+        
+        try {
+            DataOutputStream out = new DataOutputStream(connection.socket.getOutputStream());
+            out.writeInt(encoded.length);
+            out.write(encoded);
+            out.flush();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

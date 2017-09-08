@@ -55,7 +55,7 @@ public class PeerConnection extends Thread
 	public void run()
 	{
 		try {
-		    if(!encryptor.init())
+		    if(!encryptor.init(this))
 		    {
 		        JOptionPane.showMessageDialog(panel.frame, "Failed to initialize security layer.");
 	            panel.frame.openMenu();
@@ -66,47 +66,39 @@ public class PeerConnection extends Thread
 		        return;
 		    }
 		    
+		    if(!encryptor.parseHandshake(this))
+            {
+                JOptionPane.showMessageDialog(panel.frame, "Failed to complete security protocol.");
+                panel.frame.openMenu();
+                
+                close();
+                
+                disconnected = true;
+                return;
+            }
+		    
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			
 			//Start data output thread
 			out.start();
 			
-			//Initialize security handshake
-			initHandshake();
+			if(host)
+            {
+                write("UPDATE");
+            }
+            else {
+                write("USER:" + PeerChess.instance().username);
+            }
 			
 			String reading = "";
 			
 			while((reading = reader.readLine()) != null && !disconnected)
 			{
-				PeerUtils.debug("Received message: " + reading);
-				
-				if(reading.startsWith("HANDSHAKE"))
-				{
-				    if(!encryptor.receiveKey(reading.split(":")[1]))
-				    {
-				        JOptionPane.showMessageDialog(panel.frame, "Failed to complete security protocol.");
-		                panel.frame.openMenu();
-		                
-		                close();
-		                
-		                disconnected = true;
-		                return;
-				    }
-				    
-				    if(host)
-                    {
-                        write("UPDATE");
-                    }
-				    else {
-				        write("USER:" + PeerChess.instance().username);
-				    }
-				    
-				    continue;
-				}
-				
 				//Decrypt and trim message
                 reading = encryptor.decrypt(reading).trim();
+                
+                PeerUtils.debug("Received message: " + reading);
 				
 				if(reading.startsWith("UPDATE"))
 				{
@@ -191,12 +183,6 @@ public class PeerConnection extends Thread
 					{
 					    PeerUtils.debug("Sending message: " + s);
 					    
-					    //Encrypt if message is not handshake
-					    if(!s.startsWith("HANDSHAKE"))
-					    {
-					        s = encryptor.encrypt(s);
-					    }
-					    
 						writer.println(s);
 						
 						if(s.equals("UPDATE"))
@@ -215,11 +201,6 @@ public class PeerConnection extends Thread
 			
 			PeerUtils.debug("Ending output stream");
 		}
-	}
-	
-	public void initHandshake()
-	{
-	    encryptor.sendPublicKey(this);
 	}
 	
 	public void write(String s)
