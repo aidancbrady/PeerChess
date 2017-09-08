@@ -189,6 +189,8 @@ public class PeerConnection extends Thread
 					
 					if(s != null)
 					{
+					    PeerUtils.debug("Sending message: " + s);
+					    
 					    //Encrypt if message is not handshake
 					    if(!s.startsWith("HANDSHAKE"))
 					    {
@@ -201,8 +203,6 @@ public class PeerConnection extends Thread
 						{
 							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
 						}
-						
-						PeerUtils.debug("Sent message: " + s);
 						
 						writer.flush();
 					}
