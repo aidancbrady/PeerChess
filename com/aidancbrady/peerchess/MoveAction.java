@@ -2,6 +2,7 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 
+import com.aidancbrady.peerchess.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.sound.Sound;
 
@@ -103,9 +104,9 @@ public class MoveAction
 		
 		component.turn = component.turn.getOpposite();
 		
-		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
+		if(component.sideInCheck == getSide().getOpposite() && PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
 		{
-			component.winner = getSide();
+			component.endgame = Endgame.get(getSide());
 		}
 		
 		component.panel.updateText();
@@ -121,7 +122,7 @@ public class MoveAction
 		    component.sideInCheck = null;
 		}
 		
-		if(component.winner == null && !component.multiplayer && component.turn != component.side)
+		if(component.endgame == null && !component.multiplayer && component.turn != component.side)
 		{
 		    component.chessAI.triggerMove();
 		}

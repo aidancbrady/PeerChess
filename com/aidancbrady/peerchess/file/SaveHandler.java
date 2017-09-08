@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.ChessPiece;
+import com.aidancbrady.peerchess.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.ChessSquare;
@@ -92,7 +93,7 @@ public final class SaveHandler
 		writer.newLine();
 		writer.append(Integer.toString(chess.turn.ordinal()));
 		writer.newLine();
-		writer.append(chess.winner != null ? Integer.toString(chess.winner.ordinal()) : "-1");
+		writer.append(chess.endgame != null ? Integer.toString(chess.endgame.ordinal()) : "-1");
 		writer.newLine();
 		
 		for(int y = 0; y < 8; y++)
@@ -131,7 +132,7 @@ public final class SaveHandler
 		chess.turn = Side.values()[Integer.parseInt(reader.readLine())];
 		
 		int check = Integer.parseInt(reader.readLine());
-		chess.winner = check == -1 ? null : Side.values()[check];
+		chess.endgame = check == -1 ? null : Endgame.values()[check];
 		
 		for(int y = 0; y < 8; y++)
 		{

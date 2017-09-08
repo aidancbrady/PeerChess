@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import com.aidancbrady.peerchess.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.file.SaveHandler;
@@ -133,12 +134,18 @@ public class ChessPanel extends JPanel implements MouseListener
 			opponentLabel.setText("Opponent: " + opponentName);
 			titleLabel.setText("PeerChess - " + chess.side.name);
 			
-			if(chess.winner == null)
+			if(chess.endgame == null)
 			{
 				statusLabel.setText(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
 			}
 			else {
-				statusLabel.setText(chess.winner == chess.side ? "You win the game!" : "You lost the game.");
+			    if(chess.endgame == Endgame.STALEMATE)
+			    {
+			        statusLabel.setText("Stalemate!");
+			    }
+			    else {
+			        statusLabel.setText(Endgame.get(chess.side) == chess.endgame ? "You win the game!" : "You lost the game.");
+			    }
 			}
 		}
 	}

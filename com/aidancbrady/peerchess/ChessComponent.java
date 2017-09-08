@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import com.aidancbrady.peerchess.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.tex.Texture;
@@ -35,7 +36,7 @@ public class ChessComponent extends JComponent
 	
 	public Side side = Side.WHITE;
 	public Side turn = Side.WHITE;
-	public Side winner = null;
+	public Endgame endgame = null;
 	
 	public Set<ChessPos> possibleMoves = new HashSet<>();
 	public Side sideInCheck = null;
@@ -160,7 +161,7 @@ public class ChessComponent extends JComponent
 		panel.pawnReplace = 0;
 		panel.chatBox.setText("");
 		panel.updateText();
-		winner = null;
+		endgame = null;
 		chessAI.reset();
 		
 		possibleMoves.clear();

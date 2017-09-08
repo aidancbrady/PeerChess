@@ -42,6 +42,7 @@ public class ChessAI
         for(ChessMove move : possibleMoves)
         {
             ChessSquare[][] grid = move.getFakeGrid(chess.grid);
+            modifyMove(grid, move);
             double score = minimax_do(MAX_DEPTH-1, grid, -10000, 10000, false);
             
             if(score >= bestMoveScore)
@@ -70,6 +71,7 @@ public class ChessAI
         for(ChessMove move : possibleMoves)
         {
             ChessSquare[][] newGrid = move.getFakeGrid(grid);
+            modifyMove(newGrid, move);
             
             if(maximizing)
             {
@@ -88,6 +90,18 @@ public class ChessAI
         }
         
         return bestMoveScore;
+    }
+    
+    public void modifyMove(ChessSquare[][] grid, ChessMove move)
+    {
+        if(move.getToSquare(grid).housedPiece.type == PieceType.PAWN)
+        {
+            if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
+            {
+                ChessPiece oldPiece = move.getToSquare(grid).housedPiece;
+                move.getToSquare(grid).housedPiece = new ChessPiece(PieceType.QUEEN, oldPiece.side);
+            }
+        }
     }
     
     public int evaluateBoard(ChessSquare[][] grid)

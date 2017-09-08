@@ -138,4 +138,16 @@ public class ChessPiece
             return name;
         }
     }
+    
+    public static enum Endgame
+    {
+        WHITE_WIN,
+        BLACK_WIN,
+        STALEMATE;
+        
+        public static Endgame get(Side side)
+        {
+            return side == Side.WHITE ? WHITE_WIN : BLACK_WIN;
+        }
+    }
 }
