@@ -183,7 +183,7 @@ public class PeerConnection extends Thread
 					{
 					    PeerUtils.debug("Sending message: " + s);
 					    
-						writer.println(s);
+						writer.println(encryptor.encrypt(s));
 						
 						if(s.equals("UPDATE"))
 						{
