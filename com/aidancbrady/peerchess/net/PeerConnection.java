@@ -79,8 +79,6 @@ public class PeerConnection extends Thread
 			
 			while((reading = reader.readLine()) != null && !disconnected)
 			{
-			    //Decrypt and trim message
-				reading = encryptor.decrypt(reading).trim();
 				PeerUtils.debug("Received message: " + reading);
 				
 				if(reading.startsWith("HANDSHAKE"))
@@ -103,8 +101,14 @@ public class PeerConnection extends Thread
 				    else {
 				        write("USER:" + PeerChess.instance().username);
 				    }
+				    
+				    continue;
 				}
-				else if(reading.startsWith("UPDATE"))
+				
+				//Decrypt and trim message
+                reading = encryptor.decrypt(reading).trim();
+				
+				if(reading.startsWith("UPDATE"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
 					panel.chess.side = panel.chess.side == Side.WHITE ? Side.BLACK : Side.WHITE;
@@ -164,7 +168,7 @@ public class PeerConnection extends Thread
 		        e.printStackTrace();
             }
 			
-			JOptionPane.showMessageDialog(panel.frame, username + " has disconnected.");
+			JOptionPane.showMessageDialog(panel.frame, "Connection error: " + e.getMessage());
 			panel.frame.openMenu();
 			
 			close();
@@ -185,6 +189,12 @@ public class PeerConnection extends Thread
 					
 					if(s != null)
 					{
+					    //Encrypt if message is not handshake
+					    if(!s.startsWith("HANDSHAKE"))
+					    {
+					        s = encryptor.encrypt(s);
+					    }
+					    
 						writer.println(s);
 						
 						if(s.equals("UPDATE"))
