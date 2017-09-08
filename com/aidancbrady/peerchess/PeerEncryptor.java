@@ -30,7 +30,7 @@ public class PeerEncryptor
     {
         try {
             random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
+            keyGen = KeyPairGenerator.getInstance("RSA", "SUN");
             keyGen.initialize(1024, random);
         } catch(Exception e) {
             e.printStackTrace();
