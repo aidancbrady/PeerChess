@@ -84,9 +84,9 @@ public final class SaveHandler
 	
 	public static void saveToWriter(BufferedWriter writer, ChessComponent chess) throws IOException
 	{
-		if(chess.currentAnimation != null)
+		if(chess.currentMove != null)
 		{
-			chess.currentAnimation.move();
+			chess.currentMove.move();
 		}
 		
 		writer.append(Integer.toString(chess.side.ordinal()));

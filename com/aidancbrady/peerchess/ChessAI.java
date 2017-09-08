@@ -28,7 +28,7 @@ public class ChessAI
         
         if(!terminate)
         {
-            chess.currentAnimation = new MoveAction(chess, move, piece, piece);
+            chess.currentMove = new MoveAction(chess, move, piece, piece);
             chess.panel.updateText();
         }
     }
@@ -104,9 +104,9 @@ public class ChessAI
         }
     }
     
-    public int evaluateBoard(ChessSquare[][] grid)
+    public double evaluateBoard(ChessSquare[][] grid)
     {
-        int total = 0;
+        double total = 0;
         
         for(int y = 0; y < 8; y++)
         {
@@ -119,7 +119,7 @@ public class ChessAI
         return total;
     }
     
-    public int getSquareValue(ChessSquare[][] grid, ChessPos pos)
+    public double getSquareValue(ChessSquare[][] grid, ChessPos pos)
     {
         ChessPiece piece = pos.getSquare(grid).getPiece();
         
@@ -128,7 +128,7 @@ public class ChessAI
             return 0;
         }
         
-        int value = piece.type.getPiece().getPointValue();
+        double value = piece.type.getPiece().getPointValue();
         
         if(piece.type == PieceType.PAWN)
         {

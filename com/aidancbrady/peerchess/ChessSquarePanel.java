@@ -48,7 +48,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
     	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && component.sideInCheck == square.getPiece().side)
     	    {
-    	        if(component.currentAnimation == null)
+    	        if(component.currentMove == null)
     	        {
     	            ChessComponent.check.draw(g, 0, 0, getWidth(), getHeight());
     	        }
@@ -141,11 +141,11 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 								}
 							}
 							
-							component.currentAnimation = new MoveAction(component, move, piece, newPiece);
+							component.currentMove = new MoveAction(component, move, piece, newPiece);
 							
 							if(component.multiplayer)
 							{
-							    component.panel.connection.move(component.currentAnimation);
+							    component.currentMove.broadcast();
 							}
 						}
 					}

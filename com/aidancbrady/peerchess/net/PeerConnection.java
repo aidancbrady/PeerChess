@@ -16,6 +16,8 @@ import com.aidancbrady.peerchess.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.ChessPiece.Side;
 import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.MoveAction;
+import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerEncryptor;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
 
@@ -23,8 +25,9 @@ public class PeerConnection extends Thread
 {
 	public Socket socket;
 	
-	public BufferedReader reader;
+	public PeerEncryptor encryptor;
 	
+	public BufferedReader reader;
 	public PrintWriter writer;
 	
 	public OutThread out;
@@ -37,31 +40,71 @@ public class PeerConnection extends Thread
 	
 	public boolean disconnected = false;
 	
-	public PeerConnection(Socket s, ChessPanel p)
+	public PeerConnection(Socket s, ChessPanel p, boolean h)
 	{
 		socket = s;
 		panel = p;
 		
+		host = h;
+		
 		out = new OutThread();
+		encryptor = new PeerEncryptor();
 	}
 	
 	@Override
 	public void run()
 	{
 		try {
+		    if(!encryptor.init())
+		    {
+		        JOptionPane.showMessageDialog(panel.frame, "Failed to initialize security layer.");
+	            panel.frame.openMenu();
+	            
+	            close();
+	            
+	            disconnected = true;
+		        return;
+		    }
+		    
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			
+			//Start data output thread
 			out.start();
+			
+			//Initialize security handshake
+			initHandshake();
 			
 			String reading = "";
 			
 			while((reading = reader.readLine()) != null && !disconnected)
 			{
-				reading = reading.trim();
+			    //Decrypt and trim message
+				reading = encryptor.decrypt(reading).trim();
 				PeerUtils.debug("Received message: " + reading);
 				
-				if(reading.startsWith("UPDATE"))
+				if(reading.startsWith("HANDSHAKE"))
+				{
+				    if(!encryptor.receiveKey(reading.split(":")[1]))
+				    {
+				        JOptionPane.showMessageDialog(panel.frame, "Failed to complete security protocol.");
+		                panel.frame.openMenu();
+		                
+		                close();
+		                
+		                disconnected = true;
+		                return;
+				    }
+				    
+				    if(host)
+                    {
+                        write("UPDATE");
+                    }
+				    else {
+				        write("USER:" + PeerChess.instance().username);
+				    }
+				}
+				else if(reading.startsWith("UPDATE"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
 					panel.chess.side = panel.chess.side == Side.WHITE ? Side.BLACK : Side.WHITE;
@@ -104,7 +147,7 @@ public class PeerConnection extends Thread
 					ChessMove move = new ChessMove(oldPos, newPos);
 					oldPos.getSquare(panel.chess.grid).getPiece().type.getPiece().validateMove(panel.chess.grid, move);
 					
-					panel.chess.currentAnimation = new MoveAction(panel.chess, move, piece, newPiece);
+					panel.chess.currentMove = new MoveAction(panel.chess, move, piece, newPiece);
 					panel.updateText();
 				}
 			}
@@ -164,14 +207,14 @@ public class PeerConnection extends Thread
 		}
 	}
 	
+	public void initHandshake()
+	{
+	    encryptor.sendPublicKey(this);
+	}
+	
 	public void write(String s)
 	{
 		out.outList.add(s);
-	}
-	
-	public void move(MoveAction move)
-	{
-		write(move.write());
 	}
 	
 	public void chat(String text)

@@ -104,23 +104,29 @@ public class MoveAction
 		
 		component.turn = component.turn.getOpposite();
 		
-		if(component.sideInCheck == getSide().getOpposite() && PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
+		ChessPos kingPos = PeerUtils.findKing(newPiece.side.getOpposite(), component.grid);
+        
+        if(PeerUtils.isInCheck(newPiece.side.getOpposite(), kingPos, component.grid))
+        {
+            component.sideInCheck = newPiece.side.getOpposite();
+        }
+        else {
+            component.sideInCheck = null;
+        }
+		
+		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
 		{
-			component.endgame = Endgame.get(getSide());
+		    if(component.sideInCheck == getSide().getOpposite())
+		    {
+		        component.endgame = Endgame.get(getSide());
+		    }
+		    else {
+		        component.endgame = Endgame.STALEMATE;
+		    }
 		}
 		
 		component.panel.updateText();
-		component.currentAnimation = null;
-		
-		ChessPos kingPos = PeerUtils.findKing(newPiece.side.getOpposite(), component.grid);
-		
-		if(PeerUtils.isInCheck(newPiece.side.getOpposite(), kingPos, component.grid))
-		{
-		    component.sideInCheck = newPiece.side.getOpposite();
-		}
-		else {
-		    component.sideInCheck = null;
-		}
+		component.currentMove = null;
 		
 		if(component.endgame == null && !component.multiplayer && component.turn != component.side)
 		{
@@ -146,6 +152,11 @@ public class MoveAction
 	public Side getSide()
 	{
 		return piece.side;
+	}
+	
+	public void broadcast()
+	{
+	    component.panel.connection.write(write());
 	}
 	
 	public String write()

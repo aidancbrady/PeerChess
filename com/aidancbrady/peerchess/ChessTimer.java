@@ -24,7 +24,7 @@ public final class ChessTimer extends Thread
 				{
 					if(chess.frame.chess.chess.isMoving())
 					{
-						chess.frame.chess.chess.currentAnimation.update();
+						chess.frame.chess.chess.currentMove.update();
 					}
 				}
 				

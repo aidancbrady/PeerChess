@@ -28,7 +28,7 @@ public class ChessComponent extends JComponent
 	
 	public ChessSquare selected;
 	
-	public MoveAction currentAnimation;
+	public MoveAction currentMove;
 	
 	public OverlayComponent overlay;
 	
@@ -147,7 +147,7 @@ public class ChessComponent extends JComponent
 		resetPawns(Side.WHITE, 6);
 		resetMain(Side.WHITE, 7);
 		
-		currentAnimation = null;
+		currentMove = null;
 		side = Side.WHITE;
 		turn = Side.WHITE;
 		selected = null;
@@ -176,7 +176,7 @@ public class ChessComponent extends JComponent
 	
 	public boolean isMoving()
 	{
-		return currentAnimation != null;
+		return currentMove != null;
 	}
 	
 	public void setSide(Side s)

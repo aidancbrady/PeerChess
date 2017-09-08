@@ -22,9 +22,9 @@ public class OverlayComponent extends JComponent
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		if(component.currentAnimation != null)
+		if(component.currentMove != null)
 		{
-			component.currentAnimation.render(g);
+			component.currentMove.render(g);
 		}
 	}
 }
