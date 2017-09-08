@@ -30,7 +30,7 @@ public class PeerEncryptor
     {
         try {
             random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-            keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
+            keyGen = KeyPairGenerator.getInstance("DH");
             keyGen.initialize(1024, random);
         } catch(Exception e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class PeerEncryptor
     public boolean receiveKey(byte[] keyBytes)
     {
         try {
-            PublicKey otherKey = KeyFactory.getInstance("DSA", "SUN").generatePublic(new X509EncodedKeySpec(keyBytes));
+            PublicKey otherKey = KeyFactory.getInstance("DH").generatePublic(new X509EncodedKeySpec(keyBytes));
             
             KeyAgreement agreement = KeyAgreement.getInstance("DH");
             agreement.init(privateKey);
