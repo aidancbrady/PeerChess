@@ -60,7 +60,7 @@ public class PeerEncryptor
     public boolean receiveKey(byte[] keyBytes)
     {
         try {
-            PublicKey otherKey = KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(keyBytes));
+            PublicKey otherKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(keyBytes));
             
             KeyAgreement agreement = KeyAgreement.getInstance("DH");
             agreement.init(privateKey);
