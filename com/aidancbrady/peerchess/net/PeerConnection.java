@@ -155,10 +155,10 @@ public class PeerConnection extends Thread
 		} catch(Exception e) {
 		    if(!e.getMessage().contains("Socket closed")) // ignore
             {
+		        JOptionPane.showMessageDialog(panel.frame, "Connection error: " + e.getMessage());
 		        e.printStackTrace();
             }
 			
-			JOptionPane.showMessageDialog(panel.frame, "Connection error: " + e.getMessage());
 			panel.frame.openMenu();
 			
 			close();
@@ -193,7 +193,10 @@ public class PeerConnection extends Thread
 					
 					Thread.sleep(1);
 				} catch(Exception e) {
-					e.printStackTrace();
+				    if(!e.getMessage().contains("sleep interrupted"))
+				    {
+				        e.printStackTrace();
+				    }
 				}
 			}
 			

@@ -9,6 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
@@ -86,7 +87,7 @@ public class PeerEncryptor
         Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, spec);
         
-        return new String(cipher.doFinal(s.getBytes("ISO-8859-1")), "ISO-8859-1");
+        return Base64.getEncoder().encodeToString(cipher.doFinal(s.getBytes()));
     }
     
     public String decrypt(String s) throws Exception
@@ -95,7 +96,7 @@ public class PeerEncryptor
         Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, spec);
         
-        return new String(cipher.doFinal(s.getBytes("ISO-8859-1")));
+        return new String(cipher.doFinal(Base64.getDecoder().decode(s)));
     }
     
     public boolean sendPublicKey(PeerConnection connection)
