@@ -3,7 +3,6 @@ package com.aidancbrady.peerchess.net;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
 
 import com.aidancbrady.peerchess.ChessPanel;
@@ -31,7 +30,7 @@ public class GameConnector extends Thread
 	public void run()
 	{
 		try {
-		    socket = SSLSocketFactory.getDefault().createSocket();
+		    socket = new Socket();
 			socket.connect(new InetSocketAddress(server.ip, PeerChess.instance().port), GameScanner.MAX_PING);
 			
 			(panel.connection = new PeerConnection(socket, panel, false)).start();

@@ -5,7 +5,6 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.net.ssl.SSLServerSocketFactory;
 import javax.swing.JOptionPane;
 
 import com.aidancbrady.peerchess.ChessPanel;
@@ -32,7 +31,7 @@ public class ConnectionWaiter extends Thread
 	{
 		try {
 			(responseThread = new PingResponder()).start();
-			serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(PeerChess.instance().port);
+			serverSocket = new ServerSocket(PeerChess.instance().port);
 			
 			Socket connection = serverSocket.accept();
 			
