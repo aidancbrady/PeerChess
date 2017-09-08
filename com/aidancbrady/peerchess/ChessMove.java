@@ -1,5 +1,6 @@
 package com.aidancbrady.peerchess;
 
+
 public class ChessMove 
 {
 	public ChessPos fromPos;
@@ -32,7 +33,7 @@ public class ChessMove
 	
 	public boolean isValidStep(ChessSquare[][] grid)
 	{
-		if(getToSquare(grid).housedPiece != null && getToSquare(grid).housedPiece.side == getFromSquare(grid).housedPiece.side)
+		if(getToSquare(grid).getPiece() != null && getToSquare(grid).getPiece().side == getFromSquare(grid).getPiece().side)
 		{
 			return false;
 		}
@@ -45,9 +46,9 @@ public class ChessMove
 		ChessSquare fromSquare = getFromSquare(grid);
 		ChessSquare toSquare = getToSquare(grid);
 		
-		if(toSquare.housedPiece != null)
+		if(toSquare.getPiece() != null)
 		{
-			if(toSquare.housedPiece.side == fromSquare.housedPiece.side)
+			if(toSquare.getPiece().side == fromSquare.getPiece().side)
 			{
 				return false;
 			}
@@ -65,7 +66,7 @@ public class ChessMove
 					
 					if(y != toPos.yPos)
 					{
-						if(grid[toPos.xPos][y].housedPiece != null)
+						if(grid[toPos.xPos][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -79,7 +80,7 @@ public class ChessMove
 					
 					if(y != toPos.yPos)
 					{
-						if(grid[toPos.xPos][y].housedPiece != null)
+						if(grid[toPos.xPos][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -99,7 +100,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos)
 					{
-						if(grid[x][toPos.yPos].housedPiece != null)
+						if(grid[x][toPos.yPos].getPiece() != null)
 						{
 							return false;
 						}
@@ -113,7 +114,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos)
 					{
-						if(grid[x][toPos.yPos].housedPiece != null)
+						if(grid[x][toPos.yPos].getPiece() != null)
 						{
 							return false;
 						}
@@ -133,9 +134,9 @@ public class ChessMove
 		ChessSquare fromSquare = getFromSquare(grid);
 		ChessSquare toSquare = getToSquare(grid);
 		
-		if(toSquare.housedPiece != null)
+		if(toSquare.getPiece() != null)
 		{
-			if(toSquare.housedPiece.side == fromSquare.housedPiece.side)
+			if(toSquare.getPiece().side == fromSquare.getPiece().side)
 			{
 				return false;
 			}
@@ -158,7 +159,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos && y != toPos.yPos)
 					{
-						if(grid[x][y].housedPiece != null)
+						if(grid[x][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -174,7 +175,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos && y != toPos.yPos)
 					{
-						if(grid[x][y].housedPiece != null)
+						if(grid[x][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -190,7 +191,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos && y != toPos.yPos)
 					{
-						if(grid[x][y].housedPiece != null)
+						if(grid[x][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -206,7 +207,7 @@ public class ChessMove
 					
 					if(x != toPos.xPos && y != toPos.yPos)
 					{
-						if(grid[x][y].housedPiece != null)
+						if(grid[x][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -229,18 +230,18 @@ public class ChessMove
 		{
 			for(int y = 0; y < 8; y++)
 			{
-				fakeGrid[x][y] = new ChessSquare(PeerChess.instance().getChess(), false, new ChessPos(x, y));
-				fakeGrid[x][y].housedPiece = grid[x][y].housedPiece;
+				fakeGrid[x][y] = new ChessSquare(false, new ChessPos(x, y));
+				fakeGrid[x][y].setPiece(grid[x][y].getPiece());
 			}
 		}
 		
-		getFromSquare(fakeGrid).housedPiece = null;
-		getToSquare(fakeGrid).housedPiece = getFromSquare(grid).housedPiece;
+		getFromSquare(fakeGrid).setPiece(null);
+		getToSquare(fakeGrid).setPiece(getFromSquare(grid).getPiece());
 		
 		if(fromPosCastle != null)
 		{
-		    fromPosCastle.getSquare(fakeGrid).housedPiece = null;
-		    toPosCastle.getSquare(fakeGrid).housedPiece = fromPosCastle.getSquare(grid).housedPiece;
+		    fromPosCastle.getSquare(fakeGrid).setPiece(null);
+		    toPosCastle.getSquare(fakeGrid).setPiece(fromPosCastle.getSquare(grid).getPiece());
 		}
 		
 		return fakeGrid;

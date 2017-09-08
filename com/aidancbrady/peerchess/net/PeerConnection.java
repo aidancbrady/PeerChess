@@ -99,10 +99,10 @@ public class PeerConnection extends Thread
 					ChessPos oldPos = new ChessPos(Integer.parseInt(strOldPos[0]), Integer.parseInt(strOldPos[1]));
 					ChessPos newPos = new ChessPos(Integer.parseInt(strNewPos[0]), Integer.parseInt(strNewPos[1]));
 					
-					newPiece.moves = oldPos.getSquare(panel.chess.grid).housedPiece.moves;
+					newPiece.moves = oldPos.getSquare(panel.chess.grid).getPiece().moves;
 					
 					ChessMove move = new ChessMove(oldPos, newPos);
-					oldPos.getSquare(panel.chess.grid).housedPiece.type.getPiece().validateMove(panel.chess.grid, move);
+					oldPos.getSquare(panel.chess.grid).getPiece().type.getPiece().validateMove(panel.chess.grid, move);
 					
 					panel.chess.currentAnimation = new MoveAction(panel.chess, move, piece, newPiece);
 					panel.updateText();

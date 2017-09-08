@@ -38,7 +38,7 @@ public class MoveAction
 	{
 	    if(move.fromPosCastle != null)
         {
-            newCastle = move.fromPosCastle.getSquare(component.grid).housedPiece;
+            newCastle = move.fromPosCastle.getSquare(component.grid).getPiece();
             move.fromPosCastle.getSquare(component.grid).setPiece(null);
         }
 	    
@@ -92,13 +92,13 @@ public class MoveAction
 	    newPiece.move();
 	    
 		move.toPos.getSquare(component.grid).setPiece(newPiece);
-		move.toPos.getSquare(component.grid).repaint();
 		
 		if(move.toPosCastle != null)
 		{
 		    move.toPosCastle.getSquare(component.grid).setPiece(newCastle);
-		    move.toPosCastle.getSquare(component.grid).repaint();
 		}
+		
+		component.repaint();
 		
 		moveSound.stop();
 		

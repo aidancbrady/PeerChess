@@ -185,30 +185,30 @@ public class ChessPanel extends JPanel implements MouseListener
 	 */
 	public byte shouldPawnReplace()
 	{
-		if(chess != null && chess.selected != null && chess.selected.housedPiece != null)
+		if(chess != null && chess.selected != null && chess.selected.getPiece() != null)
 		{
-			if(chess.selected.housedPiece.type == PieceType.PAWN)
+			if(chess.selected.getPiece().type == PieceType.PAWN)
 			{
-				if(chess.selected.housedPiece.side == Side.BLACK && chess.selected.pos.translate(0, 1).yPos == 7)
+				if(chess.selected.getPiece().side == Side.BLACK && chess.selected.getPos().translate(0, 1).yPos == 7)
 				{
-					Piece piece = chess.selected.housedPiece.type.getPiece();
+					Piece piece = chess.selected.getPiece().type.getPiece();
 					
-					ChessMove leftMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(-1, 1));
-					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, 1));
-					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, 1));
+					ChessMove leftMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(-1, 1));
+					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, 1));
+					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, 1));
 					
 					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess.grid, leftMove)) || piece.validateMove(chess.grid, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess.grid, rightMove)))
 					{
 						return 1;
 					}
 				}
-				else if(chess.selected.housedPiece.side == Side.WHITE && chess.selected.pos.translate(0, -1).yPos == 0)
+				else if(chess.selected.getPiece().side == Side.WHITE && chess.selected.getPos().translate(0, -1).yPos == 0)
 				{
-					Piece piece = chess.selected.housedPiece.type.getPiece();
+					Piece piece = chess.selected.getPiece().type.getPiece();
 					
-					ChessMove leftMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(-1, -1));
-					ChessMove centerMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(0, -1));
-					ChessMove rightMove = new ChessMove(chess.selected.pos, chess.selected.pos.translate(1, -1));
+					ChessMove leftMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(-1, -1));
+					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, -1));
+					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, -1));
 					
 					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess.grid, leftMove)) || piece.validateMove(chess.grid, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess.grid, rightMove)))
 					{

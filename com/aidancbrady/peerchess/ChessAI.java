@@ -23,7 +23,7 @@ public class ChessAI
     {
         terminate = false; // thread safety
         ChessMove move = minimax();
-        ChessPiece piece = move.fromPos.getSquare(chess.grid).housedPiece;
+        ChessPiece piece = move.fromPos.getSquare(chess.grid).getPiece();
         evaluations = 0;
         
         if(!terminate)
@@ -94,12 +94,12 @@ public class ChessAI
     
     public void modifyMove(ChessSquare[][] grid, ChessMove move)
     {
-        if(move.getToSquare(grid).housedPiece.type == PieceType.PAWN)
+        if(move.getToSquare(grid).getPiece().type == PieceType.PAWN)
         {
             if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
             {
-                ChessPiece oldPiece = move.getToSquare(grid).housedPiece;
-                move.getToSquare(grid).housedPiece = new ChessPiece(PieceType.QUEEN, oldPiece.side);
+                ChessPiece oldPiece = move.getToSquare(grid).getPiece();
+                move.getToSquare(grid).setPiece(new ChessPiece(PieceType.QUEEN, oldPiece.side));
             }
         }
     }
@@ -121,7 +121,7 @@ public class ChessAI
     
     public int getSquareValue(ChessSquare[][] grid, ChessPos pos)
     {
-        ChessPiece piece = pos.getSquare(grid).housedPiece;
+        ChessPiece piece = pos.getSquare(grid).getPiece();
         
         if(piece == null)
         {
@@ -167,9 +167,9 @@ public class ChessAI
         {
             for(int x = 0; x < 8; x++)
             {
-                if(grid[x][y].housedPiece != null && grid[x][y].housedPiece.side == sideToTest)
+                if(grid[x][y].getPiece() != null && grid[x][y].getPiece().side == sideToTest)
                 {
-                    ChessPiece piece = grid[x][y].housedPiece;
+                    ChessPiece piece = grid[x][y].getPiece();
                     ChessPos origPos = new ChessPos(x, y);
                     
                     for(ChessPos pos : piece.type.getPiece().getCurrentPossibleMoves(grid, origPos))

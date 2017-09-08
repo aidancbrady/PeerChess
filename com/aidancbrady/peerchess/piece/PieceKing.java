@@ -16,7 +16,7 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(grid) || isValidCastle(grid, move))
 		{
-			if(!PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, move.toPos, move.getFakeGrid(grid)))
+			if(!PeerUtils.isInCheck(move.getFromSquare(grid).getPiece().side, move.toPos, move.getFakeGrid(grid)))
 			{
 				return true;
 			}
@@ -27,7 +27,7 @@ public class PieceKing implements Piece
 	
 	private boolean isValidCastle(ChessSquare[][] grid, ChessMove move)
 	{
-	    ChessPiece piece = move.fromPos.getSquare(grid).housedPiece;
+	    ChessPiece piece = move.fromPos.getSquare(grid).getPiece();
         
         if(!PeerUtils.isInCheck(piece.side, move.fromPos, grid) && piece.moves == 0)
         {
@@ -35,12 +35,12 @@ public class PieceKing implements Piece
             
             if(move.toPos.xPos == 2)
             {
-                test = grid[0][move.fromPos.yPos].housedPiece;
+                test = grid[0][move.fromPos.yPos].getPiece();
                 
                 if(test != null && test.moves == 0)
                 {
-                    if(grid[1][move.fromPos.yPos].housedPiece == null && grid[2][move.fromPos.yPos].housedPiece == null &&
-                            grid[3][move.fromPos.yPos].housedPiece == null)
+                    if(grid[1][move.fromPos.yPos].getPiece() == null && grid[2][move.fromPos.yPos].getPiece() == null &&
+                            grid[3][move.fromPos.yPos].getPiece() == null)
                     {
                         move.fromPosCastle = new ChessPos(0, move.fromPos.yPos);
                         move.toPosCastle = new ChessPos(3, move.fromPos.yPos);
@@ -50,11 +50,11 @@ public class PieceKing implements Piece
             }
             else if(move.toPos.xPos == 6)
             {
-                test = grid[7][move.fromPos.yPos].housedPiece;
+                test = grid[7][move.fromPos.yPos].getPiece();
                 
                 if(test != null && test.moves == 0)
                 {
-                    if(grid[6][move.fromPos.yPos].housedPiece == null && grid[5][move.fromPos.yPos].housedPiece == null)
+                    if(grid[6][move.fromPos.yPos].getPiece() == null && grid[5][move.fromPos.yPos].getPiece() == null)
                     {
                         move.fromPosCastle = new ChessPos(7, move.fromPos.yPos);
                         move.toPosCastle = new ChessPos(5, move.fromPos.yPos);
@@ -76,32 +76,32 @@ public class PieceKing implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(grid).housedPiece != null && pos.getSquare(grid).housedPiece.side == origPos.getSquare(grid).housedPiece.side)
+			if(pos.getSquare(grid).getPiece() != null && pos.getSquare(grid).getPiece().side == origPos.getSquare(grid).getPiece().side)
 			{
 				iter.remove();
 			}
 		}
 		
-		ChessPiece piece = origPos.getSquare(grid).housedPiece;
+		ChessPiece piece = origPos.getSquare(grid).getPiece();
 		
 		if(!PeerUtils.isInCheck(piece.side, origPos, grid) && piece.moves == 0)
 		{
-		    ChessPiece test = grid[0][origPos.yPos].housedPiece;
+		    ChessPiece test = grid[0][origPos.yPos].getPiece();
 		    
 		    if(test != null && test.moves == 0)
 		    {
-		        if(grid[1][origPos.yPos].housedPiece == null && grid[2][origPos.yPos].housedPiece == null &&
-		                grid[3][origPos.yPos].housedPiece == null)
+		        if(grid[1][origPos.yPos].getPiece() == null && grid[2][origPos.yPos].getPiece() == null &&
+		                grid[3][origPos.yPos].getPiece() == null)
 		        {
 		            possibleMoves.add(new ChessPos(2, origPos.yPos));
 		        }
 		    }
 		    
-		    test = grid[7][origPos.yPos].housedPiece;
+		    test = grid[7][origPos.yPos].getPiece();
 		    
 		    if(test != null && test.moves == 0)
 		    {
-		        if(grid[6][origPos.yPos].housedPiece == null && grid[5][origPos.yPos].housedPiece == null)
+		        if(grid[6][origPos.yPos].getPiece() == null && grid[5][origPos.yPos].getPiece() == null)
 		        {
 		            possibleMoves.add(new ChessPos(6, origPos.yPos));
 		        }

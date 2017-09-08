@@ -104,12 +104,12 @@ public final class SaveHandler
 			{
 				ChessSquare square = chess.grid[x][y];
 				
-				if(square.housedPiece == null)
+				if(square.getPiece() == null)
 				{
 					builder.append("null");
 				}
 				else {
-					ChessPiece piece = square.housedPiece;
+					ChessPiece piece = square.getPiece();
 					builder.append(piece.type.ordinal() + "," + piece.side.ordinal() + "," + piece.moves);
 				}
 				

@@ -74,9 +74,9 @@ public final class PeerUtils
 		{
 			for(int y = 0; y < 8; y++)
 			{
-				if(grid[x][y].housedPiece != null && grid[x][y].housedPiece.side == side)
+				if(grid[x][y].getPiece() != null && grid[x][y].getPiece().side == side)
 				{
-					ChessPiece piece = grid[x][y].housedPiece;
+					ChessPiece piece = grid[x][y].getPiece();
 					
 					for(ChessPos newPos : piece.type.getPiece().getCurrentPossibleMoves(grid, new ChessPos(x, y)))
 					{
@@ -103,7 +103,7 @@ public final class PeerUtils
 		
 		for(ChessPos iterPos : moves)
 		{
-			if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side && iterPos.getSquare(grid).housedPiece.type == PieceType.KNIGHT)
+			if(iterPos.getSquare(grid).getPiece() != null && iterPos.getSquare(grid).getPiece().side != side && iterPos.getSquare(grid).getPiece().type == PieceType.KNIGHT)
 			{
 				return true;
 			}
@@ -115,7 +115,7 @@ public final class PeerUtils
 		{
 			if(iterPos.xPos != pos.xPos)
 			{
-				if(iterPos.getSquare(grid).housedPiece != null && iterPos.getSquare(grid).housedPiece.side != side && iterPos.getSquare(grid).housedPiece.type == PieceType.PAWN)
+				if(iterPos.getSquare(grid).getPiece() != null && iterPos.getSquare(grid).getPiece().side != side && iterPos.getSquare(grid).getPiece().type == PieceType.PAWN)
 				{
 					return true;
 				}
@@ -129,9 +129,9 @@ public final class PeerUtils
 		{
 			xPointer++;
 			
-			if(grid[xPointer][pos.yPos].housedPiece != null)
+			if(grid[xPointer][pos.yPos].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][pos.yPos].housedPiece;
+				ChessPiece piece = grid[xPointer][pos.yPos].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -156,9 +156,9 @@ public final class PeerUtils
 		{
 			xPointer--;
 			
-			if(grid[xPointer][pos.yPos].housedPiece != null)
+			if(grid[xPointer][pos.yPos].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][pos.yPos].housedPiece;
+				ChessPiece piece = grid[xPointer][pos.yPos].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -183,9 +183,9 @@ public final class PeerUtils
 		{
 			yPointer++;
 			
-			if(grid[pos.xPos][yPointer].housedPiece != null)
+			if(grid[pos.xPos][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[pos.xPos][yPointer].housedPiece;
+				ChessPiece piece = grid[pos.xPos][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -209,9 +209,9 @@ public final class PeerUtils
 		{
 			yPointer--;
 			
-			if(grid[pos.xPos][yPointer].housedPiece != null)
+			if(grid[pos.xPos][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[pos.xPos][yPointer].housedPiece;
+				ChessPiece piece = grid[pos.xPos][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -237,9 +237,9 @@ public final class PeerUtils
 			xPointer++;
 			yPointer++;
 			
-			if(grid[xPointer][yPointer].housedPiece != null)
+			if(grid[xPointer][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				ChessPiece piece = grid[xPointer][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -265,9 +265,9 @@ public final class PeerUtils
 			xPointer--;
 			yPointer--;
 			
-			if(grid[xPointer][yPointer].housedPiece != null)
+			if(grid[xPointer][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				ChessPiece piece = grid[xPointer][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -293,9 +293,9 @@ public final class PeerUtils
 			xPointer++;
 			yPointer--;
 			
-			if(grid[xPointer][yPointer].housedPiece != null)
+			if(grid[xPointer][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				ChessPiece piece = grid[xPointer][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -321,9 +321,9 @@ public final class PeerUtils
 			xPointer--;
 			yPointer++;
 			
-			if(grid[xPointer][yPointer].housedPiece != null)
+			if(grid[xPointer][yPointer].getPiece() != null)
 			{
-				ChessPiece piece = grid[xPointer][yPointer].housedPiece;
+				ChessPiece piece = grid[xPointer][yPointer].getPiece();
 				
 				if(piece.side != side)
 				{
@@ -350,11 +350,11 @@ public final class PeerUtils
 		{
 			for(ChessSquare square : array)
 			{
-				if(square.housedPiece != null)
+				if(square.getPiece() != null)
 				{
-					if(square.housedPiece.type == PieceType.KING && square.housedPiece.side == side)
+					if(square.getPiece().type == PieceType.KING && square.getPiece().side == side)
 					{
-						return square.pos.clone();
+						return square.getPos().clone();
 					}
 				}
 			}
@@ -460,9 +460,9 @@ public final class PeerUtils
 	    
 	    Piece piece = chess.getSelectedPiece().type.getPiece();
 	    
-	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess.grid, chess.selected.pos))
+	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess.grid, chess.selected.getPos()))
 	    {
-	        ChessMove move = new ChessMove(chess.selected.pos, pos);
+	        ChessMove move = new ChessMove(chess.selected.getPos(), pos);
 	        
 	        if(piece.validateMove(chess.grid, move))
 	        {

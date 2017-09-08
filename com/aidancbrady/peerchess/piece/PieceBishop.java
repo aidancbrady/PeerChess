@@ -14,9 +14,9 @@ public class PieceBishop implements Piece
 	@Override
 	public boolean validateMove(ChessSquare[][] grid, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).housedPiece.side, grid);
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).getPiece().side, grid);
 		
-		if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, pos, move.getFakeGrid(grid)))
+		if(PeerUtils.isInCheck(move.getFromSquare(grid).getPiece().side, pos, move.getFakeGrid(grid)))
 		{
 			return false;
 		}
@@ -37,9 +37,9 @@ public class PieceBishop implements Piece
 			x++;
 			y--;
 			
-			ChessPiece piece = grid[x][y].housedPiece;
+			ChessPiece piece = grid[x][y].getPiece();
 			
-			if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+			if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 			{
 				break;
 			}
@@ -60,9 +60,9 @@ public class PieceBishop implements Piece
 			x--;
 			y++;
 			
-			ChessPiece piece = grid[x][y].housedPiece;
+			ChessPiece piece = grid[x][y].getPiece();
 			
-			if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+			if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 			{
 				break;
 			}
@@ -83,9 +83,9 @@ public class PieceBishop implements Piece
 			x++;
 			y++;
 			
-			ChessPiece piece = grid[x][y].housedPiece;
+			ChessPiece piece = grid[x][y].getPiece();
 			
-			if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+			if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 			{
 				break;
 			}
@@ -106,9 +106,9 @@ public class PieceBishop implements Piece
 			x--;
 			y--;
 			
-			ChessPiece piece = grid[x][y].housedPiece;
+			ChessPiece piece = grid[x][y].getPiece();
 			
-			if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+			if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 			{
 				break;
 			}

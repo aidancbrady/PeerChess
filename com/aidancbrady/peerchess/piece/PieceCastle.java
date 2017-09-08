@@ -14,9 +14,9 @@ public class PieceCastle implements Piece
 	@Override
 	public boolean validateMove(ChessSquare[][] grid, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).housedPiece.side, grid);
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).getPiece().side, grid);
 		
-		if(PeerUtils.isInCheck(move.getFromSquare(grid).housedPiece.side, pos, move.getFakeGrid(grid)))
+		if(PeerUtils.isInCheck(move.getFromSquare(grid).getPiece().side, pos, move.getFakeGrid(grid)))
 		{
 			return false;
 		}
@@ -36,9 +36,9 @@ public class PieceCastle implements Piece
 		{
 			for(x = x+1; x <= 7; x++)
 			{
-				ChessPiece piece = grid[x][y].housedPiece;
+				ChessPiece piece = grid[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+				if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 				{
 					break;
 				}
@@ -59,9 +59,9 @@ public class PieceCastle implements Piece
 		{
 			for(x = x-1; x >= 0; x--)
 			{
-				ChessPiece piece = grid[x][y].housedPiece;
+				ChessPiece piece = grid[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+				if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 				{
 					break;
 				}
@@ -82,9 +82,9 @@ public class PieceCastle implements Piece
 		{
 			for(y = y+1; y <= 7; y++)
 			{
-				ChessPiece piece = grid[x][y].housedPiece;
+				ChessPiece piece = grid[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+				if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 				{
 					break;
 				}
@@ -105,9 +105,9 @@ public class PieceCastle implements Piece
 		{
 			for(y = y-1; y >= 0; y--)
 			{
-				ChessPiece piece = grid[x][y].housedPiece;
+				ChessPiece piece = grid[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(grid).housedPiece.side)
+				if(piece != null && piece.side == origPos.getSquare(grid).getPiece().side)
 				{
 					break;
 				}

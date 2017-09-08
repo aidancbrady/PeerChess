@@ -59,7 +59,7 @@ public class ChessComponent extends JComponent
 		setLayout(new BorderLayout());
 		setSize(768, 768);
 		
-		boolean state = false;
+		boolean color = false;
 		
 		chessboard = new JPanel(new GridLayout(8, 8));
 		
@@ -69,11 +69,12 @@ public class ChessComponent extends JComponent
 		{			
 			for(int x = 0; x < 8; x++)
 			{
-				chessboard.add(grid[x][y] = new ChessSquare(this, state, new ChessPos(x, y)));
-				state = !state;
+			    grid[x][y] = new ChessSquare(color, new ChessPos(x, y));
+				chessboard.add(new ChessSquarePanel(this, grid[x][y]));
+				color = !color;
 			}
 			
-			state = !state;
+			color = !color;
 		}
 		
 		add(chessboard, BorderLayout.CENTER);
@@ -83,14 +84,7 @@ public class ChessComponent extends JComponent
 	
 	public void select(ChessSquare square)
 	{
-		ChessSquare prev = selected;
-		
 		selected = square;
-		
-		if(prev != null)
-		{
-			prev.repaint();
-		}
 		
 		possibleMoves.clear();
 		
@@ -109,7 +103,7 @@ public class ChessComponent extends JComponent
 			return null;
 		}
 		
-		return selected.housedPiece;
+		return selected.getPiece();
 	}
 	
 	public void resetMain(Side s, int y)
