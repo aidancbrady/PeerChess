@@ -86,7 +86,7 @@ public class PeerEncryptor
         Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, spec);
         
-        return new String(cipher.doFinal(s.getBytes()));
+        return new String(cipher.doFinal(s.getBytes("ISO-8859-1")));
     }
     
     public String decrypt(String s) throws Exception
@@ -95,7 +95,7 @@ public class PeerEncryptor
         Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, spec);
         
-        return new String(cipher.doFinal(s.getBytes()));
+        return new String(cipher.doFinal(s.getBytes("ISO-8859-1")));
     }
     
     public boolean sendPublicKey(PeerConnection connection)
