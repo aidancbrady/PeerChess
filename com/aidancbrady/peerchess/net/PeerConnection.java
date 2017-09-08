@@ -9,17 +9,16 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
-import com.aidancbrady.peerchess.ChessMove;
-import com.aidancbrady.peerchess.ChessPanel;
-import com.aidancbrady.peerchess.ChessPiece;
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
-import com.aidancbrady.peerchess.ChessPos;
 import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
-import com.aidancbrady.peerchess.PeerEncryptor;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.gui.ChessPanel;
 
 public class PeerConnection extends Thread
 {
@@ -87,9 +86,8 @@ public class PeerConnection extends Thread
             {
                 write("UPDATE");
             }
-            else {
-                write("USER:" + PeerChess.instance().username);
-            }
+			
+            write("USER:" + PeerChess.instance().username);
 			
 			String reading = "";
 			

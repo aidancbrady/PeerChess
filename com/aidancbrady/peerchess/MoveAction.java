@@ -2,8 +2,11 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 
-import com.aidancbrady.peerchess.ChessPiece.Endgame;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.sound.Sound;
 
 public class MoveAction 

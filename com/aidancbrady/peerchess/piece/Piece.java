@@ -2,9 +2,9 @@ package com.aidancbrady.peerchess.piece;
 
 import java.util.Set;
 
-import com.aidancbrady.peerchess.ChessMove;
-import com.aidancbrady.peerchess.ChessPos;
-import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessSquare;
 
 public interface Piece 
 {

@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 
 import com.aidancbrady.peerchess.file.DataHandler;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.gui.ChessFrame;
 
 public class PeerChess
 {

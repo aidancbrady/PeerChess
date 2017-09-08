@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.tex.Texture;
 
 public class MenuPanel extends JPanel

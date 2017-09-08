@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;

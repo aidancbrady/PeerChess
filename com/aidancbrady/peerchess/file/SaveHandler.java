@@ -8,11 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.aidancbrady.peerchess.ChessComponent;
-import com.aidancbrady.peerchess.ChessPiece;
-import com.aidancbrady.peerchess.ChessPiece.Endgame;
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
-import com.aidancbrady.peerchess.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 
 public final class SaveHandler 
 {

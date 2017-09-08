@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,10 +18,14 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import com.aidancbrady.peerchess.ChessPiece.Endgame;
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.file.SaveHandler;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.net.PeerConnection;
 import com.aidancbrady.peerchess.piece.Piece;
 

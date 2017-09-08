@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;

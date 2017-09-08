@@ -11,9 +11,16 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.aidancbrady.peerchess.ChessPiece.Endgame;
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessAI;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessPanel;
+import com.aidancbrady.peerchess.gui.ChessSquarePanel;
 import com.aidancbrady.peerchess.tex.Texture;
 
 public class ChessComponent extends JComponent

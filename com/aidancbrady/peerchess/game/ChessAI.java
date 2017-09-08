@@ -1,10 +1,12 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.MoveAction;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 
 public class ChessAI 
 {

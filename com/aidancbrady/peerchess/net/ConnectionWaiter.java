@@ -7,9 +7,9 @@ import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
-import com.aidancbrady.peerchess.ChessPanel;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.gui.ChessPanel;
 
 public class ConnectionWaiter extends Thread
 {

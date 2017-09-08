@@ -7,9 +7,9 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aidancbrady.peerchess.JoinPanel;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.gui.JoinPanel;
 
 public class GameScanner extends Thread
 {

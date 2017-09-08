@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -6,8 +6,14 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.MoveAction;
+import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 
 public class ChessSquarePanel extends JComponent implements MouseListener
 {

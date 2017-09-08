@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
+import com.aidancbrady.peerchess.PeerChess;
 
 public class OptionsFrame extends JFrame implements ItemListener
 {

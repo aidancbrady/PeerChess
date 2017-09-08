@@ -1,4 +1,4 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,6 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.net.GameConnector;
 import com.aidancbrady.peerchess.net.GameScanner;
 import com.aidancbrady.peerchess.net.GameScanner.Server;

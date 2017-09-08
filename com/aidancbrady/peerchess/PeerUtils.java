@@ -6,8 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.aidancbrady.peerchess.ChessPiece.PieceType;
-import com.aidancbrady.peerchess.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.piece.Piece;
 
 public final class PeerUtils
