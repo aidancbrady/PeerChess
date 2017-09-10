@@ -8,10 +8,10 @@ import java.util.Set;
 
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
-import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.piece.Piece;
 
 public final class PeerUtils
@@ -475,5 +475,11 @@ public final class PeerUtils
 	    }
 	    
 	    return ret;
+	}
+	
+	public static ChessPiece getPawnReplace(Side side, int index)
+	{
+	    PieceType type = PieceType.values()[(PieceType.values().length-2)-index];
+	    return new ChessPiece(type, side);
 	}
 }

@@ -9,11 +9,12 @@ import javax.swing.JComponent;
 import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
-import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessSquare;
 
 public class ChessSquarePanel extends JComponent implements MouseListener
 {
@@ -123,6 +124,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 					{
 						component.select(square);
 						repaint();
+						component.panel.repaint();
 						
 						return;
 					}
@@ -133,17 +135,11 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 							
 							if(piece.type == PieceType.PAWN)
 							{
-								if(piece.side == Side.WHITE && move.toPos.yPos == 0)
+								if((piece.side == Side.WHITE && move.toPos.yPos == 0) || (piece.side == Side.BLACK && move.toPos.yPos == 7))
 								{
-									component.panel.pawnReplace %= PieceType.values().length;
-									newPiece = ChessPiece.getPieceList(Side.WHITE).get(component.panel.pawnReplace);
-									newPiece = newPiece.copyWithMoves(piece.moves);
-								}
-								else if(piece.side == Side.BLACK && move.toPos.yPos == 7)
-								{
-									component.panel.pawnReplace %= PieceType.values().length;
-									newPiece = ChessPiece.getPieceList(Side.BLACK).get(component.panel.pawnReplace);
-									newPiece = newPiece.copyWithMoves(piece.moves);
+									component.panel.pawnReplace %= PieceType.values().length-1;
+									newPiece = PeerUtils.getPawnReplace(piece.side, component.panel.pawnReplace);
+									newPiece.moves = piece.moves;
 								}
 							}
 							

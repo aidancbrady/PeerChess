@@ -11,7 +11,6 @@ import com.aidancbrady.peerchess.game.ChessPiece.Side;
 public class ChessAI 
 {
     private ChessComponent chess;
-    private Side side = Side.BLACK;
     private int MAX_DEPTH = 3;
     public int evaluations = 0;
     public boolean terminate = false;
@@ -30,7 +29,17 @@ public class ChessAI
         
         if(!terminate)
         {
-            chess.currentMove = new MoveAction(chess, move, piece, piece);
+            ChessPiece finalPiece = piece;
+            
+            if(move.getFromSquare(chess.grid).getPiece().type == PieceType.PAWN)
+            {
+                if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
+                {
+                    finalPiece = new ChessPiece(PieceType.QUEEN, piece.side);
+                }
+            }
+            
+            chess.currentMove = new MoveAction(chess, move, piece, finalPiece);
             chess.panel.updateText();
         }
     }
@@ -43,8 +52,7 @@ public class ChessAI
         
         for(ChessMove move : possibleMoves)
         {
-            ChessSquare[][] grid = move.getFakeGrid(chess.grid);
-            modifyMove(grid, move);
+            ChessSquare[][] grid = getFakeGrid(chess.grid, move);
             double score = minimax_do(MAX_DEPTH-1, grid, -10000, 10000, false);
             
             if(score >= bestMoveScore)
@@ -63,7 +71,7 @@ public class ChessAI
         
         if(depth == 0)
         {
-            return side == Side.WHITE ? evaluateBoard(grid) : -evaluateBoard(grid);
+            return getSide() == Side.WHITE ? evaluateBoard(grid) : -evaluateBoard(grid);
         }
         
         double bestMoveScore = maximizing ? -9999 : 9999;
@@ -72,8 +80,7 @@ public class ChessAI
         
         for(ChessMove move : possibleMoves)
         {
-            ChessSquare[][] newGrid = move.getFakeGrid(grid);
-            modifyMove(newGrid, move);
+            ChessSquare[][] newGrid = getFakeGrid(grid, move);
             
             if(maximizing)
             {
@@ -94,16 +101,20 @@ public class ChessAI
         return bestMoveScore;
     }
     
-    public void modifyMove(ChessSquare[][] grid, ChessMove move)
+    public ChessSquare[][] getFakeGrid(ChessSquare[][] grid, ChessMove move)
     {
-        if(move.getToSquare(grid).getPiece().type == PieceType.PAWN)
+        ChessSquare[][] ret = move.getFakeGrid(grid);
+        
+        if(move.getFromSquare(grid).getPiece().type == PieceType.PAWN)
         {
             if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
             {
-                ChessPiece oldPiece = move.getToSquare(grid).getPiece();
-                move.getToSquare(grid).setPiece(new ChessPiece(PieceType.QUEEN, oldPiece.side));
+                ChessPiece oldPiece = move.getFromSquare(grid).getPiece();
+                move.getToSquare(ret).setPiece(new ChessPiece(PieceType.QUEEN, oldPiece.side));
             }
         }
+        
+        return ret;
     }
     
     public double evaluateBoard(ChessSquare[][] grid)
@@ -162,7 +173,7 @@ public class ChessAI
     
     public List<ChessMove> getPossibleMoves(ChessSquare[][] grid, boolean maximizing)
     {
-        Side sideToTest = maximizing ? side : side.getOpposite();
+        Side sideToTest = maximizing ? getSide() : getSide().getOpposite();
         List<ChessMove> possibleMoves = new ArrayList<>();
         
         for(int y = 0; y < 8; y++)
@@ -188,6 +199,11 @@ public class ChessAI
         }
         
         return possibleMoves;
+    }
+    
+    public Side getSide()
+    {
+        return chess.turn;
     }
     
     public static double[][] reverseArray(double[][] array)

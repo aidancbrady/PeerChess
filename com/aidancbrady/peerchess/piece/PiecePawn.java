@@ -3,11 +3,11 @@ package com.aidancbrady.peerchess.piece;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
-import com.aidancbrady.peerchess.game.ChessPiece.Side;
-import com.aidancbrady.peerchess.PeerUtils;
 
 public class PiecePawn implements Piece
 {
@@ -56,6 +56,13 @@ public class PiecePawn implements Piece
 			return false;
 		}
 		
+		int beforeY = side == Side.BLACK ? 2 : 5;
+		
+		if(yAbs == 2 && grid[move.fromPos.xPos][beforeY].getPiece() != null)
+		{
+		    return false;
+		}
+		
 		if(move.toPos.equals(left) || move.toPos.equals(right))
 		{
 			if(move.getToSquare(grid).getPiece() == null || (move.getToSquare(grid).getPiece() != null && move.getToSquare(grid).getPiece().side == move.getFromSquare(grid).getPiece().side))
@@ -91,8 +98,9 @@ public class PiecePawn implements Piece
 		if(origPos.yPos == yStart)
 		{
 			int forwardY = side == Side.BLACK ? 3 : 4;
+			int beforeY = side == Side.BLACK ? 2 : 5;
 			
-			if(grid[origPos.xPos][forwardY].getPiece() == null)
+			if(grid[origPos.xPos][forwardY].getPiece() == null && grid[origPos.xPos][beforeY].getPiece() == null)
 			{
 				possibleMoves.add(new ChessPos(origPos.xPos, forwardY));
 			}

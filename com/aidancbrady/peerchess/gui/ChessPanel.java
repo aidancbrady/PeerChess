@@ -20,9 +20,9 @@ import javax.swing.border.TitledBorder;
 
 import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
 import com.aidancbrady.peerchess.game.ChessMove;
-import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
@@ -168,13 +168,9 @@ public class ChessPanel extends JPanel implements MouseListener
 		int x = chess.getWidth() + (width-chess.getWidth())/2 - size/2;
 		int y = yStart + (int)((statusLabel.getY()-yStart)*(1D/3D)) - size/2;
 		
-		if(replace == 0)
+		if(replace != -1)
 		{
-			ChessPiece.getPieceList(Side.WHITE).get(pawnReplace).getTexture().draw(g, x, y, size, size);
-		}
-		else if(replace == 1)
-		{
-			ChessPiece.getPieceList(Side.BLACK).get(pawnReplace).getTexture().draw(g, x, y, size, size);
+		    PeerUtils.getPawnReplace(replace == 0 ? Side.WHITE : Side.BLACK, pawnReplace).getTexture().draw(g, x, y, size, size);
 		}
 	}
 
@@ -327,12 +323,7 @@ public class ChessPanel extends JPanel implements MouseListener
 			
 			if(replace != -1)
 			{
-				if(replace == 0 && pawnReplace > PieceType.values().length)
-				{
-					pawnReplace = 0;
-				}
-				
-				pawnReplace = (pawnReplace+1)%PieceType.values().length;
+				pawnReplace = (pawnReplace+1)%(PieceType.values().length-1);
 				repaint();
 			}
 		}

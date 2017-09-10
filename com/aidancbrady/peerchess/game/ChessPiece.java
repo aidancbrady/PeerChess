@@ -1,8 +1,6 @@
 package com.aidancbrady.peerchess.game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.aidancbrady.peerchess.piece.Piece;
@@ -19,17 +17,6 @@ public class ChessPiece
     private static Map<PieceType, Texture> whiteTextures = new HashMap<>();
     private static Map<PieceType, Texture> blackTextures = new HashMap<>();
 	
-	private static List<ChessPiece> cachedWhitePieces = new ArrayList<ChessPiece>();
-	private static List<ChessPiece> cachedBlackPieces = new ArrayList<ChessPiece>();
-	
-	static {
-	    for(PieceType type : PieceType.values())
-        {
-            cachedWhitePieces.add(new ChessPiece(type, Side.WHITE));
-            cachedBlackPieces.add(new ChessPiece(type, Side.BLACK));
-        }
-	}
-	
 	public PieceType type;
 	
 	public Side side;
@@ -40,11 +27,6 @@ public class ChessPiece
 	{
 		type = t;
 		side = s;
-	}
-	
-	public static List<ChessPiece> getPieceList(Side s)
-	{
-	    return s == Side.WHITE ? cachedWhitePieces : cachedBlackPieces;
 	}
 	
 	public void move()
