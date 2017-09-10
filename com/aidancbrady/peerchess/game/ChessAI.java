@@ -11,7 +11,7 @@ import com.aidancbrady.peerchess.game.ChessPiece.Side;
 public class ChessAI 
 {
     private ChessComponent chess;
-    private int MAX_DEPTH = 3;
+    private int MAX_DEPTH = 4;
     public int evaluations = 0;
     public boolean terminate = false;
     

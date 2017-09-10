@@ -35,6 +35,11 @@ public class PieceKing implements Piece
             
             if(move.toPos.xPos == 2)
             {
+                if(PeerUtils.isInCheck(piece.side, move.fromPos.translate(-1, 0), grid))
+                {
+                    return false;
+                }
+                
                 test = grid[0][move.fromPos.yPos].getPiece();
                 
                 if(test != null && test.moves == 0)
@@ -50,6 +55,11 @@ public class PieceKing implements Piece
             }
             else if(move.toPos.xPos == 6)
             {
+                if(PeerUtils.isInCheck(piece.side, move.fromPos.translate(1, 0), grid))
+                {
+                    return false;
+                }
+                
                 test = grid[7][move.fromPos.yPos].getPiece();
                 
                 if(test != null && test.moves == 0)
