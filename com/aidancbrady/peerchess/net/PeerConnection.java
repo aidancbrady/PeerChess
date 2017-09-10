@@ -106,12 +106,12 @@ public class PeerConnection extends Thread
 				}
 				else if(reading.startsWith("MSG"))
 				{
-					String msg = reading.split(":")[1];
+					String msg = reading.substring(4);
 					panel.appendChat(username + ": " + msg);
 				}
 				else if(reading.startsWith("USER"))
 				{
-					username = reading.split(":")[1];
+					username = reading.substring(5);
 					panel.updateText();
 					
 					if(host)
@@ -143,6 +143,9 @@ public class PeerConnection extends Thread
 					
 					panel.chess.currentMove = new MoveAction(panel.chess, move, piece, newPiece);
 					panel.updateText();
+				}
+				else {
+				    throw new Exception("invalid request received");
 				}
 			}
 			
