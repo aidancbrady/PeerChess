@@ -11,7 +11,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.aidancbrady.peerchess.game.ChessAI;
+import com.aidancbrady.peerchess.ai.ChessAI;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPos;

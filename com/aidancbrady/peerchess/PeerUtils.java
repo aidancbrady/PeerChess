@@ -87,7 +87,7 @@ public final class PeerUtils
 						ChessMove move = new ChessMove(new ChessPos(x, y), newPos);
 						ChessPos kingPos = piece.type == PieceType.KING ? newPos : pos;
 						
-						if(!isInCheck(side, kingPos, move.getFakeGrid(grid)))
+						if(!testCheck(side, kingPos, grid, move))
 						{
 						    PeerUtils.debug(side + " is not in checkmate.");
 						    PeerUtils.debug("Valid move: " + piece + " at " + move.fromPos + " to " + move.toPos);
@@ -99,6 +99,14 @@ public final class PeerUtils
 		}
 		
 		return true;
+	}
+	
+	public static boolean testCheck(Side side, ChessPos pos, ChessSquare[][] grid, ChessMove move)
+	{
+	    move.testApplyMove(grid);
+	    boolean inCheck = isInCheck(side, pos, grid);
+	    move.testRevertMove(grid);
+	    return inCheck;
 	}
 	
 	public static boolean isInCheck(Side side, ChessPos pos, ChessSquare[][] grid)
@@ -476,6 +484,18 @@ public final class PeerUtils
 	    
 	    return ret;
 	}
+	
+    public static double[][] reverseArray(double[][] array)
+    {
+        double[][] ret = new double[8][8];
+        
+        for(int i = 0; i < array.length; i++)
+        {
+            ret[i] = array[array.length-i-1];
+        }
+        
+        return ret;
+    }
 	
 	public static ChessPiece getPawnReplace(Side side, int index)
 	{

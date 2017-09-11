@@ -15,7 +15,7 @@ public class PieceKnight implements Piece
 	{
 		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).getPiece().side, grid);
 		
-		if(PeerUtils.isInCheck(move.getFromSquare(grid).getPiece().side, pos, move.getFakeGrid(grid)))
+		if(PeerUtils.testCheck(move.getFromSquare(grid).getPiece().side, pos, grid, move))
 		{
 			return false;
 		}

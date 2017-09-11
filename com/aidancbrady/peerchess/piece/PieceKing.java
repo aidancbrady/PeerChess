@@ -16,7 +16,7 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(grid) || isValidCastle(grid, move))
 		{
-			if(!PeerUtils.isInCheck(move.getFromSquare(grid).getPiece().side, move.toPos, move.getFakeGrid(grid)))
+		    if(!PeerUtils.testCheck(move.getFromSquare(grid).getPiece().side, move.toPos, grid, move))
 			{
 				return true;
 			}

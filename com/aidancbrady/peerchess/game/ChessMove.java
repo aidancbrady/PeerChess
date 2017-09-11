@@ -1,5 +1,7 @@
 package com.aidancbrady.peerchess.game;
 
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
+
 public class ChessMove 
 {
 	public ChessPos fromPos;
@@ -7,6 +9,12 @@ public class ChessMove
 	
 	public ChessPos fromPosCastle;
 	public ChessPos toPosCastle;
+	
+	public ChessPiece testFromPiece;
+	public ChessPiece testToPiece;
+	
+	public ChessPiece testFromCastle;
+	public ChessPiece testToCastle;
 	
 	public ChessMove(ChessPos from, ChessPos to)
 	{
@@ -221,29 +229,41 @@ public class ChessMove
 		return true;
 	}
 	
-	public ChessSquare[][] getFakeGrid(ChessSquare[][] grid)
+	public void testApplyMove(ChessSquare[][] grid)
 	{
-		ChessSquare[][] fakeGrid = new ChessSquare[8][8];
-		
-		for(int x = 0; x < 8; x++)
-		{
-			for(int y = 0; y < 8; y++)
-			{
-				fakeGrid[x][y] = new ChessSquare(false, new ChessPos(x, y));
-				fakeGrid[x][y].setPiece(grid[x][y].getPiece());
-			}
-		}
-		
-		getFromSquare(fakeGrid).setPiece(null);
-		getToSquare(fakeGrid).setPiece(getFromSquare(grid).getPiece());
-		
-		if(fromPosCastle != null)
-		{
-		    fromPosCastle.getSquare(fakeGrid).setPiece(null);
-		    toPosCastle.getSquare(fakeGrid).setPiece(fromPosCastle.getSquare(grid).getPiece());
-		}
-		
-		return fakeGrid;
+	    testFromPiece = getFromSquare(grid).getPiece();
+	    testToPiece = getToSquare(grid).getPiece();
+	    
+	    getToSquare(grid).setPiece(getFromSquare(grid).getPiece());
+        getFromSquare(grid).setPiece(null);
+        
+        if(fromPosCastle != null)
+        {
+            testFromCastle = fromPosCastle.getSquare(grid).getPiece();
+            testToCastle = toPosCastle.getSquare(grid).getPiece();
+            
+            toPosCastle.getSquare(grid).setPiece(fromPosCastle.getSquare(grid).getPiece());
+            fromPosCastle.getSquare(grid).setPiece(null);
+        }
+	}
+	
+	public boolean testTakingKing()
+	{
+	    return testToPiece != null && testToPiece.type == PieceType.KING;
+	}
+	
+	public void testRevertMove(ChessSquare[][] grid)
+	{
+	    getFromSquare(grid).setPiece(testFromPiece);
+	    getToSquare(grid).setPiece(testToPiece);
+	    
+	    if(fromPosCastle != null)
+	    {
+	        fromPosCastle.getSquare(grid).setPiece(testFromCastle);
+	        toPosCastle.getSquare(grid).setPiece(testToCastle);
+	    }
+	    
+	    testFromPiece = testToPiece = testFromCastle = testToCastle = null;
 	}
 
     @Override
