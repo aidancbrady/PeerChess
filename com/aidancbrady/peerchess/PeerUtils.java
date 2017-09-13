@@ -70,24 +70,24 @@ public final class PeerUtils
 		}
 	}
 	
-	public static boolean isCheckMate(Side side, ChessSquare[][] grid)
+	public static boolean isCheckMate(Side side, IChessGame game)
 	{
-		ChessPos pos = findKing(side, grid);
+		ChessPos pos = findKing(side, game.getGrid());
 		
 		for(int x = 0; x < 8; x++)
 		{
 			for(int y = 0; y < 8; y++)
 			{
-				if(grid[x][y].getPiece() != null && grid[x][y].getPiece().side == side)
+				if(game.getGrid()[x][y].getPiece() != null && game.getGrid()[x][y].getPiece().side == side)
 				{
-					ChessPiece piece = grid[x][y].getPiece();
+					ChessPiece piece = game.getGrid()[x][y].getPiece();
 					
-					for(ChessPos newPos : piece.type.getPiece().getCurrentPossibleMoves(grid, new ChessPos(x, y)))
+					for(ChessPos newPos : piece.type.getPiece().getCurrentPossibleMoves(game, new ChessPos(x, y)))
 					{
 						ChessMove move = new ChessMove(new ChessPos(x, y), newPos);
 						ChessPos kingPos = piece.type == PieceType.KING ? newPos : pos;
 						
-						if(!testCheck(side, kingPos, grid, move))
+						if(!testCheck(side, kingPos, game.getGrid(), move))
 						{
 						    PeerUtils.debug(side + " is not in checkmate.");
 						    PeerUtils.debug("Valid move: " + piece + " at " + move.fromPos + " to " + move.toPos);
@@ -472,11 +472,11 @@ public final class PeerUtils
 	    
 	    Piece piece = chess.getSelectedPiece().type.getPiece();
 	    
-	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess.grid, chess.selected.getPos()))
+	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess, chess.selected.getPos()))
 	    {
 	        ChessMove move = new ChessMove(chess.selected.getPos(), pos);
 	        
-	        if(piece.validateMove(chess.grid, move))
+	        if(piece.validateMove(chess, move))
 	        {
 	            ret.add(pos);
 	        }

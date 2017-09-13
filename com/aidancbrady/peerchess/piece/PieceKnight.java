@@ -3,19 +3,19 @@ package com.aidancbrady.peerchess.piece;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.game.ChessSquare;
 
 public class PieceKnight implements Piece
 {
 	@Override
-	public boolean validateMove(ChessSquare[][] grid, ChessMove move)
+	public boolean validateMove(IChessGame game, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).getPiece().side, grid);
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().side, game.getGrid());
 		
-		if(PeerUtils.testCheck(move.getFromSquare(grid).getPiece().side, pos, grid, move))
+		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().side, pos, game.getGrid(), move))
 		{
 			return false;
 		}
@@ -31,7 +31,7 @@ public class PieceKnight implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
 	{
 		Set<ChessPos> possibleMoves = PeerUtils.getValidKnightMoves(origPos);
 		
@@ -39,7 +39,7 @@ public class PieceKnight implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(grid).getPiece() != null && pos.getSquare(grid).getPiece().side == origPos.getSquare(grid).getPiece().side)
+			if(pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().side == origPos.getSquare(game.getGrid()).getPiece().side)
 			{
 				iter.remove();
 			}

@@ -117,7 +117,7 @@ public class MoveAction
             component.sideInCheck = null;
         }
 		
-		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.grid))
+		if(PeerUtils.isCheckMate(getSide().getOpposite(), component))
 		{
 		    if(component.sideInCheck == getSide().getOpposite())
 		    {

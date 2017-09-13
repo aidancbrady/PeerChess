@@ -2,15 +2,15 @@ package com.aidancbrady.peerchess.piece;
 
 import java.util.Set;
 
+import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.game.ChessSquare;
 
 public interface Piece 
 {
-	public boolean validateMove(ChessSquare[][] grid, ChessMove move);
+	public boolean validateMove(IChessGame game, ChessMove move);
 	
-	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos);
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos);
 	
 	public int getPointValue();
 }

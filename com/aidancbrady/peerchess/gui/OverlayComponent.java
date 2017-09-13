@@ -1,8 +1,10 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.Graphics;
 
 import javax.swing.JComponent;
+
+import com.aidancbrady.peerchess.ChessComponent;
 
 public class OverlayComponent extends JComponent
 {

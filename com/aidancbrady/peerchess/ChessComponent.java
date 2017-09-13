@@ -14,16 +14,17 @@ import javax.swing.JPanel;
 import com.aidancbrady.peerchess.ai.ChessAI;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
-import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.gui.ChessPanel;
 import com.aidancbrady.peerchess.gui.ChessSquarePanel;
+import com.aidancbrady.peerchess.gui.OverlayComponent;
 import com.aidancbrady.peerchess.tex.Texture;
 
-public class ChessComponent extends JComponent
+public class ChessComponent extends JComponent implements IChessGame
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -189,6 +190,18 @@ public class ChessComponent extends JComponent
 	public void setSide(Side s)
 	{
 		side = s;
+	}
+	
+	@Override
+	public ChessSquare[][] getGrid()
+	{
+	    return grid;
+	}
+	
+	@Override
+	public List<ChessMove> getPastMoves()
+	{
+	    return moves;
 	}
 	
 	@Override

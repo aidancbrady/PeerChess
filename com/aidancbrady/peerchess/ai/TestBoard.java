@@ -3,6 +3,8 @@ package com.aidancbrady.peerchess.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -10,21 +12,23 @@ import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
 
-public class TestBoard 
+public class TestBoard implements IChessGame
 {
     private ChessSquare[][] grid;
     private double currentEvaluation;
+    private List<ChessMove> moves;
     
-    public TestBoard(ChessSquare[][] board)
+    public TestBoard(ChessComponent game)
     {
         grid = new ChessSquare[8][8];
+        moves = new ArrayList<ChessMove>(game.moves);
         
         for(int x = 0; x < 8; x++)
         {
             for(int y = 0; y < 8; y++)
             {
                 grid[x][y] = new ChessSquare(false, new ChessPos(x, y));
-                grid[x][y].setPiece(board[x][y].getPiece());
+                grid[x][y].setPiece(game.grid[x][y].getPiece());
             }
         }
         
@@ -65,11 +69,11 @@ public class TestBoard
                     ChessPiece piece = grid[x][y].getPiece();
                     ChessPos origPos = new ChessPos(x, y);
                     
-                    for(ChessPos pos : piece.type.getPiece().getCurrentPossibleMoves(grid, origPos))
+                    for(ChessPos pos : piece.type.getPiece().getCurrentPossibleMoves(this, origPos))
                     {
                         ChessMove move = new ChessMove(origPos, pos);
                         
-                        if(piece.type.getPiece().validateMove(grid, move))
+                        if(piece.type.getPiece().validateMove(this, move))
                         {
                             possibleMoves.add(move);
                         }
@@ -150,12 +154,27 @@ public class TestBoard
         double delta = afterScore-beforeScore;
         currentEvaluation += delta;
         
+        moves.add(move);
+        
         return delta;
     }
     
     public void revertMove(ChessMove move, double delta)
     {
         move.testRevertMove(grid);
+        moves.remove(moves.size()-1);
         currentEvaluation -= delta;
+    }
+    
+    @Override
+    public ChessSquare[][] getGrid()
+    {
+        return grid;
+    }
+    
+    @Override
+    public List<ChessMove> getPastMoves()
+    {
+        return moves;
     }
 }

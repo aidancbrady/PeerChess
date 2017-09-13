@@ -4,7 +4,7 @@ import com.aidancbrady.peerchess.PeerUtils;
 
 public final class Constants 
 {
-    public static final int MAX_DEPTH = 4;
+    public static final int MAX_DEPTH = 5;
     
     public static double[][] pawnEvalWhite = {
         {0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0},

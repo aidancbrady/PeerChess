@@ -197,7 +197,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, 1));
 					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, 1));
 					
-					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess.grid, leftMove)) || piece.validateMove(chess.grid, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess.grid, rightMove)))
+					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess, leftMove)) || piece.validateMove(chess, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess, rightMove)))
 					{
 						return 1;
 					}
@@ -210,7 +210,7 @@ public class ChessPanel extends JPanel implements MouseListener
 					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, -1));
 					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, -1));
 					
-					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess.grid, leftMove)) || piece.validateMove(chess.grid, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess.grid, rightMove)))
+					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess, leftMove)) || piece.validateMove(chess, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess, rightMove)))
 					{
 						return 0;
 					}

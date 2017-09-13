@@ -3,25 +3,27 @@ package com.aidancbrady.peerchess.piece;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.game.ChessSquare;
 
 public class PiecePawn implements Piece
 {
 	@Override
-	public boolean validateMove(ChessSquare[][] grid, ChessMove move)
+	public boolean validateMove(IChessGame game, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(grid).getPiece().side, grid);
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().side, game.getGrid());
 		
-		if(PeerUtils.testCheck(move.getFromSquare(grid).getPiece().side, pos, grid, move))
+		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().side, pos, game.getGrid(), move))
 		{
 			return false;
 		}
 		
-		Side side = move.getFromSquare(grid).getPiece().side;
+		Side side = move.getFromSquare(game.getGrid()).getPiece().side;
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
 		ChessPos left = move.fromPos.translate(1, side == Side.BLACK ? 1 : -1);
@@ -29,7 +31,7 @@ public class PiecePawn implements Piece
 		
 		if(move.fromPos.xPos == move.toPos.xPos)
 		{
-			if(move.getToSquare(grid).getPiece() != null)
+			if(move.getToSquare(game.getGrid()).getPiece() != null)
 			{
 				return false;
 			}
@@ -58,16 +60,27 @@ public class PiecePawn implements Piece
 		
 		int beforeY = side == Side.BLACK ? 2 : 5;
 		
-		if(yAbs == 2 && grid[move.fromPos.xPos][beforeY].getPiece() != null)
+		if(yAbs == 2 && game.getGrid()[move.fromPos.xPos][beforeY].getPiece() != null)
 		{
 		    return false;
 		}
 		
 		if(move.toPos.equals(left) || move.toPos.equals(right))
 		{
-			if(move.getToSquare(grid).getPiece() == null || (move.getToSquare(grid).getPiece() != null && move.getToSquare(grid).getPiece().side == move.getFromSquare(grid).getPiece().side))
+			if(move.getToSquare(game.getGrid()).getPiece() != null && move.getToSquare(game.getGrid()).getPiece().side == move.getFromSquare(game.getGrid()).getPiece().side)
 			{
 				return false;
+			}
+			
+			if(move.getToSquare(game.getGrid()).getPiece() == null) //en passant
+			{
+			    ChessPos prevPos = move.toPos.translate(0, side == Side.BLACK ? -1 : 1);
+			    ChessPiece prevPiece = prevPos.getSquare(game.getGrid()).getPiece();
+			    
+			    if(prevPiece == null || prevPiece.side == side || prevPiece.type != PieceType.PAWN)
+			    {
+			        return false;
+			    }
 			}
 		}
 		
@@ -75,24 +88,66 @@ public class PiecePawn implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(ChessSquare[][] grid, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
 	{
 		Set<ChessPos> possibleMoves = new HashSet<ChessPos>();
 		
-		Side side = origPos.getSquare(grid).getPiece().side;
+		Side side = origPos.getSquare(game.getGrid()).getPiece().side;
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
 		ChessPos left = origPos.translate(1, side == Side.BLACK ? 1 : -1);
 		ChessPos right = origPos.translate(-1, side == Side.BLACK ? 1 : -1);
 		
-		if(left.isInRange() && left.getSquare(grid).getPiece() != null && left.getSquare(grid).getPiece().side != side)
+		if(left.isInRange())
 		{
-			possibleMoves.add(left);
+		    if(left.getSquare(game.getGrid()).getPiece() != null && left.getSquare(game.getGrid()).getPiece().side != side)
+		    {
+		        possibleMoves.add(left);
+		    }
+		    else if(left.getSquare(game.getGrid()).getPiece() == null) //en passant
+		    {
+		        ChessPos lower = left.translate(0, side == Side.BLACK ? -1 : 1);
+		        ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
+		        
+		        if(lowerPiece != null && lowerPiece.side != side && lowerPiece.type == PieceType.PAWN)
+		        {
+		            if(!game.getPastMoves().isEmpty())
+		            {
+    		            ChessMove lastMove = game.getPastMoves().get(game.getPastMoves().size()-1);
+    		            
+    		            if(lower.equals(lastMove.toPos))
+    		            {
+    		                possibleMoves.add(lower);
+    		            }
+		            }
+		        }
+		    }
 		}
 		
-		if(right.isInRange() && right.getSquare(grid).getPiece() != null && right.getSquare(grid).getPiece().side != side)
+		if(right.isInRange())
 		{
-			possibleMoves.add(right);
+		    if(right.getSquare(game.getGrid()).getPiece() != null && right.getSquare(game.getGrid()).getPiece().side != side)
+		    {
+		        possibleMoves.add(right);
+		    }
+		    else if(right.getSquare(game.getGrid()).getPiece() == null) //en passant
+		    {
+		        ChessPos lower = right.translate(0, side == Side.BLACK ? -1 : 1);
+                ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
+                
+                if(lowerPiece != null && lowerPiece.side != side && lowerPiece.type == PieceType.PAWN)
+                {
+                    if(!game.getPastMoves().isEmpty())
+                    {
+                        ChessMove lastMove = game.getPastMoves().get(game.getPastMoves().size()-1);
+                        
+                        if(lower.equals(lastMove.toPos))
+                        {
+                            possibleMoves.add(lower);
+                        }
+                    }
+                }
+		    }
 		}
 		
 		if(origPos.yPos == yStart)
@@ -100,7 +155,7 @@ public class PiecePawn implements Piece
 			int forwardY = side == Side.BLACK ? 3 : 4;
 			int beforeY = side == Side.BLACK ? 2 : 5;
 			
-			if(grid[origPos.xPos][forwardY].getPiece() == null && grid[origPos.xPos][beforeY].getPiece() == null)
+			if(game.getGrid()[origPos.xPos][forwardY].getPiece() == null && game.getGrid()[origPos.xPos][beforeY].getPiece() == null)
 			{
 				possibleMoves.add(new ChessPos(origPos.xPos, forwardY));
 			}
@@ -108,7 +163,7 @@ public class PiecePawn implements Piece
 		
 		int forwardY = side == Side.BLACK ? origPos.yPos+1 : origPos.yPos-1;
 		
-		if(forwardY >= 0 && forwardY <= 7 && grid[origPos.xPos][forwardY].getPiece() == null)
+		if(forwardY >= 0 && forwardY <= 7 && game.getGrid()[origPos.xPos][forwardY].getPiece() == null)
 		{
 			possibleMoves.add(new ChessPos(origPos.xPos, forwardY));
 		}

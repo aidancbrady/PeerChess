@@ -20,13 +20,13 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessComponent component;
+	public ChessComponent game;
 	
 	public ChessSquare square;
 	
 	public ChessSquarePanel(ChessComponent com, ChessSquare s)
 	{
-		component = com;
+		game = com;
 		square = s;
 		
 		setSize(96, 96);
@@ -53,21 +53,21 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(PeerChess.instance().enableVisualGuides)
 		{
-    	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && component.sideInCheck == square.getPiece().side)
+    	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && game.sideInCheck == square.getPiece().side)
     	    {
-    	        if(component.currentMove == null)
+    	        if(game.currentMove == null)
     	        {
     	            ChessComponent.check.draw(g, 0, 0, getWidth(), getHeight());
     	        }
     	    }
     	    
-    	    if(component.possibleMoves.contains(square.getPos()))
+    	    if(game.possibleMoves.contains(square.getPos()))
     	    {
     	        ChessComponent.possible.draw(g, 0, 0, getWidth(), getHeight());
     	    }
 		}
 		
-		if(component.selected == square)
+		if(game.selected == square)
 		{
 			ChessComponent.select.draw(g, 0, 0, getWidth(), getHeight());
 		}
@@ -88,48 +88,48 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(component.isMoving() || component.turn != component.side || component.endgame != null)
+		if(game.isMoving() || game.turn != game.side || game.endgame != null)
 		{
 			return;
 		}
 		
-		if(component.multiplayer && component.panel.connection == null)
+		if(game.multiplayer && game.panel.connection == null)
 		{
 		    return;
 		}
 		
-		if(component.selected != null && component.selected.getPiece() == null)
+		if(game.selected != null && game.selected.getPiece() == null)
 		{
-		    component.select(null);
+		    game.select(null);
 		}
 		
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
-			if(component.selected == null && square.getPiece() != null)
+			if(game.selected == null && square.getPiece() != null)
 			{
-				if(component.side != square.getPiece().side)
+				if(game.side != square.getPiece().side)
 				{
 					return;
 				}
 				
-				component.select(square);
+				game.select(square);
 			}
 			else {
-				if(component.selected != null)
+				if(game.selected != null)
 				{
-					ChessPiece piece = component.selected.getPiece();
-					ChessMove move = new ChessMove(component.selected.getPos(), square.getPos());
+					ChessPiece piece = game.selected.getPiece();
+					ChessMove move = new ChessMove(game.selected.getPos(), square.getPos());
 					
 					if(square.getPiece() != null && square.getPiece().side == piece.side)
 					{
-						component.select(square);
+						game.select(square);
 						repaint();
-						component.panel.repaint();
+						game.panel.repaint();
 						
 						return;
 					}
 					else {
-						if(piece.type.getPiece().validateMove(component.grid, move))
+						if(piece.type.getPiece().validateMove(game, move))
 						{
 							ChessPiece newPiece = piece;
 							
@@ -137,27 +137,27 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 							{
 								if((piece.side == Side.WHITE && move.toPos.yPos == 0) || (piece.side == Side.BLACK && move.toPos.yPos == 7))
 								{
-									component.panel.pawnReplace %= PieceType.values().length-1;
-									newPiece = PeerUtils.getPawnReplace(piece.side, component.panel.pawnReplace);
+									game.panel.pawnReplace %= PieceType.values().length-1;
+									newPiece = PeerUtils.getPawnReplace(piece.side, game.panel.pawnReplace);
 									newPiece.moves = piece.moves;
 								}
 							}
 							
-							component.currentMove = new MoveAction(component, move, piece, newPiece);
+							game.currentMove = new MoveAction(game, move, piece, newPiece);
 							
-							if(component.multiplayer)
+							if(game.multiplayer)
 							{
-							    component.currentMove.broadcast();
+							    game.currentMove.broadcast();
 							}
 						}
 					}
 				}
 				
-				component.select(null);
+				game.select(null);
 			}
 			
 			repaint();
-			component.panel.repaint();
+			game.panel.repaint();
 		}
 	}
 }

@@ -48,7 +48,7 @@ public class ChessAI
     
     public ChessMove minimax()
     {
-        TestBoard board = new TestBoard(chess.grid);
+        TestBoard board = new TestBoard(chess);
         List<ChessMove> possibleMoves = board.getPossibleMoves(getSide(), true);
         double bestMoveScore = -9999;
         ChessMove bestMove = null;
