@@ -10,22 +10,20 @@ public class ChessMove
 	public ChessPos fromPosCastle;
 	public ChessPos toPosCastle;
 	
+	public ChessPos enPassantTakePos;
+	
 	public ChessPiece testFromPiece;
 	public ChessPiece testToPiece;
 	
 	public ChessPiece testFromCastle;
 	public ChessPiece testToCastle;
 	
+	public ChessPiece enPassantTake;
+	
 	public ChessMove(ChessPos from, ChessPos to)
 	{
 		fromPos = from;
 		toPos = to;
-	}
-	
-	public void setCastle(ChessPos from, ChessPos to)
-	{
-	    fromPosCastle = from;
-	    toPosCastle = to;
 	}
 	
 	public ChessSquare getFromSquare(ChessSquare[][] grid)
@@ -245,6 +243,11 @@ public class ChessMove
             toPosCastle.getSquare(grid).setPiece(fromPosCastle.getSquare(grid).getPiece());
             fromPosCastle.getSquare(grid).setPiece(null);
         }
+        
+        if(enPassantTakePos != null)
+        {
+            enPassantTake = enPassantTakePos.getSquare(grid).getPiece();
+        }
 	}
 	
 	public boolean testTakingKing()
@@ -263,7 +266,12 @@ public class ChessMove
 	        toPosCastle.getSquare(grid).setPiece(testToCastle);
 	    }
 	    
-	    testFromPiece = testToPiece = testFromCastle = testToCastle = null;
+	    if(enPassantTakePos != null)
+	    {
+	        enPassantTakePos.getSquare(grid).setPiece(enPassantTake);
+	    }
+	    
+	    testFromPiece = testToPiece = testFromCastle = testToCastle = enPassantTake = null;
 	}
 	
 	public String serialize()
@@ -273,6 +281,11 @@ public class ChessMove
 	    if(fromPosCastle != null)
 	    {
 	        ret += " " + fromPosCastle.serialize() + " " + toPosCastle.serialize();
+	    }
+	    
+	    if(enPassantTakePos != null)
+	    {
+	        ret += " " + enPassantTakePos.serialize();
 	    }
 	    
 	    return ret;
@@ -288,6 +301,11 @@ public class ChessMove
 	    {
 	        ret.fromPosCastle = ChessPos.create(split[2]);
 	        ret.toPosCastle = ChessPos.create(split[3]);
+	    }
+	    
+	    if(split.length == 3)
+	    {
+	        ret.enPassantTakePos = ChessPos.create(split[2]);
 	    }
 	    
 	    return ret;

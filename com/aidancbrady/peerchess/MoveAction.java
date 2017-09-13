@@ -101,6 +101,11 @@ public class MoveAction
 		    move.toPosCastle.getSquare(component.grid).setPiece(newCastle);
 		}
 		
+		if(move.enPassantTakePos != null)
+		{
+		    move.enPassantTakePos.getSquare(component.grid).setPiece(null);
+		}
+		
 		component.repaint();
 		
 		moveSound.stop();

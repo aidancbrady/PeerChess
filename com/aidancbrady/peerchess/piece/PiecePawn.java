@@ -86,6 +86,8 @@ public class PiecePawn implements Piece
 			    {
 			        return false;
 			    }
+			    
+			    move.enPassantTakePos = prevPos.clone();
 			}
 		}
 		
@@ -122,7 +124,7 @@ public class PiecePawn implements Piece
     		            
     		            if(lower.equals(lastMove.toPos))
     		            {
-    		                possibleMoves.add(lower);
+    		                possibleMoves.add(left);
     		            }
 		            }
 		        }
@@ -148,7 +150,7 @@ public class PiecePawn implements Piece
                         
                         if(lower.equals(lastMove.toPos))
                         {
-                            possibleMoves.add(lower);
+                            possibleMoves.add(right);
                         }
                     }
                 }
