@@ -81,6 +81,11 @@ public class PiecePawn implements Piece
 			    {
 			        return false;
 			    }
+			    
+			    if(game.getPastMoves().isEmpty() || !game.getPastMoves().get(game.getPastMoves().size()-1).toPos.equals(prevPos))
+			    {
+			        return false;
+			    }
 			}
 		}
 		
