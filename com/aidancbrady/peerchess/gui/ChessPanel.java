@@ -124,6 +124,14 @@ public class ChessPanel extends JPanel implements MouseListener
 		add(statusLabel);
 	}
 	
+	public void initGame()
+	{
+	    if(!chess.multiplayer && chess.side != chess.turn)
+	    {
+	        chess.chessAI.triggerMove();
+	    }
+	}
+	
 	public void updateText()
 	{
 		if(opponentLabel != null && titleLabel != null && statusLabel != null)
