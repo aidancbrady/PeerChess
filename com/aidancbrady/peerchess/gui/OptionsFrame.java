@@ -11,10 +11,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.ai.Constants;
 
-public class OptionsFrame extends JFrame implements ItemListener
+public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -24,7 +28,10 @@ public class OptionsFrame extends JFrame implements ItemListener
 	public JButton usernameButton;
 	
 	public JCheckBox soundEffectsBox;
+	public JCheckBox animationsBox;
 	public JCheckBox visualGuidesBox;
+	
+	public JSlider difficultySlider;
 	
 	public JLabel usernameLabel;
 
@@ -66,10 +73,17 @@ public class OptionsFrame extends JFrame implements ItemListener
 		soundEffectsBox.addItemListener(this);
 		add(soundEffectsBox);
 		
+		animationsBox = new JCheckBox();
+        animationsBox.setSelected(PeerChess.instance().enableAnimations);
+        animationsBox.setSize(24, 24);
+        animationsBox.setLocation(16, 110);
+        animationsBox.addItemListener(this);
+        add(animationsBox);
+		
 		visualGuidesBox = new JCheckBox();
         visualGuidesBox.setSelected(PeerChess.instance().enableVisualGuides);
         visualGuidesBox.setSize(24, 24);
-        visualGuidesBox.setLocation(16, 110);
+        visualGuidesBox.setLocation(16, 130);
         visualGuidesBox.addItemListener(this);
         add(visualGuidesBox);
 		
@@ -78,10 +92,30 @@ public class OptionsFrame extends JFrame implements ItemListener
 		soundEffectsLabel.setLocation(40, 86);
 		add(soundEffectsLabel);
 		
+		JLabel animationsLabel = new JLabel("Enable animations");
+        animationsLabel.setSize(200, 30);
+        animationsLabel.setLocation(40, 106);
+        add(animationsLabel);
+		
 		JLabel visualGuidesLabel = new JLabel("Enable visual guides");
         visualGuidesLabel.setSize(200, 30);
-        visualGuidesLabel.setLocation(40, 106);
+        visualGuidesLabel.setLocation(40, 126);
         add(visualGuidesLabel);
+        
+        difficultySlider = new JSlider(JSlider.HORIZONTAL, 1, Constants.MAX_DEPTH+1, PeerChess.instance().difficulty);
+        difficultySlider.setSize(getWidth()-32, 60);
+        difficultySlider.setLocation(16, 180);
+        difficultySlider.setSnapToTicks(true);
+        difficultySlider.setPaintTicks(true);
+        difficultySlider.setPaintLabels(true);
+        difficultySlider.addChangeListener(this);
+        difficultySlider.setMajorTickSpacing(1);
+        add(difficultySlider);
+        
+        JLabel difficultyLabel = new JLabel("Difficulty");
+        difficultyLabel.setSize(200, 30);
+        difficultyLabel.setLocation(16, 166);
+        add(difficultyLabel);
 		
 		setVisible(true);
 		setResizable(false);
@@ -136,9 +170,22 @@ public class OptionsFrame extends JFrame implements ItemListener
 		{
 			PeerChess.instance().enableSoundEffects = arg0.getStateChange() == 1;
 		}
+		else if(arg0.getSource() == animationsBox)
+        {
+            PeerChess.instance().enableAnimations = arg0.getStateChange() == 1;
+        }
 		else if(arg0.getSource() == visualGuidesBox)
 		{
 		    PeerChess.instance().enableVisualGuides = arg0.getStateChange() == 1;
 		}
 	}
+
+    @Override
+    public void stateChanged(ChangeEvent e)
+    {
+        if(e.getSource() == difficultySlider)
+        {
+            PeerChess.instance().difficulty = difficultySlider.getValue();
+        }
+    }
 }

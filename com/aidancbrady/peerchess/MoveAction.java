@@ -75,14 +75,14 @@ public class MoveAction
 	
 	public void update()
 	{
-		if(frames == 0 && PeerChess.instance().enableSoundEffects)
+		if(frames == 0 && PeerChess.instance().enableSoundEffects && PeerChess.instance().enableAnimations)
 		{
 			moveSound.play();
 		}
 		
 		frames++;
 		
-		if(frames == FRAME_LIMIT)
+		if(!PeerChess.instance().enableAnimations || frames == FRAME_LIMIT)
 		{
 			move();
 		}
