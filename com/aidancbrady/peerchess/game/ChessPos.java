@@ -26,6 +26,17 @@ public class ChessPos
 		return xPos >= 0 && xPos <= 7 && yPos >= 0 && yPos <= 7;
 	}
 	
+	public String serialize()
+	{
+	    return xPos + "," + yPos;
+	}
+	
+	public static ChessPos create(String s) throws Exception
+	{
+	    String[] split = s.split(",");
+	    return new ChessPos(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+	}
+	
 	@Override
 	public ChessPos clone()
 	{

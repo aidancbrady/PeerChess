@@ -265,6 +265,33 @@ public class ChessMove
 	    
 	    testFromPiece = testToPiece = testFromCastle = testToCastle = null;
 	}
+	
+	public String serialize()
+	{
+	    String ret = fromPos.serialize() + " " + toPos.serialize();
+	    
+	    if(fromPosCastle != null)
+	    {
+	        ret += " " + fromPosCastle.serialize() + " " + toPosCastle.serialize();
+	    }
+	    
+	    return ret;
+	}
+	
+	public static ChessMove create(String s) throws Exception
+	{
+	    String[] split = s.split(" ");
+	    
+	    ChessMove ret = new ChessMove(ChessPos.create(split[0]), ChessPos.create(split[1]));
+	    
+	    if(split.length == 4)
+	    {
+	        ret.fromPosCastle = ChessPos.create(split[2]);
+	        ret.toPosCastle = ChessPos.create(split[3]);
+	    }
+	    
+	    return ret;
+	}
 
     @Override
     public int hashCode() 

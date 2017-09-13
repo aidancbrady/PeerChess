@@ -1,6 +1,5 @@
 package com.aidancbrady.peerchess.game;
 
-
 public class ChessSquare 
 {
     private boolean color;

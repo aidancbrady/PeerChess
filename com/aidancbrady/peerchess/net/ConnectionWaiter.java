@@ -42,6 +42,7 @@ public class ConnectionWaiter extends Thread
 				PeerUtils.debug("Received connection from " + connection.getInetAddress() + ":" + connection.getPort());
 				
 				panel.frame.waiting.setVisible(false);
+				panel.chess.host = true;
 			}
 		} catch(Exception e) {
 		    if(!e.getMessage().contains("Socket closed")) // ignore

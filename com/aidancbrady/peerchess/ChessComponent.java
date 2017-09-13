@@ -50,6 +50,7 @@ public class ChessComponent extends JComponent implements IChessGame
 	public Side sideInCheck = null;
 	
 	public boolean multiplayer;
+	public boolean host;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	

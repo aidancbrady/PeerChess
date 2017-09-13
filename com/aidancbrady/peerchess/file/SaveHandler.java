@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -93,10 +94,23 @@ public final class SaveHandler
 		writer.newLine();
 		writer.append(Integer.toString(chess.turn.ordinal()));
 		writer.newLine();
+		writer.append(Boolean.toString(chess.multiplayer));
+		writer.newLine();
+		writer.append(Boolean.toString(chess.host));
+        writer.newLine();
 		writer.append(chess.endgame != null ? Integer.toString(chess.endgame.ordinal()) : "-1");
 		writer.newLine();
 		writer.append(chess.sideInCheck != null ? Integer.toString(chess.sideInCheck.ordinal()) : "-1");
 		writer.newLine();
+		
+		writer.append(Integer.toString(chess.moves.size()));
+		writer.newLine();
+		
+		for(ChessMove move : chess.moves)
+		{
+		    writer.append(move.serialize());
+		    writer.newLine();
+		}
 		
 		for(int y = 0; y < 8; y++)
 		{
@@ -132,12 +146,25 @@ public final class SaveHandler
 	{
 		chess.setSide(Side.values()[Integer.parseInt(reader.readLine())]);
 		chess.turn = Side.values()[Integer.parseInt(reader.readLine())];
+		chess.multiplayer = Boolean.parseBoolean(reader.readLine());
+		chess.host = Boolean.parseBoolean(reader.readLine());
 		
 		int check = Integer.parseInt(reader.readLine());
 		chess.endgame = check == -1 ? null : Endgame.values()[check];
 		
 		int s = Integer.parseInt(reader.readLine());
 		chess.sideInCheck = s == -1 ? null : Side.values()[s];
+		
+		try {
+    		int moveCount = Integer.parseInt(reader.readLine());
+    		
+    		for(int i = 0; i < moveCount; i++)
+    		{
+    		    chess.moves.add(ChessMove.create(reader.readLine()));
+    		}
+		} catch(Exception e) {
+		    throw new IOException("Failed to read move history.", e);
+		}
 		
 		for(int y = 0; y < 8; y++)
 		{

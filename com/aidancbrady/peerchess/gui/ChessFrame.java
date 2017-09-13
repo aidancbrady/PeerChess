@@ -122,7 +122,7 @@ public class ChessFrame extends JFrame implements WindowListener
 		{
 			if(SaveHandler.loadGame(chess.chess, chooser.getSelectedFile()))
 			{
-				openChess(true);
+				openChess(chess.chess.multiplayer);
 			}
 			else {
 				chess.chess.resetGame();
