@@ -166,6 +166,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		panel.updateText();
 		endgame = null;
 		chessAI.reset();
+		host = false;
+		multiplayer = false;
 		
 		possibleMoves.clear();
 		sideInCheck = null;
