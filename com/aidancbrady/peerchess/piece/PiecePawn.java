@@ -65,6 +65,11 @@ public class PiecePawn implements Piece
 		    return false;
 		}
 		
+		if(yAbs == 2 && xAbs != 0)
+		{
+		    return false;
+		}
+		
 		if(move.toPos.equals(left) || move.toPos.equals(right))
 		{
 			if(move.getToSquare(game.getGrid()).getPiece() != null && move.getToSquare(game.getGrid()).getPiece().side == move.getFromSquare(game.getGrid()).getPiece().side)
