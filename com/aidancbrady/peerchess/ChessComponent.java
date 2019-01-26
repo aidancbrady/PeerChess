@@ -52,6 +52,8 @@ public class ChessComponent extends JComponent implements IChessGame
 	public boolean multiplayer;
 	public boolean host;
 	
+	public ChessSquarePanel heldDown = null;
+	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
 	public static Texture white = Texture.load("resources/icon/white.png");
@@ -171,6 +173,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		possibleMoves.clear();
 		sideInCheck = null;
+		
+		heldDown = null;
 		
 		if(panel.opponentLabel != null)
 		{

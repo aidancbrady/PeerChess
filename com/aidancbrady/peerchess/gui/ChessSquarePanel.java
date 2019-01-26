@@ -1,6 +1,5 @@
 package com.aidancbrady.peerchess.gui;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -83,17 +82,27 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) 
+	{
+	    if(game.heldDown == this) 
+	    {
+	        game.possibleMoves.clear();
+	        game.repaint();
+	        game.heldDown = null;
+	    }
+	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) 
 	{
 	    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
 	    
-	    if(square.getPiece() != null && !possibleMoves.isEmpty())
+	    if(square.getPiece() != null && square.getPiece().side == game.side && !possibleMoves.isEmpty())
 	    {
 	        game.possibleMoves.clear();
 	        game.possibleMoves.addAll(possibleMoves);
+	        game.repaint();
+	        game.heldDown = this;
 	    }
 	}
 
@@ -109,6 +118,8 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
 		    return;
 		}
+		
+		game.heldDown = null;
 		
 		if(game.selected != null && game.selected.getPiece() == null)
 		{
