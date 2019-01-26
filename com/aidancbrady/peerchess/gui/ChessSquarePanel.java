@@ -3,11 +3,13 @@ package com.aidancbrady.peerchess.gui;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JComponent;
 
 import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.DragAction;
 import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
@@ -35,6 +37,33 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		setLocation(square.getPos().xPos*96, square.getPos().yPos*96);
 		setFocusable(false);
 		addMouseListener(this);
+		
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e)
+            {
+                if(game.currentDrag == null && game.turn == game.side) 
+                {
+                    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
+                    
+                    if(square.getPiece() != null && square.getPiece().side == game.side && !possibleMoves.isEmpty())
+                    {
+                        game.select(null);
+                        game.possibleMoves.addAll(possibleMoves);
+                        game.repaint();
+                        game.currentDrag = new DragAction(ChessSquarePanel.this);
+                    }
+                }
+                
+                if(game.currentDrag != null)
+                {
+                    game.currentDrag.updateMouse(e.getLocationOnScreen());
+                }
+            }
+        
+            @Override
+            public void mouseMoved(MouseEvent e) {}
+        });
 	}
 	
 	@Override
@@ -50,7 +79,10 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(square.getPiece() != null && square.getPiece().getTexture() != null)
 		{
-			square.getPiece().getTexture().draw(g, 0, 0, getWidth(), getHeight());
+		    if(game.currentDrag == null || game.currentDrag.getSquarePanel() != this)
+	        {
+		        square.getPiece().getTexture().draw(g, 0, 0, getWidth(), getHeight());
+	        }
 		}
 		
 		if(PeerChess.instance().enableVisualGuides)
@@ -79,32 +111,25 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	public void mouseClicked(MouseEvent arg0) {}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseEntered(MouseEvent arg0) 
+	{
+	    if(game.currentDrag != null)
+	    {
+	        game.currentDrag.enter(this);
+	    }
+	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) 
 	{
-	    if(game.heldDown == this) 
-	    {
-	        game.possibleMoves.clear();
-	        game.repaint();
-	        game.heldDown = null;
-	    }
+	    if(game.currentDrag != null)
+        {
+            game.currentDrag.exit(this);
+        }
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) 
-	{
-	    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
-	    
-	    if(square.getPiece() != null && square.getPiece().side == game.side && !possibleMoves.isEmpty())
-	    {
-	        game.possibleMoves.clear();
-	        game.possibleMoves.addAll(possibleMoves);
-	        game.repaint();
-	        game.heldDown = this;
-	    }
-	}
+	public void mousePressed(MouseEvent arg0) {}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
@@ -119,7 +144,11 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		    return;
 		}
 		
-		game.heldDown = null;
+		if(game.currentDrag != null)
+		{
+		    game.currentDrag.release();
+		    return;
+		}
 		
 		if(game.selected != null && game.selected.getPiece() == null)
 		{

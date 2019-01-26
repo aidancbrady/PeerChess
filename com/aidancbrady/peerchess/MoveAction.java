@@ -37,6 +37,11 @@ public class MoveAction
 		start();
 	}
 	
+	public void setNoAnimation()
+	{
+	    frames = FRAME_LIMIT;
+	}
+	
 	public void start()
 	{
 	    if(move.fromPosCastle != null)
@@ -82,7 +87,7 @@ public class MoveAction
 		
 		frames++;
 		
-		if(!PeerChess.instance().enableAnimations || frames == FRAME_LIMIT)
+		if(!PeerChess.instance().enableAnimations || frames >= FRAME_LIMIT)
 		{
 			move();
 		}

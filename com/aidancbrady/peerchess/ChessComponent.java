@@ -37,6 +37,7 @@ public class ChessComponent extends JComponent implements IChessGame
 	public ChessSquare selected;
 	
 	public MoveAction currentMove;
+	public DragAction currentDrag;
 	
 	public OverlayComponent overlay;
 	
@@ -51,8 +52,6 @@ public class ChessComponent extends JComponent implements IChessGame
 	
 	public boolean multiplayer;
 	public boolean host;
-	
-	public ChessSquarePanel heldDown = null;
 	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
 	
@@ -159,6 +158,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		resetMain(Side.WHITE, 7);
 		
 		currentMove = null;
+		currentDrag = null;
+		
 		side = Side.WHITE;
 		turn = Side.WHITE;
 		selected = null;
@@ -173,8 +174,6 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		possibleMoves.clear();
 		sideInCheck = null;
-		
-		heldDown = null;
 		
 		if(panel.opponentLabel != null)
 		{

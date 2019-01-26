@@ -28,5 +28,10 @@ public class OverlayComponent extends JComponent
 		{
 			component.currentMove.render(g);
 		}
+		
+		if(component.currentDrag != null)
+		{
+		    component.currentDrag.render(g);
+		}
 	}
 }
