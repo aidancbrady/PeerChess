@@ -99,7 +99,7 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		if(selected != null)
 		{
-		    possibleMoves.addAll(PeerUtils.getValidatedMoves(this));
+		    possibleMoves.addAll(PeerUtils.getValidatedMoves(this, selected));
 		}
 		
 		repaint();

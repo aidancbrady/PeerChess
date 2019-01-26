@@ -466,15 +466,17 @@ public final class PeerUtils
 	    }
 	}
 	
-	public static List<ChessPos> getValidatedMoves(ChessComponent chess)
+	public static List<ChessPos> getValidatedMoves(ChessComponent chess, ChessSquare square)
 	{
 	    List<ChessPos> ret = new ArrayList<>();
 	    
-	    Piece piece = chess.getSelectedPiece().type.getPiece();
+	    if(square.getPiece() == null) return ret;
 	    
-	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess, chess.selected.getPos()))
+	    Piece piece = square.getPiece().type.getPiece();
+	    
+	    for(ChessPos pos : piece.getCurrentPossibleMoves(chess, square.getPos()))
 	    {
-	        ChessMove move = new ChessMove(chess.selected.getPos(), pos);
+	        ChessMove move = new ChessMove(square.getPos(), pos);
 	        
 	        if(piece.validateMove(chess, move))
 	        {
