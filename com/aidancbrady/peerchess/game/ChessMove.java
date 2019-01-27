@@ -1,5 +1,8 @@
 package com.aidancbrady.peerchess.game;
 
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.file.SaveHandler;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 
 public class ChessMove 
@@ -19,6 +22,8 @@ public class ChessMove
 	public ChessPiece testToCastle;
 	
 	public ChessPiece enPassantTake;
+	
+	public ChessSquare[][] boardPreMove;
 	
 	public ChessMove(ChessPos from, ChessPos to)
 	{
@@ -274,9 +279,20 @@ public class ChessMove
 	    testFromPiece = testToPiece = testFromCastle = testToCastle = enPassantTake = null;
 	}
 	
+	public boolean doRevertMove(ChessComponent component)
+	{
+	    if(boardPreMove != null)
+	    {
+	        PeerUtils.applyBoard(boardPreMove, component.grid);
+	        return true;
+	    }
+	    
+	    return false;
+	}
+	
 	public String serialize()
 	{
-	    String ret = fromPos.serialize() + " " + toPos.serialize();
+	    String ret = fromPos.serialize() + " " + toPos.serialize() + " " + SaveHandler.saveChessBoard(boardPreMove);
 	    
 	    if(fromPosCastle != null)
 	    {
@@ -296,14 +312,15 @@ public class ChessMove
 	    String[] split = s.split(" ");
 	    
 	    ChessMove ret = new ChessMove(ChessPos.create(split[0]), ChessPos.create(split[1]));
+	    ret.boardPreMove = SaveHandler.loadChessBoard(split[2]);
 	    
-	    if(split.length == 4)
+	    if(split.length == 5)
 	    {
-	        ret.fromPosCastle = ChessPos.create(split[2]);
-	        ret.toPosCastle = ChessPos.create(split[3]);
+	        ret.fromPosCastle = ChessPos.create(split[3]);
+	        ret.toPosCastle = ChessPos.create(split[4]);
 	    }
 	    
-	    if(split.length == 3)
+	    if(split.length == 4)
 	    {
 	        ret.enPassantTakePos = ChessPos.create(split[2]);
 	    }

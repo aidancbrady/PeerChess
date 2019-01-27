@@ -504,4 +504,49 @@ public final class PeerUtils
 	    PieceType type = PieceType.values()[(PieceType.values().length-2)-index];
 	    return new ChessPiece(type, side);
 	}
+	
+	public static ChessSquare[][] deepCopyBoard(ChessSquare[][] grid)
+	{
+	    ChessSquare[][] ret = new ChessSquare[8][8];
+	    
+        for(int x = 0; x < 8; x++)
+        {
+            for(int y = 0; y < 8; y++)
+            {
+                ret[x][y] = grid[x][y].copy();
+            }
+        }
+	    
+	    return ret;
+	}
+	
+	public static ChessSquare[][] createEmptyBoard()
+	{
+	    ChessSquare[][] grid = new ChessSquare[8][8];
+	    boolean color = false;
+	    
+        for(int y = 0; y < 8; y++)
+        {           
+            for(int x = 0; x < 8; x++)
+            {
+                grid[x][y] = new ChessSquare(color, new ChessPos(x, y));
+                color = !color;
+            }
+            
+            color = !color;
+        }
+        
+        return grid;
+	}
+	
+	public static void applyBoard(ChessSquare[][] from, ChessSquare[][] to)
+	{
+	    for(int y = 0; y < 8; y++)
+        {
+            for(int x = 0; x < 8; x++)
+            {
+                to[x][y].setPiece(from[x][y].getPiece());
+            }
+        }
+	}
 }

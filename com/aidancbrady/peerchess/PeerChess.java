@@ -23,6 +23,7 @@ public class PeerChess
 	public boolean enableSoundEffects = true;
 	public boolean enableAnimations = true;
 	public boolean enableVisualGuides = true;
+	public boolean enableHints = true;
 	public int difficulty = 4;
 	
 	public Calendar calendar = Calendar.getInstance();

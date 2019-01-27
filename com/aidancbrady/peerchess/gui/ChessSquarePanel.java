@@ -13,6 +13,7 @@ import com.aidancbrady.peerchess.DragAction;
 import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Assets;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -42,16 +43,18 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             @Override
             public void mouseDragged(MouseEvent e)
             {
-                if(game.currentDrag == null && game.turn == game.side) 
+                if(game.currentDrag == null && game.getGame().turn == game.getGame().side) 
                 {
                     List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
                     
-                    if(square.getPiece() != null && square.getPiece().side == game.side && !possibleMoves.isEmpty())
+                    if(square.getPiece() != null && square.getPiece().side == game.getGame().side && !possibleMoves.isEmpty())
                     {
                         game.select(null);
                         game.possibleMoves.addAll(possibleMoves);
                         game.repaint();
                         game.currentDrag = new DragAction(ChessSquarePanel.this);
+                        game.panel.updateText();
+                        game.currentHint = null;
                     }
                 }
                 
@@ -71,10 +74,10 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	{
 		if(square.isBlack())
 		{
-			ChessComponent.black.draw(g, 0, 0, getWidth(), getHeight());
+			Assets.black.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		else {
-			ChessComponent.white.draw(g, 0, 0, getWidth(), getHeight());	
+			Assets.white.draw(g, 0, 0, getWidth(), getHeight());	
 		}
 		
 		if(square.getPiece() != null && square.getPiece().getTexture() != null)
@@ -87,23 +90,28 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(PeerChess.instance().enableVisualGuides)
 		{
-    	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && game.sideInCheck == square.getPiece().side)
+    	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && game.getGame().sideInCheck == square.getPiece().side)
     	    {
     	        if(game.currentMove == null)
     	        {
-    	            ChessComponent.check.draw(g, 0, 0, getWidth(), getHeight());
+    	            Assets.check.draw(g, 0, 0, getWidth(), getHeight());
     	        }
     	    }
     	    
     	    if(game.possibleMoves.contains(square.getPos()))
     	    {
-    	        ChessComponent.possible.draw(g, 0, 0, getWidth(), getHeight());
+    	        Assets.possible.draw(g, 0, 0, getWidth(), getHeight());
     	    }
+		}
+		
+		if(game.currentHint != null && (game.currentHint.toPos.equals(square.getPos()) || game.currentHint.fromPos.equals(square.getPos())))
+		{
+		    Assets.hint.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
 		if(game.selected == square)
 		{
-			ChessComponent.select.draw(g, 0, 0, getWidth(), getHeight());
+			Assets.select.draw(g, 0, 0, getWidth(), getHeight());
 		}
 	}
 
@@ -134,7 +142,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(game.isMoving() || game.turn != game.side || game.endgame != null)
+		if(game.isMoving() || game.getGame().turn != game.getGame().side || game.getGame().endgame != null)
 		{
 			return;
 		}
@@ -159,7 +167,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
 			if(game.selected == null && square.getPiece() != null)
 			{
-				if(game.side != square.getPiece().side)
+				if(game.getGame().side != square.getPiece().side)
 				{
 					return;
 				}
@@ -196,6 +204,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 							}
 							
 							game.currentMove = new MoveAction(game, move, piece, newPiece);
+							game.panel.updateText();
 							
 							if(game.multiplayer)
 							{

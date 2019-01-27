@@ -33,4 +33,11 @@ public class ChessSquare
     {
         return housedPiece;
     }
+    
+    public ChessSquare copy()
+    {
+        ChessSquare square = new ChessSquare(color, pos);
+        square.housedPiece = housedPiece != null ? housedPiece.copy() : null;
+        return square;
+    }
 }

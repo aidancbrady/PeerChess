@@ -1,7 +1,6 @@
 package com.aidancbrady.peerchess;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,9 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.aidancbrady.peerchess.ai.ChessAI;
+import com.aidancbrady.peerchess.game.ChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
-import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
@@ -22,17 +21,19 @@ import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.gui.ChessPanel;
 import com.aidancbrady.peerchess.gui.ChessSquarePanel;
 import com.aidancbrady.peerchess.gui.OverlayComponent;
-import com.aidancbrady.peerchess.tex.Texture;
+import com.aidancbrady.peerchess.piece.Piece;
 
 public class ChessComponent extends JComponent implements IChessGame
 {
 	private static final long serialVersionUID = 1L;
 	
+	public ChessGame game = new ChessGame(this);
+	
 	public ChessAI chessAI = new ChessAI(this);
 	
 	public ChessPanel panel;
 	
-	public ChessSquare[][] grid = new ChessSquare[8][8];
+	public ChessSquare[][] grid = PeerUtils.createEmptyBoard();
 	
 	public ChessSquare selected;
 	
@@ -43,24 +44,14 @@ public class ChessComponent extends JComponent implements IChessGame
 	
 	public JPanel chessboard;
 	
-	public Side side = Side.WHITE;
-	public Side turn = Side.WHITE;
-	public Endgame endgame = null;
-	
 	public Set<ChessPos> possibleMoves = new HashSet<>();
-	public Side sideInCheck = null;
 	
 	public boolean multiplayer;
 	public boolean host;
 	
+	public ChessMove currentHint;
+	
 	public List<ChessMove> moves = new ArrayList<ChessMove>();
-	
-	public static Texture white = Texture.load("resources/icon/white.png");
-	public static Texture black = Texture.load("resources/icon/black.png");
-	
-	public static Texture select = Texture.load("resources/icon/select.png");
-	public static Texture possible = Texture.load("resources/icon/possible.png");
-	public static Texture check = Texture.load("resources/icon/check.png");
 	
 	public ChessComponent(ChessPanel p)
 	{
@@ -68,8 +59,6 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		setLayout(new BorderLayout());
 		setSize(768, 768);
-		
-		boolean color = false;
 		
 		chessboard = new JPanel(new GridLayout(8, 8));
 		
@@ -79,12 +68,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		{			
 			for(int x = 0; x < 8; x++)
 			{
-			    grid[x][y] = new ChessSquare(color, new ChessPos(x, y));
 				chessboard.add(new ChessSquarePanel(this, grid[x][y]));
-				color = !color;
 			}
-			
-			color = !color;
 		}
 		
 		add(chessboard, BorderLayout.CENTER);
@@ -102,6 +87,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		{
 		    possibleMoves.addAll(PeerUtils.getValidatedMoves(this, selected));
 		}
+		
+		currentHint = null;
 		
 		repaint();
 	}
@@ -160,20 +147,19 @@ public class ChessComponent extends JComponent implements IChessGame
 		currentMove = null;
 		currentDrag = null;
 		
-		side = Side.WHITE;
-		turn = Side.WHITE;
+		game.reset();
+	
 		selected = null;
 		moves.clear();
 		panel.pawnReplace = 0;
 		panel.chatBox.setText("");
 		panel.updateText();
-		endgame = null;
+
 		chessAI.reset();
 		host = false;
 		multiplayer = false;
 		
 		possibleMoves.clear();
-		sideInCheck = null;
 		
 		if(panel.opponentLabel != null)
 		{
@@ -188,14 +174,99 @@ public class ChessComponent extends JComponent implements IChessGame
 		panel.frame.waiting.close();
 	}
 	
+    /**
+     * @return -1 if no, 0 if white, 1 if black
+     */
+    public byte shouldPawnReplace()
+    {
+        if(selected != null && selected.getPiece() != null)
+        {
+            if(selected.getPiece().type == PieceType.PAWN)
+            {
+                if(selected.getPiece().side == Side.BLACK && selected.getPos().translate(0, 1).yPos == 7)
+                {
+                    Piece piece = selected.getPiece().type.getPiece();
+                    
+                    ChessMove leftMove = new ChessMove(selected.getPos(), selected.getPos().translate(-1, 1));
+                    ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, 1));
+                    ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, 1));
+                    
+                    if((leftMove.toPos.xPos >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(this, rightMove)))
+                    {
+                        return 1;
+                    }
+                }
+                else if(selected.getPiece().side == Side.WHITE && selected.getPos().translate(0, -1).yPos == 0)
+                {
+                    Piece piece = selected.getPiece().type.getPiece();
+                    
+                    ChessMove leftMove = new ChessMove(selected.getPos(), selected.getPos().translate(-1, -1));
+                    ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, -1));
+                    ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, -1));
+                    
+                    if((leftMove.toPos.xPos >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(this, rightMove)))
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+    
+    public void takeBackLastMove()
+    {
+        currentHint = null;
+        
+        //take back opponent's last move
+        ChessMove opponentLast = moves.get(moves.size()-1);
+        opponentLast.doRevertMove(this);
+        moves.remove(opponentLast);
+        
+        //take back player's last move
+        ChessMove last = moves.get(moves.size()-1);
+        last.doRevertMove(this);
+        moves.remove(last);
+        
+        ChessPos opponentKingPos = PeerUtils.findKing(getGame().side.getOpposite(), grid);
+        ChessPos kingPos = PeerUtils.findKing(getGame().side, grid);
+        
+        if(PeerUtils.isInCheck(getGame().side.getOpposite(), opponentKingPos, grid))
+        {
+            getGame().sideInCheck = getGame().side.getOpposite();
+        }
+        else if(PeerUtils.isInCheck(getGame().side, kingPos, grid))
+        {
+            getGame().sideInCheck = getGame().side;
+        }
+        else {
+            getGame().sideInCheck = null;
+        }
+        
+        panel.updateText();
+        repaint();
+    }
+	
 	public boolean isMoving()
 	{
 		return currentMove != null;
 	}
 	
-	public void setSide(Side s)
+	public boolean isDragging()
 	{
-		side = s;
+	    return currentDrag != null;
+	}
+	
+	public ChessGame getGame()
+	{
+	    return game;
+	}
+	
+	public void hint()
+	{
+	    currentHint = chessAI.minimax(true);
+	    repaint();
 	}
 	
 	@Override
@@ -209,7 +280,4 @@ public class ChessComponent extends JComponent implements IChessGame
 	{
 	    return moves;
 	}
-	
-	@Override
-	public void paintComponent(Graphics g) {}
 }

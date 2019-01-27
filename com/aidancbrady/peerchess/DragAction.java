@@ -77,11 +77,18 @@ public class DragAction
                 getGame().select(null);
             }
         }
+        else if(hoverPanel != null && hoverPanel == startPiece)
+        {
+            getGame().select(startPiece.square);
+            getGame().currentDrag = null;
+        }
         else {
             getGame().possibleMoves.clear();
             getGame().currentDrag = null;
             getGame().repaint();
         }
+        
+        getGame().panel.updateText();
     }
     
     public ChessSquarePanel getSquarePanel()

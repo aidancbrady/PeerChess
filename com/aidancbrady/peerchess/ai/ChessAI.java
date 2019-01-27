@@ -29,7 +29,7 @@ public class ChessAI
             @Override
             public void run()
             {
-                ChessMove move = minimax();
+                ChessMove move = minimax(false);
                 ChessPiece piece = move.fromPos.getSquare(chess.grid).getPiece();
                 evaluations = 0;
                 
@@ -52,17 +52,18 @@ public class ChessAI
         }).start();
     }
     
-    public ChessMove minimax()
+    public ChessMove minimax(boolean hint)
     {
         TestBoard board = new TestBoard(chess);
         List<ChessMove> possibleMoves = board.getPossibleMoves(getSide(), true);
         double bestMoveScore = -9999;
         ChessMove bestMove = null;
+        int diff = hint ? 4 : PeerChess.instance().difficulty-1;
         
         for(ChessMove move : possibleMoves)
         {
             double delta = board.applyMove(move);
-            double score = minimax_do(PeerChess.instance().difficulty-1, board, -10000, 10000, false);
+            double score = minimax_do(diff, board, -10000, 10000, false);
             board.revertMove(move, delta);
             
             if(score >= bestMoveScore)
@@ -121,7 +122,7 @@ public class ChessAI
     
     public Side getSide()
     {
-        return chess.turn;
+        return chess.getGame().turn;
     }
     
     public void reset() 

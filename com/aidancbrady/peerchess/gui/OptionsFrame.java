@@ -30,6 +30,7 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 	public JCheckBox soundEffectsBox;
 	public JCheckBox animationsBox;
 	public JCheckBox visualGuidesBox;
+	public JCheckBox hintsBox;
 	
 	public JSlider difficultySlider;
 	
@@ -86,6 +87,13 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
         visualGuidesBox.setLocation(16, 130);
         visualGuidesBox.addItemListener(this);
         add(visualGuidesBox);
+        
+        hintsBox = new JCheckBox();
+        hintsBox.setSelected(PeerChess.instance().enableHints);
+        hintsBox.setSize(24, 24);
+        hintsBox.setLocation(16, 150);
+        hintsBox.addItemListener(this);
+        add(hintsBox);
 		
 		JLabel soundEffectsLabel = new JLabel("Enable sound effects");
 		soundEffectsLabel.setSize(200, 30);
@@ -102,9 +110,14 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
         visualGuidesLabel.setLocation(40, 126);
         add(visualGuidesLabel);
         
+        JLabel hintsLabel = new JLabel("Enable hints");
+        hintsLabel.setSize(200, 30);
+        hintsLabel.setLocation(40, 146);
+        add(hintsLabel);
+        
         difficultySlider = new JSlider(JSlider.HORIZONTAL, 1, Constants.MAX_DEPTH+1, PeerChess.instance().difficulty);
         difficultySlider.setSize(getWidth()-32, 60);
-        difficultySlider.setLocation(16, 180);
+        difficultySlider.setLocation(16, 200);
         difficultySlider.setSnapToTicks(true);
         difficultySlider.setPaintTicks(true);
         difficultySlider.setPaintLabels(true);
@@ -114,7 +127,7 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
         
         JLabel difficultyLabel = new JLabel("Difficulty");
         difficultyLabel.setSize(200, 30);
-        difficultyLabel.setLocation(16, 166);
+        difficultyLabel.setLocation(16, 186);
         add(difficultyLabel);
 		
 		setVisible(true);
@@ -177,6 +190,10 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 		else if(arg0.getSource() == visualGuidesBox)
 		{
 		    PeerChess.instance().enableVisualGuides = arg0.getStateChange() == 1;
+		}
+		else if(arg0.getSource() == hintsBox)
+		{
+		    PeerChess.instance().enableHints = arg0.getStateChange() == 1;
 		}
 	}
 

@@ -22,12 +22,10 @@ import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
-import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.net.PeerConnection;
-import com.aidancbrady.peerchess.piece.Piece;
 
 public class ChessPanel extends JPanel implements MouseListener
 {
@@ -36,6 +34,9 @@ public class ChessPanel extends JPanel implements MouseListener
 	public ChessFrame frame;
 
 	public ChessComponent chess;
+	
+	public JButton hintButton;
+	public JButton revertButton;
 	
 	public JButton exitButton;
 	public JButton sendButton;
@@ -71,6 +72,32 @@ public class ChessPanel extends JPanel implements MouseListener
 		sendButton.addActionListener(new ChatListener());
 		add(sendButton);
 		
+		hintButton = new JButton("Hint");
+		hintButton.setSize(127, 30);
+		hintButton.setLocation(768, 422);
+		hintButton.setEnabled(false);
+		hintButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                chess.hint();
+            }
+		});
+		add(hintButton);
+		
+		revertButton = new JButton("Revert");
+		revertButton.setSize(127, 30);
+		revertButton.setLocation(898, 422);
+		revertButton.setEnabled(false);
+		revertButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e)
+            {
+		        chess.takeBackLastMove();
+            }
+        });
+		add(revertButton);
+		
 		exitButton = new JButton("Exit to Menu");
 		exitButton.setSize(256, 30);
 		exitButton.setLocation(768, 456);
@@ -105,7 +132,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		add(chess = new ChessComponent(this));
 		chess.setVisible(true);
 		
-		titleLabel = new JLabel("PeerChess - " + chess.side.name);
+		titleLabel = new JLabel("PeerChess - " + chess.getGame().side.name);
 		titleLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
 		titleLabel.setSize(300, 20);
 		titleLabel.setLocation(820, 5);
@@ -117,7 +144,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		opponentLabel.setLocation(774, 40);
 		add(opponentLabel);
 		
-		statusLabel = new JLabel(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
+		statusLabel = new JLabel(chess.getGame().turn == chess.getGame().side ? "Ready for your move" : "Waiting for opponent");
 		statusLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
 		statusLabel.setLocation(815, 420);
 		statusLabel.setSize(200, 40);
@@ -126,7 +153,7 @@ public class ChessPanel extends JPanel implements MouseListener
 	
 	public void initGame()
 	{
-	    if(!chess.multiplayer && chess.side != chess.turn)
+	    if(!chess.multiplayer && chess.getGame().side != chess.getGame().turn)
 	    {
 	        chess.chessAI.triggerMove();
 	    }
@@ -144,20 +171,33 @@ public class ChessPanel extends JPanel implements MouseListener
 		    }
 		    
 			opponentLabel.setText("Opponent: " + opponentName);
-			titleLabel.setText("PeerChess - " + chess.side.name);
+			titleLabel.setText("PeerChess - " + chess.getGame().side.name);
 			
-			if(chess.endgame == null)
+			if(chess.getGame().endgame == null)
 			{
-				statusLabel.setText(chess.turn == chess.side ? "Ready for your move" : "Waiting for opponent");
+				statusLabel.setText(chess.getGame().turn == chess.getGame().side ? "Ready for your move" : "Waiting for opponent");
+				
+				if(!chess.isDragging() && !chess.isMoving() && chess.getGame().turn == chess.getGame().side)
+				{
+			        hintButton.setEnabled(PeerChess.instance().enableHints);
+                    revertButton.setEnabled(chess.multiplayer == false && chess.moves.size() >= 2);
+				}
+				else {
+				    hintButton.setEnabled(false);
+				    revertButton.setEnabled(false);
+				}
 			}
 			else {
-			    if(chess.endgame == Endgame.STALEMATE)
+			    if(chess.getGame().endgame == Endgame.STALEMATE)
 			    {
 			        statusLabel.setText("Stalemate!");
 			    }
 			    else {
-			        statusLabel.setText(Endgame.get(chess.side) == chess.endgame ? "You win the game!" : "You lost the game.");
+			        statusLabel.setText(Endgame.get(chess.getGame().side) == chess.getGame().endgame ? "You win the game!" : "You lost the game.");
 			    }
+			    
+			    hintButton.setEnabled(false);
+                revertButton.setEnabled(false);
 			}
 		}
 	}
@@ -167,7 +207,7 @@ public class ChessPanel extends JPanel implements MouseListener
 	{
 		super.paintComponent(g);
 		
-		byte replace = shouldPawnReplace();
+		byte replace = chess.shouldPawnReplace();
 		
 		int width = frame.getContentPane().getWidth();
 		int size = (int)((width-chess.getWidth())*(2D/3D));
@@ -188,50 +228,15 @@ public class ChessPanel extends JPanel implements MouseListener
 		chatBox.setCaretPosition(chatBox.getText().length() - 1);
 	}
 	
-	/**
-	 * @return -1 if no, 0 if white, 1 if black
-	 */
-	public byte shouldPawnReplace()
-	{
-		if(chess != null && chess.selected != null && chess.selected.getPiece() != null)
-		{
-			if(chess.selected.getPiece().type == PieceType.PAWN)
-			{
-				if(chess.selected.getPiece().side == Side.BLACK && chess.selected.getPos().translate(0, 1).yPos == 7)
-				{
-					Piece piece = chess.selected.getPiece().type.getPiece();
-					
-					ChessMove leftMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(-1, 1));
-					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, 1));
-					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, 1));
-					
-					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess, leftMove)) || piece.validateMove(chess, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess, rightMove)))
-					{
-						return 1;
-					}
-				}
-				else if(chess.selected.getPiece().side == Side.WHITE && chess.selected.getPos().translate(0, -1).yPos == 0)
-				{
-					Piece piece = chess.selected.getPiece().type.getPiece();
-					
-					ChessMove leftMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(-1, -1));
-					ChessMove centerMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(0, -1));
-					ChessMove rightMove = new ChessMove(chess.selected.getPos(), chess.selected.getPos().translate(1, -1));
-					
-					if((leftMove.toPos.xPos >= 0 && piece.validateMove(chess, leftMove)) || piece.validateMove(chess, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(chess, rightMove)))
-					{
-						return 0;
-					}
-				}
-			}
-		}
-		
-		return -1;
-	}
-	
 	public boolean exit()
 	{
-	    if(chess.endgame == null && (chess.host || !chess.multiplayer))
+	    if(!chess.multiplayer && chess.moves.isEmpty())
+	    {
+	        chess.resetGame();
+	        return true;
+	    }
+	    
+	    if(chess.getGame().endgame == null && (chess.host || !chess.multiplayer))
 	    {
     		int returned = JOptionPane.showConfirmDialog(this, "Would you like to save your game?");
     		
@@ -286,7 +291,6 @@ public class ChessPanel extends JPanel implements MouseListener
 	    }
 		
 		chess.resetGame();
-		
 		return true;
 	}
 	
@@ -330,7 +334,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(mouseX >= x && mouseX <= xMax && mouseY >= y && mouseY <= yMax)
 		{
-			byte replace = shouldPawnReplace();
+			byte replace = chess.shouldPawnReplace();
 			
 			if(replace != -1)
 			{
@@ -385,6 +389,12 @@ public class ChessPanel extends JPanel implements MouseListener
         exitButton.setLocation(size, chatScroll.getY()-30);
         exitButton.setSize(width-size, 30);
         
+        hintButton.setLocation(size, exitButton.getY()-34);
+        hintButton.setSize((width-size)/2 - 1, 30);
+        
+        revertButton.setLocation(hintButton.getX()+(int)hintButton.getSize().getWidth()+2, exitButton.getY()-34);
+        revertButton.setSize((width-size)/2 - 1, 30);
+        
         chatField.setLocation(size, chatScroll.getY()+chatScroll.getHeight());
         chatField.setSize(width-size-60, 30);
         
@@ -392,7 +402,7 @@ public class ChessPanel extends JPanel implements MouseListener
         
         int textCenter = size + (width-size)/2;
         
-        statusLabel.setLocation(textCenter - (int)(statusLabel.getPreferredSize().getWidth()/2), exitButton.getY()-40);
+        statusLabel.setLocation(textCenter - (int)(statusLabel.getPreferredSize().getWidth()/2), hintButton.getY()-40);
         titleLabel.setLocation(textCenter - (int)(titleLabel.getPreferredSize().getWidth()/2), 5);
         opponentLabel.setLocation(size + 6, 40);
 	}

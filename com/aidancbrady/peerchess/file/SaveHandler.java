@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
@@ -90,17 +91,17 @@ public final class SaveHandler
 			chess.currentMove.move();
 		}
 		
-		writer.append(Integer.toString(chess.side.ordinal()));
+		writer.append(Integer.toString(chess.getGame().side.ordinal()));
 		writer.newLine();
-		writer.append(Integer.toString(chess.turn.ordinal()));
+		writer.append(Integer.toString(chess.getGame().turn.ordinal()));
 		writer.newLine();
 		writer.append(Boolean.toString(chess.multiplayer));
 		writer.newLine();
 		writer.append(Boolean.toString(chess.host));
         writer.newLine();
-		writer.append(chess.endgame != null ? Integer.toString(chess.endgame.ordinal()) : "-1");
+		writer.append(chess.getGame().endgame != null ? Integer.toString(chess.getGame().endgame.ordinal()) : "-1");
 		writer.newLine();
-		writer.append(chess.sideInCheck != null ? Integer.toString(chess.sideInCheck.ordinal()) : "-1");
+		writer.append(chess.getGame().sideInCheck != null ? Integer.toString(chess.getGame().sideInCheck.ordinal()) : "-1");
 		writer.newLine();
 		
 		writer.append(Integer.toString(chess.moves.size()));
@@ -112,48 +113,23 @@ public final class SaveHandler
 		    writer.newLine();
 		}
 		
-		for(int y = 0; y < 8; y++)
-		{
-			StringBuilder builder = new StringBuilder();
-			
-			for(int x = 0; x < 8; x++)
-			{
-				ChessSquare square = chess.grid[x][y];
-				
-				if(square.getPiece() == null)
-				{
-					builder.append("null");
-				}
-				else {
-					ChessPiece piece = square.getPiece();
-					builder.append(piece.type.ordinal() + "," + piece.side.ordinal() + "," + piece.moves);
-				}
-				
-				if(x != 7)
-				{
-					builder.append(":");
-				}
-			}
-			
-			writer.append(builder.toString());
-			writer.newLine();
-			
-			writer.flush();
-		}
+		writer.append(saveChessBoard(chess.grid));
+		writer.newLine();
+		writer.flush();
 	}
 	
 	public static void loadFromReader(BufferedReader reader, ChessComponent chess) throws IOException
 	{
-		chess.setSide(Side.values()[Integer.parseInt(reader.readLine())]);
-		chess.turn = Side.values()[Integer.parseInt(reader.readLine())];
+		chess.getGame().setSide(Side.values()[Integer.parseInt(reader.readLine())]);
+		chess.getGame().turn = Side.values()[Integer.parseInt(reader.readLine())];
 		chess.multiplayer = Boolean.parseBoolean(reader.readLine());
 		chess.host = Boolean.parseBoolean(reader.readLine());
 		
 		int check = Integer.parseInt(reader.readLine());
-		chess.endgame = check == -1 ? null : Endgame.values()[check];
+		chess.getGame().endgame = check == -1 ? null : Endgame.values()[check];
 		
 		int s = Integer.parseInt(reader.readLine());
-		chess.sideInCheck = s == -1 ? null : Side.values()[s];
+		chess.getGame().sideInCheck = s == -1 ? null : Side.values()[s];
 		
 		try {
     		int moveCount = Integer.parseInt(reader.readLine());
@@ -166,29 +142,65 @@ public final class SaveHandler
 		    throw new IOException("Failed to read move history.", e);
 		}
 		
-		for(int y = 0; y < 8; y++)
-		{
-			String line = reader.readLine();
-			String[] segs = line.split(":");
-			
-			for(int x = 0; x < 8; x++)
-			{
-				if(segs[x].equals("null"))
-				{
-					chess.grid[x][y].setPiece(null);
-				}
-				else {
-					String[] data = segs[x].split(",");
-					
-					PieceType type = PieceType.values()[Integer.parseInt(data[0])];
-					Side side = Side.values()[Integer.parseInt(data[1])];
-					ChessPiece piece = new ChessPiece(type, side);
-					piece.moves = Integer.parseInt(data[2]);
-					
-					chess.grid[x][y].setPiece(piece);
-				}
-			}
-		}
+		PeerUtils.applyBoard(loadChessBoard(reader.readLine()), chess.grid);
+	}
+	
+	public static String saveChessBoard(ChessSquare[][] grid)
+	{
+	    StringBuilder builder = new StringBuilder();
+	    
+	    for(int y = 0; y < 8; y++)
+        {
+            for(int x = 0; x < 8; x++)
+            {
+                ChessSquare square = grid[x][y];
+                
+                if(square.getPiece() == null)
+                {
+                    builder.append("null");
+                }
+                else {
+                    ChessPiece piece = square.getPiece();
+                    builder.append(piece.type.ordinal() + "," + piece.side.ordinal() + "," + piece.moves);
+                }
+                
+                if(y != 7 || x != 7)
+                {
+                    builder.append(":");
+                }
+            }
+        }
+	    
+	    return builder.toString();
+	}
+	
+	public static ChessSquare[][] loadChessBoard(String s)
+	{
+	    ChessSquare[][] grid = PeerUtils.createEmptyBoard();
+	    String[] split = s.split(":");
+	    
+	    for(int y = 0; y < 8; y++)
+        {
+            for(int x = 0; x < 8; x++)
+            {
+                if(split[y*8 + x].equals("null"))
+                {
+                    grid[x][y].setPiece(null);
+                }
+                else {
+                    String[] data = split[y*8 + x].split(",");
+                    
+                    PieceType type = PieceType.values()[Integer.parseInt(data[0])];
+                    Side side = Side.values()[Integer.parseInt(data[1])];
+                    ChessPiece piece = new ChessPiece(type, side);
+                    piece.moves = Integer.parseInt(data[2]);
+                    
+                    grid[x][y].setPiece(piece);
+                }
+            }
+        }
+	    
+	    return grid;
 	}
 	
 	public static String getTrimmedName(String s)

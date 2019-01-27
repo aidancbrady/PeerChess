@@ -34,6 +34,7 @@ public final class DataHandler
 			PeerChess.instance().enableSoundEffects = Boolean.parseBoolean(reader.readLine().trim());
 			PeerChess.instance().enableAnimations = Boolean.parseBoolean(reader.readLine().trim());
 			PeerChess.instance().enableVisualGuides = Boolean.parseBoolean(reader.readLine().trim());
+			PeerChess.instance().enableHints = Boolean.parseBoolean(reader.readLine().trim());
 			PeerChess.instance().difficulty = Integer.parseInt(reader.readLine().trim());
 			
 			reader.close();
@@ -66,6 +67,9 @@ public final class DataHandler
 			
 			writer.append(Boolean.toString(PeerChess.instance().enableVisualGuides));
 			writer.newLine();
+			
+			writer.append(Boolean.toString(PeerChess.instance().enableHints));
+            writer.newLine();
 			
 			writer.append(Integer.toString(PeerChess.instance().difficulty));
 			writer.newLine();

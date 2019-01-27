@@ -2,17 +2,15 @@ package com.aidancbrady.peerchess;
 
 import java.awt.Graphics;
 
+import com.aidancbrady.peerchess.client.Assets;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
-import com.aidancbrady.peerchess.sound.Sound;
 
 public class MoveAction 
-{
-	public Sound moveSound = new Sound("resources/sound/move.wav");
-	
+{	
 	public static final int FRAME_LIMIT = 600;
 	
 	public int frames;
@@ -44,6 +42,8 @@ public class MoveAction
 	
 	public void start()
 	{
+	    move.boardPreMove = PeerUtils.deepCopyBoard(component.grid);
+	       
 	    if(move.fromPosCastle != null)
         {
             newCastle = move.fromPosCastle.getSquare(component.grid).getPiece();
@@ -82,7 +82,7 @@ public class MoveAction
 	{
 		if(frames == 0 && PeerChess.instance().enableSoundEffects && PeerChess.instance().enableAnimations)
 		{
-			moveSound.play();
+			Assets.moveSound.play();
 		}
 		
 		frames++;
@@ -113,36 +113,36 @@ public class MoveAction
 		
 		component.repaint();
 		
-		moveSound.stop();
+		Assets.moveSound.stop();
 		
-		component.turn = component.turn.getOpposite();
+		component.getGame().turn = component.getGame().turn.getOpposite();
 		component.moves.add(move);
 		
 		ChessPos kingPos = PeerUtils.findKing(newPiece.side.getOpposite(), component.grid);
         
         if(PeerUtils.isInCheck(newPiece.side.getOpposite(), kingPos, component.grid))
         {
-            component.sideInCheck = newPiece.side.getOpposite();
+            component.getGame().sideInCheck = newPiece.side.getOpposite();
         }
         else {
-            component.sideInCheck = null;
+            component.getGame().sideInCheck = null;
         }
 		
 		if(PeerUtils.isCheckMate(getSide().getOpposite(), component))
 		{
-		    if(component.sideInCheck == getSide().getOpposite())
+		    if(component.getGame().sideInCheck == getSide().getOpposite())
 		    {
-		        component.endgame = Endgame.get(getSide());
+		        component.getGame().endgame = Endgame.get(getSide());
 		    }
 		    else {
-		        component.endgame = Endgame.STALEMATE;
+		        component.getGame().endgame = Endgame.STALEMATE;
 		    }
 		}
 		
+	    component.currentMove = null;
 		component.panel.updateText();
-		component.currentMove = null;
 		
-		if(component.endgame == null && !component.multiplayer && component.turn != component.side)
+		if(component.getGame().endgame == null && !component.multiplayer && component.getGame().turn != component.getGame().side)
 		{
 		    component.chessAI.triggerMove();
 		}

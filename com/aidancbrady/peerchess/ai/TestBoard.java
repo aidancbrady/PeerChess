@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.IChessGame;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -20,18 +21,8 @@ public class TestBoard implements IChessGame
     
     public TestBoard(ChessComponent game)
     {
-        grid = new ChessSquare[8][8];
+        grid = PeerUtils.deepCopyBoard(game.grid);
         moves = new ArrayList<ChessMove>(game.moves);
-        
-        for(int x = 0; x < 8; x++)
-        {
-            for(int y = 0; y < 8; y++)
-            {
-                grid[x][y] = new ChessSquare(false, new ChessPos(x, y));
-                grid[x][y].setPiece(game.grid[x][y].getPiece());
-            }
-        }
-        
         currentEvaluation = evaluateBoard();
     }
     

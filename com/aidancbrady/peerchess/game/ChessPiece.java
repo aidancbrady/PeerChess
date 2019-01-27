@@ -34,6 +34,11 @@ public class ChessPiece
 	    moves++;
 	}
 	
+	public ChessPiece copy()
+	{
+	    return copyWithMoves(moves);
+	}
+	
 	public ChessPiece copyWithMoves(int newMoves)
 	{
 	    ChessPiece piece = new ChessPiece(type, side);
