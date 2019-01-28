@@ -73,6 +73,7 @@ public final class PeerUtils
 	public static boolean isCheckMate(Side side, IChessGame game)
 	{
 		ChessPos pos = findKing(side, game.getGrid());
+		if(!PeerUtils.isInCheck(side, pos, game.getGrid())) return false;
 		
 		for(int x = 0; x < 8; x++)
 		{
@@ -89,8 +90,6 @@ public final class PeerUtils
 						
 						if(!testCheck(side, kingPos, game.getGrid(), move))
 						{
-						    PeerUtils.debug(side + " is not in checkmate.");
-						    PeerUtils.debug("Valid move: " + piece + " at " + move.fromPos + " to " + move.toPos);
 							return false;
 						}
 					}

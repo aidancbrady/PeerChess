@@ -218,6 +218,7 @@ public class ChessComponent extends JComponent implements IChessGame
     public void takeBackLastMove()
     {
         currentHint = null;
+        possibleMoves.clear();
         
         //take back opponent's last move
         ChessMove opponentLast = moves.get(moves.size()-1);

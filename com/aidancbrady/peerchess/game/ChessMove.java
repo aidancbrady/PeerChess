@@ -292,12 +292,13 @@ public class ChessMove
 	
 	public boolean didTakeMaterial()
 	{
-	    return enPassantTakePos != null || boardPreMove[toPos.xPos][toPos.yPos].getPiece() != null;
+	    if(enPassantTakePos != null) return true;
+	    return boardPreMove != null ? boardPreMove[toPos.xPos][toPos.yPos].getPiece() != null : testToPiece != null;
 	}
 	
 	public boolean isPawnMove()
 	{
-	    return boardPreMove[fromPos.xPos][fromPos.yPos].getPiece().type == PieceType.PAWN;
+	    return boardPreMove != null ? boardPreMove[fromPos.xPos][fromPos.yPos].getPiece().type == PieceType.PAWN : testFromPiece.type == PieceType.PAWN;
 	}
 	
 	public String serialize()

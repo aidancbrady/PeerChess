@@ -9,6 +9,7 @@ import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.game.DrawTracker;
 
 public class ChessAI 
 {
@@ -58,12 +59,12 @@ public class ChessAI
         List<ChessMove> possibleMoves = board.getPossibleMoves(getSide(), true);
         double bestMoveScore = -9999;
         ChessMove bestMove = null;
-        int diff = hint ? 4 : PeerChess.instance().difficulty-1;
+        int diff = hint ? 3 : PeerChess.instance().difficulty-1;
         
         for(ChessMove move : possibleMoves)
         {
             double delta = board.applyMove(move);
-            double score = minimax_do(diff, board, -10000, 10000, false);
+            double score = board.isCheckmate() ? Integer.MAX_VALUE : minimax_do(diff, board, -10000, 10000, false);
             board.revertMove(move, delta);
             
             if(score >= bestMoveScore)
@@ -89,14 +90,21 @@ public class ChessAI
         
         List<ChessMove> possibleMoves = board.getPossibleMoves(getSide(), maximizing);
         
+        if(possibleMoves.isEmpty() || DrawTracker.isDraw(board.getPastMoves())) // stalemate penalty/bonus
+        {
+            double eval = getSide() == Side.WHITE ? board.getEvaluation() : -board.getEvaluation();
+            return eval < -15 ? board.getEvaluation()+10 : board.getEvaluation()-10;
+        }
+        
         for(ChessMove move : possibleMoves)
         {
             double delta = board.applyMove(move);
             
             if(move.testTakingKing())
             {
+                double eval = board.getEvaluation();
                 board.revertMove(move, delta);
-                return getSide() == Side.WHITE ? board.getEvaluation() : -board.getEvaluation();
+                return getSide() == Side.WHITE ? eval : -eval;
             }
             
             if(maximizing)

@@ -18,6 +18,7 @@ public class TestBoard implements IChessGame
     private ChessSquare[][] grid;
     private double currentEvaluation;
     private List<ChessMove> moves;
+    private boolean checkmate;
     
     public TestBoard(ChessComponent game)
     {
@@ -142,6 +143,12 @@ public class TestBoard implements IChessGame
             afterScore += getSquareValue(move.fromPosCastle) + getSquareValue(move.toPosCastle);
         }
         
+        if(PeerUtils.isCheckMate(move.testFromPiece.side.getOpposite(), this))
+        {
+            afterScore += move.testFromPiece.side == Side.WHITE ? 1000 : -1000;
+            checkmate = true;
+        }
+        
         double delta = afterScore-beforeScore;
         currentEvaluation += delta;
         
@@ -150,8 +157,14 @@ public class TestBoard implements IChessGame
         return delta;
     }
     
+    public boolean isCheckmate()
+    {
+        return checkmate;
+    }
+    
     public void revertMove(ChessMove move, double delta)
     {
+        checkmate = false;
         move.testRevertMove(grid);
         moves.remove(moves.size()-1);
         currentEvaluation -= delta;
