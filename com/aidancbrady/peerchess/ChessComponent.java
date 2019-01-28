@@ -60,19 +60,9 @@ public class ChessComponent extends JComponent implements IChessGame
 		setLayout(new BorderLayout());
 		setSize(768, 768);
 		
-		chessboard = new JPanel(new GridLayout(8, 8));
-		
 		add(overlay = new OverlayComponent(this), BorderLayout.CENTER);
 		
-		for(int y = 0; y < 8; y++)
-		{			
-			for(int x = 0; x < 8; x++)
-			{
-				chessboard.add(new ChessSquarePanel(this, grid[x][y]));
-			}
-		}
-		
-		add(chessboard, BorderLayout.CENTER);
+	    setupBoard(false);
 
 		resetGame();
 	}
@@ -161,6 +151,8 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		possibleMoves.clear();
 		
+		setupBoard(false);
+		
 		if(panel.opponentLabel != null)
 		{
 			panel.opponentLabel.setText("Opponent: waiting");
@@ -247,6 +239,23 @@ public class ChessComponent extends JComponent implements IChessGame
         
         panel.updateText();
         repaint();
+    }
+    
+    public void setupBoard(boolean flip)
+    {
+        if(chessboard != null) remove(chessboard);
+        
+        chessboard = new JPanel(new GridLayout(8, 8));
+        
+        for(int y = 0; y < 8; y++)
+        {           
+            for(int x = 0; x < 8; x++)
+            {
+                chessboard.add(new ChessSquarePanel(this, grid[flip ? 7-x : x][flip ? 7-y : y]));
+            }
+        }
+        
+        add(chessboard, BorderLayout.CENTER);
     }
 	
 	public boolean isMoving()

@@ -64,6 +64,12 @@ public class MoveAction
 	    ChessPos fromPos = castle ? move.fromPosCastle : move.fromPos;
 	    ChessPos toPos = castle ? move.toPosCastle : move.toPos;
 	    
+	    if(component.multiplayer && !component.host)
+	    {
+	        fromPos = PeerUtils.invert(fromPos);
+	        toPos = PeerUtils.invert(toPos);
+	    }
+	    
 		int xDist = (toPos.xPos-fromPos.xPos)*getScale();
 		
 		return (fromPos.xPos*getScale()) + (int)(xDist*getPercentage());
@@ -73,6 +79,12 @@ public class MoveAction
 	{
 	    ChessPos fromPos = castle ? move.fromPosCastle : move.fromPos;
         ChessPos toPos = castle ? move.toPosCastle : move.toPos;
+        
+        if(component.multiplayer && !component.host)
+        {
+            fromPos = PeerUtils.invert(fromPos);
+            toPos = PeerUtils.invert(toPos);
+        }
         
 		int yDist = (toPos.yPos-fromPos.yPos)*getScale();
 		

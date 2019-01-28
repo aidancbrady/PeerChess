@@ -20,11 +20,11 @@ public final class ChessTimer extends Thread
 		while(true)
 		{
 			try {
-				if(chess != null && chess.frame != null && chess.frame.chess != null && chess.frame.chess.chess != null)
+				if(chess != null && chess.frame != null && chess.frame.chessPanel != null && chess.frame.chessPanel.chess != null)
 				{
-					if(chess.frame.chess.chess.isMoving())
+					if(chess.frame.chessPanel.chess.isMoving())
 					{
-						chess.frame.chess.chess.currentMove.update();
+						chess.frame.chessPanel.chess.currentMove.update();
 					}
 				}
 				

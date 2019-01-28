@@ -62,7 +62,7 @@ public class PeerChess
 	
 	public ChessComponent getChess()
 	{
-		return frame.chess.chess;
+		return frame.chessPanel.chess;
 	}
 	
 	private void initMacOSX()

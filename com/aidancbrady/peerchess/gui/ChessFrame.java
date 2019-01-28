@@ -21,7 +21,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public ChessToolbar toolbar = new ChessToolbar(this);
 	
-	public ChessPanel chess;
+	public ChessPanel chessPanel;
 	public MenuPanel menu;
 	public JoinPanel join;
 	
@@ -45,8 +45,8 @@ public class ChessFrame extends JFrame implements WindowListener
 		add(join = new JoinPanel(this));
 		join.setVisible(false);
 		
-		add(chess = new ChessPanel(this));
-		chess.setVisible(false);
+		add(chessPanel = new ChessPanel(this));
+		chessPanel.setVisible(false);
 		
 		setJMenuBar(toolbar.menuBar);
 		addComponentListener(new ComponentListener() {
@@ -73,12 +73,12 @@ public class ChessFrame extends JFrame implements WindowListener
 		
 		if(mp)
 		{
-    		waiting.setThread(new ConnectionWaiter(chess));
+    		waiting.setThread(new ConnectionWaiter(chessPanel));
     		waiting.setVisible(true);
 		}
 		else {
-		    chess.updateText();
-		    chess.initGame();
+		    chessPanel.updateText();
+		    chessPanel.initGame();
 		}
 		
 		revalidate();
@@ -90,10 +90,10 @@ public class ChessFrame extends JFrame implements WindowListener
 		menu.setVisible(false);
 		join.setVisible(false);
 		
-		chess.chess.multiplayer = mp;
+		chessPanel.chess.multiplayer = mp;
 		
 		setSize(1024, 790);
-		chess.setVisible(true);
+		chessPanel.setVisible(true);
 	}
 	
 	public void openSavedChess()
@@ -121,12 +121,12 @@ public class ChessFrame extends JFrame implements WindowListener
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			if(SaveHandler.loadGame(chess.chess, chooser.getSelectedFile()))
+			if(SaveHandler.loadGame(chessPanel.chess, chooser.getSelectedFile()))
 			{
-				openChess(chess.chess.multiplayer);
+				openChess(chessPanel.chess.multiplayer);
 			}
 			else {
-				chess.chess.resetGame();
+				chessPanel.chess.resetGame();
 				JOptionPane.showMessageDialog(this, "Error loading game.");
 			}
 		}
@@ -135,7 +135,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	public void openJoin()
 	{
 		menu.setVisible(false);
-		chess.setVisible(false);
+		chessPanel.setVisible(false);
 		
 		setSize(400, 600);
 		join.setVisible(true);
@@ -143,9 +143,9 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public void openMenu()
 	{
-		if(chess.isVisible())
+		if(chessPanel.isVisible())
 		{
-			if(!chess.exit())
+			if(!chessPanel.exit())
 			{
 				return;
 			}
@@ -156,7 +156,7 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public void forceMenu()
 	{
-		chess.setVisible(false);
+		chessPanel.setVisible(false);
 		join.setVisible(false);
 		
 		setSize(400, 600);
@@ -186,9 +186,9 @@ public class ChessFrame extends JFrame implements WindowListener
 	@Override
 	public void windowClosing(WindowEvent arg0) 
 	{
-		if(chess != null && chess.isVisible())
+		if(chessPanel != null && chessPanel.isVisible())
 		{
-			if(!chess.exit())
+			if(!chessPanel.exit())
 			{
 				return;
 			}
@@ -212,6 +212,6 @@ public class ChessFrame extends JFrame implements WindowListener
 	
 	public void onWindowResized()
 	{
-	    chess.onWindowResized();
+	    chessPanel.onWindowResized();
 	}
 }

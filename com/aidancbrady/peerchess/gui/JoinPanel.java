@@ -162,7 +162,7 @@ public class JoinPanel extends JPanel
 			{
 			    synchronized(frame.connecting)
 			    {
-    				frame.connecting.setThread(new GameConnector(server, frame.chess));
+    				frame.connecting.setThread(new GameConnector(server, frame.chessPanel));
     				frame.connecting.setVisible(true);
 			    }
 			}
@@ -177,7 +177,7 @@ public class JoinPanel extends JPanel
 		{
 		    synchronized(frame.connecting)
 		    {
-    			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chess));
+    			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chessPanel));
     			frame.connecting.setVisible(true);
 		    }
 		    

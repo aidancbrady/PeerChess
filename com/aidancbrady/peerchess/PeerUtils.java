@@ -549,11 +549,8 @@ public final class PeerUtils
         }
 	}
 	
-	public static <V> List<V> mergeLists(List<V> list1, List<V> list2)
+	public static ChessPos invert(ChessPos pos)
 	{
-	    List<V> list = new ArrayList<>();
-	    list.addAll(list1);
-	    list.addAll(list2);
-	    return list;
+	    return new ChessPos(7-pos.xPos, 7-pos.yPos);
 	}
 }
