@@ -130,7 +130,8 @@ public class ChessPiece
     {
         WHITE_WIN,
         BLACK_WIN,
-        STALEMATE;
+        STALEMATE,
+        DRAW;
         
         public static Endgame get(Side side)
         {

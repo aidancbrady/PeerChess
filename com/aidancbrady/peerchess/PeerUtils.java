@@ -549,4 +549,12 @@ public final class PeerUtils
             }
         }
 	}
+	
+	public static <V> List<V> mergeLists(List<V> list1, List<V> list2)
+	{
+	    List<V> list = new ArrayList<>();
+	    list.addAll(list1);
+	    list.addAll(list2);
+	    return list;
+	}
 }

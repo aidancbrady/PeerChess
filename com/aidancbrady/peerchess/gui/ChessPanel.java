@@ -192,6 +192,10 @@ public class ChessPanel extends JPanel implements MouseListener
 			    {
 			        statusLabel.setText("Stalemate!");
 			    }
+			    else if(chess.getGame().endgame == Endgame.DRAW)
+			    {
+			        statusLabel.setText("Draw!");
+			    }
 			    else {
 			        statusLabel.setText(Endgame.get(chess.getGame().side) == chess.getGame().endgame ? "You win the game!" : "You lost the game.");
 			    }

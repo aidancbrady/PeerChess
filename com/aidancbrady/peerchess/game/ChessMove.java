@@ -290,6 +290,16 @@ public class ChessMove
 	    return false;
 	}
 	
+	public boolean didTakeMaterial()
+	{
+	    return enPassantTakePos != null || boardPreMove[toPos.xPos][toPos.yPos].getPiece() != null;
+	}
+	
+	public boolean isPawnMove()
+	{
+	    return boardPreMove[fromPos.xPos][fromPos.yPos].getPiece().type == PieceType.PAWN;
+	}
+	
 	public String serialize()
 	{
 	    String ret = fromPos.serialize() + " " + toPos.serialize() + " " + SaveHandler.saveChessBoard(boardPreMove);

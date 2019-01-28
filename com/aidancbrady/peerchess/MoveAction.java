@@ -8,6 +8,7 @@ import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
+import com.aidancbrady.peerchess.game.DrawTracker;
 
 public class MoveAction 
 {	
@@ -139,7 +140,12 @@ public class MoveAction
 		    }
 		}
 		
-	    component.currentMove = null;
+		if(DrawTracker.isDraw(component.moves))
+		{
+		    component.getGame().endgame = Endgame.DRAW;
+		}
+		
+		component.currentMove = null;
 		component.panel.updateText();
 		
 		if(component.getGame().endgame == null && !component.multiplayer && component.getGame().turn != component.getGame().side)
