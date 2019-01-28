@@ -58,7 +58,10 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 		backButton = new JButton("Close");
 		backButton.setSize(120, 30);
 		backButton.setLocation(90, 400);
-		backButton.addActionListener(new CloseButtonListener());
+		backButton.addActionListener(e -> {
+		    setVisible(false);
+            frame.toFront();
+		});
 		add(backButton);
 		
 		usernameButton = new JButton("Edit");
@@ -132,16 +135,6 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 		
 		setVisible(true);
 		setResizable(false);
-	}
-	
-	public class CloseButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			setVisible(false);
-			frame.toFront();
-		}
 	}
 	
 	public class UsernameButtonListener implements ActionListener

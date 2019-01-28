@@ -76,38 +76,20 @@ public class ChessPanel extends JPanel implements MouseListener
 		hintButton.setSize(127, 30);
 		hintButton.setLocation(768, 422);
 		hintButton.setEnabled(false);
-		hintButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                chess.hint();
-            }
-		});
+		hintButton.addActionListener(e -> chess.hint());
 		add(hintButton);
 		
 		revertButton = new JButton("Revert");
 		revertButton.setSize(127, 30);
 		revertButton.setLocation(898, 422);
 		revertButton.setEnabled(false);
-		revertButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e)
-            {
-		        chess.takeBackLastMove();
-            }
-        });
+		revertButton.addActionListener(e -> chess.takeBackLastMove());
 		add(revertButton);
 		
 		exitButton = new JButton("Exit to Menu");
 		exitButton.setSize(256, 30);
 		exitButton.setLocation(768, 456);
-		exitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				frame.openMenu();
-			}
-		});
+		exitButton.addActionListener(e -> frame.openMenu());
 		add(exitButton);
 		
 		chatBox = new JTextArea();

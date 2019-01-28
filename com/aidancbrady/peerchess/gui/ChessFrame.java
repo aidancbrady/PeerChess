@@ -48,7 +48,7 @@ public class ChessFrame extends JFrame implements WindowListener
 		add(chessPanel = new ChessPanel(this));
 		chessPanel.setVisible(false);
 		
-		setJMenuBar(toolbar.menuBar);
+		setJMenuBar(toolbar.getMenuBar());
 		addComponentListener(new ComponentListener() {
 		    @Override
 		    public void componentResized(ComponentEvent e)

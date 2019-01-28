@@ -2,8 +2,6 @@ package com.aidancbrady.peerchess.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -46,6 +44,8 @@ public class JoinPanel extends JPanel
 	public JList<String> serverList;
 	
 	public List<Server> serversLoaded = new ArrayList<Server>();
+	
+	public Vector<String> listVector = new Vector<String>();
 	
 	public JProgressBar refreshBar;
 
@@ -109,31 +109,38 @@ public class JoinPanel extends JPanel
 		ipField.setFocusable(true);
 		ipField.setSize(180, 20);
 		ipField.setLocation(5, 430);
-		ipField.addActionListener(new ConnectListener());
+		ipField.addActionListener(e -> doRemoteConnect());
 		add(ipField);
 		
 		exitButton = new JButton("Exit to Menu");
 		exitButton.setSize(200, 30);
 		exitButton.setLocation(100, 540);
-		exitButton.addActionListener(new ExitButtonListener());
+		exitButton.addActionListener(e -> {
+		    frame.openMenu();
+            
+            if(scanner != null && scanner.isAlive())
+            {
+                scanner.interrupt();
+            }
+		});
 		add(exitButton);
 		
 		refreshButton = new JButton("Refresh");
 		refreshButton.setSize(100, 30);
 		refreshButton.setLocation(5, 330);
-		refreshButton.addActionListener(new RefreshButtonListener());
+		refreshButton.addActionListener(e -> doRefresh());
 		add(refreshButton);
 		
 		joinButton = new JButton("Join");
 		joinButton.setSize(100, 30);
 		joinButton.setLocation(295, 330);
-		joinButton.addActionListener(new JoinButtonListener());
+		joinButton.addActionListener(e -> doLocalConnect());
 		add(joinButton);
 		
 		connectButton = new JButton("Connect");
 		connectButton.setSize(100, 20);
 		connectButton.setLocation(190, 430);
-		connectButton.addActionListener(new ConnectListener());
+		connectButton.addActionListener(e -> doRemoteConnect());
 		add(connectButton);
 		
 		JLabel infoLabel = new JLabel("Directly connect to an IPv4 address");
@@ -185,53 +192,14 @@ public class JoinPanel extends JPanel
 		}
 	}
 	
-	public class ExitButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			frame.openMenu();
-			
-			if(scanner != null && scanner.isAlive())
-			{
-				scanner.interrupt();
-			}
-		}
-	}
-	
-	public class RefreshButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			doRefresh();
-		}
-	}
-	
-	public class JoinButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			doLocalConnect();
-		}
-	}
-	
-	public class ConnectListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent arg0) 
-		{
-			doRemoteConnect();
-		}
-	}
-	
 	public void doRefresh()
 	{
 	    if(refreshButton.isEnabled())
 	    {
-    	    serverList.setListData(new Vector<String>());
-            
+	        serversLoaded.clear();
+	        listVector.clear();
+	        serverList.setListData(listVector);
+	        
             refreshBar.setIndeterminate(true);
             refreshLabel.setVisible(true);
             refreshBar.setVisible(true);
@@ -241,27 +209,18 @@ public class JoinPanel extends JPanel
 	    }
 	}
 	
-	public void populateServers(List<Server> servers)
+	public void endRefresh()
 	{
 		refreshLabel.setVisible(false);
 		refreshBar.setVisible(false);
 		refreshButton.setEnabled(true);
-		
-		if(servers.isEmpty())
-		{
-			return;
-		}
-		
-		serversLoaded = servers;
-		
-		Vector<String> listVector = new Vector<String>();
-		
-		for(Server s : servers)
-		{
-			listVector.add(s.username + "'s Game [" + s.ip + "]");
-		}
-		
-		serverList.setListData(listVector);
+	}
+	
+	public void addServer(Server server)
+	{
+	    serversLoaded.add(server);
+	    listVector.add(server.username + "'s Game [" + server.ip + "]");
+	    serverList.setListData(listVector);
 	}
 	
 	@Override

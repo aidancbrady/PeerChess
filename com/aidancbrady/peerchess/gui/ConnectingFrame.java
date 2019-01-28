@@ -1,8 +1,6 @@
 package com.aidancbrady.peerchess.gui;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -52,18 +50,14 @@ public class ConnectingFrame extends JFrame implements WindowListener
 		add(progressBar);
 		
 		cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				try {
-					thread.socket.close();
-					thread.interrupt();
-					setVisible(false);
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
+		cancelButton.addActionListener(e -> {
+		    try {
+                thread.socket.close();
+                thread.interrupt();
+                setVisible(false);
+            } catch(Exception e1) {
+                e1.printStackTrace();
+            }
 		});
 		cancelButton.setSize(120, 30);
 		cancelButton.setLocation(120, 110);

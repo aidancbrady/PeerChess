@@ -4,8 +4,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
@@ -14,8 +12,6 @@ import com.aidancbrady.peerchess.gui.JoinPanel;
 public class GameScanner extends Thread
 {
 	public static final int MAX_PING = 2000;
-	
-	public List<Server> pingedServers = new ArrayList<Server>();
 	
 	public boolean valid = true;
 	
@@ -57,7 +53,7 @@ public class GameScanner extends Thread
 					
 					if(s.startsWith("PING"))
 					{
-						pingedServers.add(new Server(s.split(":")[1].trim(), response.getAddress().getHostAddress()));
+					    panel.addServer(new Server(s.split(":")[1].trim(), response.getAddress().getHostAddress()));
 						PeerUtils.debug("Received datagram response from " + response.getAddress().getHostAddress());
 					}
 				} catch(SocketTimeoutException e) {
@@ -80,7 +76,7 @@ public class GameScanner extends Thread
 	{
 		if(panel.isVisible())
 		{
-			panel.populateServers(pingedServers);
+		    panel.endRefresh();
 		}
 	}
 	
