@@ -12,23 +12,23 @@ public class PeerChess
 {
 	private static PeerChess instance = new PeerChess();
 	
-	public ChessFrame frame;
+	private ChessFrame frame;
 	
-	public ChessTimer timer;
+	private ChessTimer timer;
 	
-	public int port = 26325;
+	private int port = 26325;
 	
 	public String username = "Guest";
 	
-	public boolean enableSoundEffects = true;
-	public boolean enableAnimations = true;
-	public boolean enableVisualGuides = true;
-	public boolean enableHints = true;
-	public int difficulty = 4;
+    private Calendar calendar = Calendar.getInstance();
+
+    private boolean debug = true;
 	
-	public Calendar calendar = Calendar.getInstance();
-	
-	public boolean debug = true;
+    public boolean enableSoundEffects = true;
+    public boolean enableAnimations = true;
+    public boolean enableVisualGuides = true;
+    public boolean enableHints = true;
+    public int difficulty = 4;
 	 
 	public static void main(String[] args)
 	{
@@ -60,9 +60,29 @@ public class PeerChess
         SwingUtilities.invokeLater(doSwingLater);
 	}
 	
-	public ChessComponent getChess()
+	public int getPort()
 	{
-		return frame.chessPanel.chess;
+	    return port;
+	}
+	
+	public ChessTimer getTimer()
+	{
+	    return timer;
+	}
+	
+	public ChessFrame getFrame()
+	{
+	    return frame;
+	}
+	
+	public Calendar getCalendar()
+	{
+	    return calendar;
+	}
+	
+	public boolean isDebug()
+	{
+	    return debug;
 	}
 	
 	private void initMacOSX()

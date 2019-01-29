@@ -11,9 +11,7 @@ public class Texture
 {
 	private static Map<String, Texture> loadedTextures = new HashMap<String, Texture>();
 	
-	public BufferedImage img;
-	
-	public String path;
+	private BufferedImage img;
 	
 	public Texture(String path) throws Exception
 	{

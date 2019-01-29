@@ -7,16 +7,17 @@ import javax.swing.JOptionPane;
 
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.gui.ChessPanel;
 import com.aidancbrady.peerchess.net.GameScanner.Server;
 
 public class GameConnector extends Thread
 {	
-	public ChessPanel panel;
+	private ChessPanel panel;
 	
-	public Server server;
+	private Server server;
 	
-	public Socket socket;
+	private Socket socket;
 	
 	public GameConnector(Server s, ChessPanel p)
 	{
@@ -31,17 +32,17 @@ public class GameConnector extends Thread
 	{
 		try {
 		    socket = new Socket();
-			socket.connect(new InetSocketAddress(server.ip, PeerChess.instance().port), GameScanner.MAX_PING);
+			socket.connect(new InetSocketAddress(server.ip, PeerChess.instance().getPort()), Constants.MAX_PING);
 			
-			(panel.connection = new PeerConnection(socket, panel, false)).start();
-			panel.connection.username = server.username;
+			panel.setConnection(new PeerConnection(socket, panel, false));
+			panel.getConnection().start();
 			panel.updateText();
 			
 			PeerUtils.debug("Connected to " + server.ip);
 			
-			synchronized(panel.frame.connecting)
+			synchronized(panel.frame.getConnectingFrame())
 			{
-			    panel.frame.connecting.setVisible(false);
+			    panel.frame.getConnectingFrame().setVisible(false);
 			}
 			
 			panel.frame.forceChess(true);
@@ -50,7 +51,7 @@ public class GameConnector extends Thread
 	        panel.frame.onWindowResized();
 	        panel.chess.setupBoard(true);
 		} catch(Exception e) {
-			panel.frame.connecting.setVisible(false);
+			panel.frame.getConnectingFrame().setVisible(false);
 			JOptionPane.showMessageDialog(panel, "Couldn't connect to server: " + e.getLocalizedMessage());
 			
 			try {
@@ -59,5 +60,11 @@ public class GameConnector extends Thread
 			
 			e.printStackTrace();
 		}
+	}
+	
+	public void cancel() throws Exception
+	{
+	    socket.close();
+	    interrupt();
 	}
 }

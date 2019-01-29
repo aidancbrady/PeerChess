@@ -14,8 +14,7 @@ import com.aidancbrady.peerchess.game.DrawTracker;
 public class ChessAI 
 {
     private ChessComponent chess;
-    public int evaluations = 0;
-    public boolean terminate = false;
+    private boolean terminate = false;
     
     public ChessAI(ChessComponent component)
     {
@@ -32,17 +31,16 @@ public class ChessAI
             {
                 ChessMove move = minimax(false);
                 ChessPiece piece = move.fromPos.getSquare(chess.grid).getPiece();
-                evaluations = 0;
                 
                 if(!terminate)
                 {
                     ChessPiece finalPiece = piece;
                     
-                    if(move.getFromSquare(chess.grid).getPiece().type == PieceType.PAWN)
+                    if(move.getFromSquare(chess.grid).getPiece().getType() == PieceType.PAWN)
                     {
-                        if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
+                        if(move.toPos.getY() == 0 || move.toPos.getY() == 7)
                         {
-                            finalPiece = new ChessPiece(PieceType.QUEEN, piece.side);
+                            finalPiece = new ChessPiece(PieceType.QUEEN, piece.getSide());
                         }
                     }
                     
@@ -79,8 +77,6 @@ public class ChessAI
     
     public double minimax_do(int depth, TestBoard board, double alpha, double beta, boolean maximizing)
     {
-        evaluations++;
-        
         if(depth == 0)
         {
             return getSide() == Side.WHITE ? board.getEvaluation() : -board.getEvaluation();

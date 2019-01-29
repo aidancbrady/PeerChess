@@ -17,13 +17,11 @@ public class WaitingFrame extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
 
-	public ChessFrame frame;
+	private ChessFrame frame;
 	
-	public JProgressBar progressBar;
+	private JProgressBar progressBar;
 	
-	public JButton cancelButton;
-	
-	public ConnectionWaiter thread;
+	private ConnectionWaiter thread;
 	
 	public WaitingFrame(ChessFrame f)
 	{
@@ -51,7 +49,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 		progressBar.setLocation(30, 50);
 		add(progressBar);
 		
-		cancelButton = new JButton("Cancel");
+		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
@@ -78,17 +76,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 	    try {
 	        if(thread != null)
 	        {
-	            if(thread.serverSocket != null)
-	            {
-	                thread.serverSocket.close();
-	            }
-                
-                if(thread.responseThread != null)
-                {
-                    thread.responseThread.socket.close();
-                }
-                
-                thread.interrupt();
+	            thread.close();
 	        }
         } catch(Exception e) {
             e.printStackTrace();
@@ -105,9 +93,9 @@ public class WaitingFrame extends JFrame implements WindowListener
 	public void windowClosing(WindowEvent arg0) 
 	{
 		try {
-			thread.serverSocket.close();
+			thread.close();
 			thread.interrupt();
-			frame.chessPanel.chess.resetGame();
+			frame.getPanel().chess.resetGame();
 			frame.forceMenu();
 		} catch(Exception e) {
 			e.printStackTrace();

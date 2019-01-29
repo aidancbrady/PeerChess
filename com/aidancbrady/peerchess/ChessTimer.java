@@ -5,9 +5,9 @@ import java.util.Set;
 
 public final class ChessTimer extends Thread
 {
-	public PeerChess chess = PeerChess.instance();
+	private static PeerChess chess = PeerChess.instance();
 	
-	public Set<ITicker> tickers = new HashSet<ITicker>();
+	private Set<ITicker> tickers = new HashSet<ITicker>();
 	
 	public ChessTimer()
 	{
@@ -20,11 +20,11 @@ public final class ChessTimer extends Thread
 		while(true)
 		{
 			try {
-				if(chess != null && chess.frame != null && chess.frame.chessPanel != null && chess.frame.chessPanel.chess != null)
+				if(chess.getFrame() != null)
 				{
-					if(chess.frame.chessPanel.chess.isMoving())
+					if(chess.getFrame().getPanel().chess.isMoving())
 					{
-						chess.frame.chessPanel.chess.currentMove.update();
+						chess.getFrame().getPanel().chess.currentMove.update();
 					}
 				}
 				

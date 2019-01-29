@@ -10,7 +10,7 @@ public class OverlayComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessComponent component;
+	private ChessComponent component;
 	
 	public OverlayComponent(ChessComponent c)
 	{

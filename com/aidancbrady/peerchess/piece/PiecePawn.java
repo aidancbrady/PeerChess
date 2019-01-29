@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -16,20 +17,20 @@ public class PiecePawn implements Piece
 	@Override
 	public boolean validateMove(IChessGame game, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().side, game.getGrid());
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().getSide(), game.getGrid());
 		
-		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().side, pos, game.getGrid(), move))
+		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), pos, game.getGrid(), move))
 		{
 			return false;
 		}
 		
-		Side side = move.getFromSquare(game.getGrid()).getPiece().side;
+		Side side = move.getFromSquare(game.getGrid()).getPiece().getSide();
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
 		ChessPos left = move.fromPos.translate(1, side == Side.BLACK ? 1 : -1);
 		ChessPos right = move.fromPos.translate(-1, side == Side.BLACK ? 1 : -1);
 		
-		if(move.fromPos.xPos == move.toPos.xPos)
+		if(move.fromPos.getX() == move.toPos.getX())
 		{
 			if(move.getToSquare(game.getGrid()).getPiece() != null)
 			{
@@ -37,30 +38,30 @@ public class PiecePawn implements Piece
 			}
 		}
 		
-		if(side == Side.BLACK && move.fromPos.yPos-move.toPos.yPos > 0)
+		if(side == Side.BLACK && move.fromPos.getY()-move.toPos.getY() > 0)
 		{
 			return false;
 		}
-		else if(side == Side.WHITE && move.fromPos.yPos-move.toPos.yPos < 0)
+		else if(side == Side.WHITE && move.fromPos.getY()-move.toPos.getY() < 0)
 		{
 			return false;
 		}
 		
-		int xAbs = Math.abs(move.fromPos.xPos-move.toPos.xPos);
-		int yAbs = Math.abs(move.fromPos.yPos-move.toPos.yPos);
+		int xAbs = Math.abs(move.fromPos.getX()-move.toPos.getX());
+		int yAbs = Math.abs(move.fromPos.getY()-move.toPos.getY());
 		
-		if(move.fromPos.yPos == yStart && (yAbs != 1 && yAbs != 2))
+		if(move.fromPos.getY() == yStart && (yAbs != 1 && yAbs != 2))
 		{
 			return false;
 		}
-		else if(move.fromPos.yPos != yStart && yAbs != 1)
+		else if(move.fromPos.getY() != yStart && yAbs != 1)
 		{
 			return false;
 		}
 		
 		int beforeY = side == Side.BLACK ? 2 : 5;
 		
-		if(yAbs == 2 && game.getGrid()[move.fromPos.xPos][beforeY].getPiece() != null)
+		if(yAbs == 2 && game.getGrid()[move.fromPos.getX()][beforeY].getPiece() != null)
 		{
 		    return false;
 		}
@@ -72,7 +73,7 @@ public class PiecePawn implements Piece
 		
 		if(move.toPos.equals(left) || move.toPos.equals(right))
 		{
-			if(move.getToSquare(game.getGrid()).getPiece() != null && move.getToSquare(game.getGrid()).getPiece().side == move.getFromSquare(game.getGrid()).getPiece().side)
+			if(move.getToSquare(game.getGrid()).getPiece() != null && move.getToSquare(game.getGrid()).getPiece().getSide() == move.getFromSquare(game.getGrid()).getPiece().getSide())
 			{
 				return false;
 			}
@@ -82,7 +83,7 @@ public class PiecePawn implements Piece
 			    ChessPos prevPos = move.toPos.translate(0, side == Side.BLACK ? -1 : 1);
 			    ChessPiece prevPiece = prevPos.getSquare(game.getGrid()).getPiece();
 			    
-			    if(prevPiece == null || prevPiece.side == side || prevPiece.type != PieceType.PAWN)
+			    if(prevPiece == null || prevPiece.getSide() == side || prevPiece.getType() != PieceType.PAWN)
 			    {
 			        return false;
 			    }
@@ -104,7 +105,7 @@ public class PiecePawn implements Piece
 	{
 		Set<ChessPos> possibleMoves = new HashSet<ChessPos>();
 		
-		Side side = origPos.getSquare(game.getGrid()).getPiece().side;
+		Side side = origPos.getSquare(game.getGrid()).getPiece().getSide();
 		int yStart = side == Side.BLACK ? 1 : 6;
 		
 		ChessPos left = origPos.translate(1, side == Side.BLACK ? 1 : -1);
@@ -112,7 +113,7 @@ public class PiecePawn implements Piece
 		
 		if(left.isInRange())
 		{
-		    if(left.getSquare(game.getGrid()).getPiece() != null && left.getSquare(game.getGrid()).getPiece().side != side)
+		    if(left.getSquare(game.getGrid()).getPiece() != null && left.getSquare(game.getGrid()).getPiece().getSide() != side)
 		    {
 		        possibleMoves.add(left);
 		    }
@@ -121,7 +122,7 @@ public class PiecePawn implements Piece
 		        ChessPos lower = left.translate(0, side == Side.BLACK ? -1 : 1);
 		        ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
 		        
-		        if(lowerPiece != null && lowerPiece.side != side && lowerPiece.type == PieceType.PAWN)
+		        if(lowerPiece != null && lowerPiece.getSide() != side && lowerPiece.getType() == PieceType.PAWN)
 		        {
 		            if(!game.getPastMoves().isEmpty())
 		            {
@@ -138,7 +139,7 @@ public class PiecePawn implements Piece
 		
 		if(right.isInRange())
 		{
-		    if(right.getSquare(game.getGrid()).getPiece() != null && right.getSquare(game.getGrid()).getPiece().side != side)
+		    if(right.getSquare(game.getGrid()).getPiece() != null && right.getSquare(game.getGrid()).getPiece().getSide() != side)
 		    {
 		        possibleMoves.add(right);
 		    }
@@ -147,7 +148,7 @@ public class PiecePawn implements Piece
 		        ChessPos lower = right.translate(0, side == Side.BLACK ? -1 : 1);
                 ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
                 
-                if(lowerPiece != null && lowerPiece.side != side && lowerPiece.type == PieceType.PAWN)
+                if(lowerPiece != null && lowerPiece.getSide() != side && lowerPiece.getType() == PieceType.PAWN)
                 {
                     if(!game.getPastMoves().isEmpty())
                     {
@@ -162,22 +163,22 @@ public class PiecePawn implements Piece
 		    }
 		}
 		
-		if(origPos.yPos == yStart)
+		if(origPos.getY() == yStart)
 		{
 			int forwardY = side == Side.BLACK ? 3 : 4;
 			int beforeY = side == Side.BLACK ? 2 : 5;
 			
-			if(game.getGrid()[origPos.xPos][forwardY].getPiece() == null && game.getGrid()[origPos.xPos][beforeY].getPiece() == null)
+			if(game.getGrid()[origPos.getX()][forwardY].getPiece() == null && game.getGrid()[origPos.getX()][beforeY].getPiece() == null)
 			{
-				possibleMoves.add(new ChessPos(origPos.xPos, forwardY));
+				possibleMoves.add(new ChessPos(origPos.getX(), forwardY));
 			}
 		}
 		
-		int forwardY = side == Side.BLACK ? origPos.yPos+1 : origPos.yPos-1;
+		int forwardY = side == Side.BLACK ? origPos.getY()+1 : origPos.getY()-1;
 		
-		if(forwardY >= 0 && forwardY <= 7 && game.getGrid()[origPos.xPos][forwardY].getPiece() == null)
+		if(forwardY >= 0 && forwardY <= 7 && game.getGrid()[origPos.getX()][forwardY].getPiece() == null)
 		{
-			possibleMoves.add(new ChessPos(origPos.xPos, forwardY));
+			possibleMoves.add(new ChessPos(origPos.getX(), forwardY));
 		}
 		
 		return possibleMoves;
@@ -188,4 +189,10 @@ public class PiecePawn implements Piece
 	{
 	    return 10;
 	}
+	
+    @Override
+    public double[][] getPlacementEvaluation(Side side)
+    {
+        return side == Side.WHITE ? Constants.pawnEvalWhite : Constants.pawnEvalBlack;
+    }
 }

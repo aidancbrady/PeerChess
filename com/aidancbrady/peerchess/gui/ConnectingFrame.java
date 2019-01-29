@@ -14,19 +14,15 @@ import com.aidancbrady.peerchess.net.GameConnector;
 public class ConnectingFrame extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
-
-	public ChessFrame frame;
 	
-	public JProgressBar progressBar;
+	private JProgressBar progressBar;
 	
-	public JButton cancelButton;
+	private JButton cancelButton;
 	
-	public GameConnector thread;
+	private GameConnector thread;
 	
-	public ConnectingFrame(ChessFrame f)
+	public ConnectingFrame()
 	{
-		frame = f;
-		
 		setTitle("Connection");
 		setSize(360, 180);
 		
@@ -52,7 +48,7 @@ public class ConnectingFrame extends JFrame implements WindowListener
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(e -> {
 		    try {
-                thread.socket.close();
+                thread.cancel();
                 thread.interrupt();
                 setVisible(false);
             } catch(Exception e1) {
@@ -78,8 +74,7 @@ public class ConnectingFrame extends JFrame implements WindowListener
 	public void windowClosed(WindowEvent arg0) 
 	{
 		try {
-			thread.socket.close();
-			thread.interrupt();
+			thread.cancel();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -16,30 +16,23 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.aidancbrady.peerchess.PeerChess;
-import com.aidancbrady.peerchess.ai.Constants;
+import com.aidancbrady.peerchess.client.Constants;
 
 public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessFrame frame;
+	private JCheckBox soundEffectsBox;
+	private JCheckBox animationsBox;
+	private JCheckBox visualGuidesBox;
+	private JCheckBox hintsBox;
 	
-	public JButton backButton;
-	public JButton usernameButton;
+	private JSlider difficultySlider;
 	
-	public JCheckBox soundEffectsBox;
-	public JCheckBox animationsBox;
-	public JCheckBox visualGuidesBox;
-	public JCheckBox hintsBox;
-	
-	public JSlider difficultySlider;
-	
-	public JLabel usernameLabel;
+	private JLabel usernameLabel;
 
 	public OptionsFrame(ChessFrame f)
 	{
-		frame = f;
-		
 		setTitle("Options");
 		setSize(300, 500);
 		setLayout(null);
@@ -55,16 +48,16 @@ public class OptionsFrame extends JFrame implements ItemListener, ChangeListener
 		usernameLabel.setLocation(16, 40);
 		add(usernameLabel);
 		
-		backButton = new JButton("Close");
+		JButton backButton = new JButton("Close");
 		backButton.setSize(120, 30);
 		backButton.setLocation(90, 400);
 		backButton.addActionListener(e -> {
 		    setVisible(false);
-            frame.toFront();
+            f.toFront();
 		});
 		add(backButton);
 		
-		usernameButton = new JButton("Edit");
+		JButton usernameButton = new JButton("Edit");
 		usernameButton.setSize(80, 30);
 		usernameButton.setLocation(210, 40);
 		usernameButton.addActionListener(new UsernameButtonListener());

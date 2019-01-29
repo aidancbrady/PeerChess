@@ -17,16 +17,36 @@ public class ChessPiece
     private static Map<PieceType, Texture> whiteTextures = new HashMap<>();
     private static Map<PieceType, Texture> blackTextures = new HashMap<>();
 	
-	public PieceType type;
+	private PieceType type;
 	
-	public Side side;
+	private Side side;
 	
-	public int moves;
+	private int moves;
 	
 	public ChessPiece(PieceType t, Side s)
 	{
 		type = t;
 		side = s;
+	}
+	
+	public PieceType getType()
+	{
+	    return type;
+	}
+	
+	public Side getSide()
+	{
+	    return side;
+	}
+	
+	public int getMoves()
+	{
+	    return moves;
+	}
+	
+	public void setMoves(int m)
+	{
+	    moves = m;
 	}
 	
 	public void move()

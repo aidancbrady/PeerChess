@@ -25,9 +25,9 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessComponent game;
+	private ChessComponent game;
 	
-	public ChessSquare square;
+	private ChessSquare square;
 	
 	public ChessSquarePanel(ChessComponent com, ChessSquare s)
 	{
@@ -35,7 +35,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		square = s;
 		
 		setSize(96, 96);
-		setLocation(square.getPos().xPos*96, square.getPos().yPos*96);
+		setLocation(square.getPos().getX()*96, square.getPos().getY()*96);
 		setFocusable(false);
 		addMouseListener(this);
 		
@@ -47,7 +47,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
                 {
                     List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
                     
-                    if(square.getPiece() != null && square.getPiece().side == game.getGame().side && !possibleMoves.isEmpty())
+                    if(square.getPiece() != null && square.getPiece().getSide() == game.getGame().side && !possibleMoves.isEmpty())
                     {
                         game.select(null);
                         game.possibleMoves.addAll(possibleMoves);
@@ -90,7 +90,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(PeerChess.instance().enableVisualGuides)
 		{
-    	    if(square.getPiece() != null && square.getPiece().type == PieceType.KING && game.getGame().sideInCheck == square.getPiece().side)
+    	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && game.getGame().sideInCheck == square.getPiece().getSide())
     	    {
     	        if(game.currentMove == null)
     	        {
@@ -147,7 +147,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 			return;
 		}
 		
-		if(game.multiplayer && game.panel.connection == null)
+		if(game.multiplayer && game.panel.getConnection() == null)
 		{
 		    return;
 		}
@@ -167,7 +167,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
 			if(game.selected == null && square.getPiece() != null)
 			{
-				if(game.getGame().side != square.getPiece().side)
+				if(game.getGame().side != square.getPiece().getSide())
 				{
 					return;
 				}
@@ -180,7 +180,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 					ChessPiece piece = game.selected.getPiece();
 					ChessMove move = new ChessMove(game.selected.getPos(), square.getPos());
 					
-					if(square.getPiece() != null && square.getPiece().side == piece.side)
+					if(square.getPiece() != null && square.getPiece().getSide() == piece.getSide())
 					{
 						game.select(square);
 						repaint();
@@ -189,17 +189,16 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 						return;
 					}
 					else {
-						if(piece.type.getPiece().validateMove(game, move))
+						if(piece.getType().getPiece().validateMove(game, move))
 						{
 							ChessPiece newPiece = piece;
 							
-							if(piece.type == PieceType.PAWN)
+							if(piece.getType() == PieceType.PAWN)
 							{
-								if((piece.side == Side.WHITE && move.toPos.yPos == 0) || (piece.side == Side.BLACK && move.toPos.yPos == 7))
+								if((piece.getSide() == Side.WHITE && move.toPos.getY() == 0) || (piece.getSide() == Side.BLACK && move.toPos.getY() == 7))
 								{
-									game.panel.pawnReplace %= PieceType.values().length-1;
-									newPiece = PeerUtils.getPawnReplace(piece.side, game.panel.pawnReplace);
-									newPiece.moves = piece.moves;
+									newPiece = PeerUtils.getPawnReplace(piece.getSide(), game.panel.getPawnReplaceIndex());
+									newPiece.setMoves(piece.getMoves());
 								}
 							}
 							
@@ -220,5 +219,15 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 			repaint();
 			game.panel.repaint();
 		}
+	}
+	
+	public ChessComponent getGame()
+	{
+	    return game;
+	}
+	
+	public ChessSquare getSquare()
+	{
+	    return square;
 	}
 }

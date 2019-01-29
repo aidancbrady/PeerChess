@@ -161,7 +161,7 @@ public final class SaveHandler
                 }
                 else {
                     ChessPiece piece = square.getPiece();
-                    builder.append(piece.type.ordinal() + "," + piece.side.ordinal() + "," + piece.moves);
+                    builder.append(piece.getType().ordinal() + "," + piece.getSide().ordinal() + "," + piece.getMoves());
                 }
                 
                 if(y != 7 || x != 7)
@@ -193,7 +193,7 @@ public final class SaveHandler
                     PieceType type = PieceType.values()[Integer.parseInt(data[0])];
                     Side side = Side.values()[Integer.parseInt(data[1])];
                     ChessPiece piece = new ChessPiece(type, side);
-                    piece.moves = Integer.parseInt(data[2]);
+                    piece.setMoves(Integer.parseInt(data[2]));
                     
                     grid[x][y].setPiece(piece);
                 }

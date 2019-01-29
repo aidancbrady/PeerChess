@@ -10,8 +10,8 @@ import com.aidancbrady.peerchess.PeerChess;
 
 public final class DataHandler 
 {
-	public static File dataDir = new File(getHomeDirectory() + File.separator + "Documents" + File.separator + "PeerChess" + File.separator + "Data");
-	public static File dataFile = new File(dataDir, "Data.txt");
+	private static File dataDir = new File(getHomeDirectory() + File.separator + "Documents" + File.separator + "PeerChess" + File.separator + "Data");
+	private static File dataFile = new File(dataDir, "Data.txt");
 	
 	public static void init()
 	{

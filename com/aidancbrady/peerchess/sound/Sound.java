@@ -8,11 +8,9 @@ import javax.sound.sampled.Clip;
 
 public class Sound 
 {
-	public boolean isPlaying;
-	
-	public String path;
-	
-	public Clip clip;
+	private boolean isPlaying;
+	private String path;
+	private Clip clip;
 	
 	public Sound(String s)
 	{

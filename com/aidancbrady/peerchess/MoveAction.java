@@ -12,19 +12,18 @@ import com.aidancbrady.peerchess.game.DrawTracker;
 
 public class MoveAction 
 {	
-	public static final int FRAME_LIMIT = 600;
+	private static final int FRAME_LIMIT = 600;
 	
-	public int frames;
+	private int frames;
 	
-	public ChessComponent component;
+	private ChessComponent component;
 	
-	public ChessPiece piece;
+	private ChessPiece piece;
 	
-	public ChessPiece newPiece;
+	private ChessPiece newPiece;
+	private ChessPiece newCastle;
 	
-	public ChessPiece newCastle;
-	
-	public ChessMove move;
+	private ChessMove move;
 	
 	public MoveAction(ChessComponent c, ChessMove m, ChessPiece p, ChessPiece np)
 	{
@@ -70,9 +69,9 @@ public class MoveAction
 	        toPos = PeerUtils.invert(toPos);
 	    }
 	    
-		int xDist = (toPos.xPos-fromPos.xPos)*getScale();
+		int xDist = (toPos.getX()-fromPos.getX())*getScale();
 		
-		return (fromPos.xPos*getScale()) + (int)(xDist*getPercentage());
+		return (fromPos.getX()*getScale()) + (int)(xDist*getPercentage());
 	}
 	
 	public int getPosY(boolean castle)
@@ -86,9 +85,9 @@ public class MoveAction
             toPos = PeerUtils.invert(toPos);
         }
         
-		int yDist = (toPos.yPos-fromPos.yPos)*getScale();
+		int yDist = (toPos.getY()-fromPos.getY())*getScale();
 		
-		return (fromPos.yPos*getScale()) + (int)(yDist*getPercentage());
+		return (fromPos.getY()*getScale()) + (int)(yDist*getPercentage());
 	}
 	
 	public void update()
@@ -131,11 +130,11 @@ public class MoveAction
 		component.getGame().turn = component.getGame().turn.getOpposite();
 		component.moves.add(move);
 		
-		ChessPos kingPos = PeerUtils.findKing(newPiece.side.getOpposite(), component.grid);
+		ChessPos kingPos = PeerUtils.findKing(newPiece.getSide().getOpposite(), component.grid);
         
-        if(PeerUtils.isInCheck(newPiece.side.getOpposite(), kingPos, component.grid))
+        if(PeerUtils.isInCheck(newPiece.getSide().getOpposite(), kingPos, component.grid))
         {
-            component.getGame().sideInCheck = newPiece.side.getOpposite();
+            component.getGame().sideInCheck = newPiece.getSide().getOpposite();
         }
         else {
             component.getGame().sideInCheck = null;
@@ -183,25 +182,25 @@ public class MoveAction
 	
 	public Side getSide()
 	{
-		return piece.side;
+		return piece.getSide();
 	}
 	
 	public void broadcast()
 	{
-	    component.panel.connection.write(write());
+	    component.panel.getConnection().write(write());
 	}
 	
 	public String write()
 	{
 		StringBuilder str = new StringBuilder("MOVE:");
 		
-		str.append(piece.type.ordinal() + "," + piece.side.ordinal());
+		str.append(piece.getType().ordinal() + "," + piece.getSide().ordinal());
 		str.append(":");
-		str.append(newPiece.type.ordinal() + "," + newPiece.side.ordinal());
+		str.append(newPiece.getType().ordinal() + "," + newPiece.getSide().ordinal());
 		str.append(":");
-		str.append(move.fromPos.xPos + "," + move.fromPos.yPos);
+		str.append(move.fromPos.getX() + "," + move.fromPos.getY());
 		str.append(":");
-		str.append(move.toPos.xPos + "," + move.toPos.yPos);
+		str.append(move.toPos.getX() + "," + move.toPos.getY());
 		
 		return str.toString();
 	}

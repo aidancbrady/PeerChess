@@ -48,7 +48,7 @@ public class PeerEncryptor
     public boolean parseHandshake(PeerConnection connection)
     {
         try {
-            DataInputStream in = new DataInputStream(connection.socket.getInputStream());
+            DataInputStream in = new DataInputStream(connection.getSocket().getInputStream());
             byte[] bytes = new byte[in.readInt()];
             in.readFully(bytes);
             
@@ -104,7 +104,7 @@ public class PeerEncryptor
         byte[] encoded = publicKey.getEncoded();
         
         try {
-            DataOutputStream out = new DataOutputStream(connection.socket.getOutputStream());
+            DataOutputStream out = new DataOutputStream(connection.getSocket().getOutputStream());
             out.writeInt(encoded.length);
             out.write(encoded);
             out.flush();

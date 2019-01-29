@@ -2,13 +2,23 @@ package com.aidancbrady.peerchess.game;
 
 public class ChessPos
 {
-	public int xPos;
-	public int yPos;
+	private int xPos;
+	private int yPos;
 	
 	public ChessPos(int x, int y)
 	{
 		xPos = x;
 		yPos = y;
+	}
+	
+	public int getX()
+	{
+	    return xPos;
+	}
+	
+	public int getY()
+	{
+	    return yPos;
 	}
 	
 	public ChessPos translate(int x, int y)
@@ -55,7 +65,7 @@ public class ChessPos
 	@Override
 	public boolean equals(Object obj)
 	{
-		return obj instanceof ChessPos && ((ChessPos)obj).xPos == xPos && ((ChessPos)obj).yPos == yPos;
+		return obj instanceof ChessPos && ((ChessPos)obj).getX() == xPos && ((ChessPos)obj).getY() == yPos;
 	}
 	
 	@Override

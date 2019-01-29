@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 
 public class PieceKing implements Piece
@@ -16,7 +18,7 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(game.getGrid()) || isValidCastle(game, move))
 		{
-		    if(!PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().side, move.toPos, game.getGrid(), move))
+		    if(!PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), move.toPos, game.getGrid(), move))
 			{
 				return true;
 			}
@@ -29,45 +31,45 @@ public class PieceKing implements Piece
 	{
 	    ChessPiece piece = move.fromPos.getSquare(game.getGrid()).getPiece();
         
-        if(!PeerUtils.isInCheck(piece.side, move.fromPos, game.getGrid()) && piece.moves == 0)
+        if(!PeerUtils.isInCheck(piece.getSide(), move.fromPos, game.getGrid()) && piece.getMoves() == 0)
         {
             ChessPiece test = null;
             
-            if(move.toPos.xPos == 2)
+            if(move.toPos.getX() == 2)
             {
-                if(PeerUtils.isInCheck(piece.side, move.fromPos.translate(-1, 0), game.getGrid()))
+                if(PeerUtils.isInCheck(piece.getSide(), move.fromPos.translate(-1, 0), game.getGrid()))
                 {
                     return false;
                 }
                 
-                test = game.getGrid()[0][move.fromPos.yPos].getPiece();
+                test = game.getGrid()[0][move.fromPos.getY()].getPiece();
                 
-                if(test != null && test.moves == 0)
+                if(test != null && test.getMoves() == 0)
                 {
-                    if(game.getGrid()[1][move.fromPos.yPos].getPiece() == null && game.getGrid()[2][move.fromPos.yPos].getPiece() == null &&
-                            game.getGrid()[3][move.fromPos.yPos].getPiece() == null)
+                    if(game.getGrid()[1][move.fromPos.getY()].getPiece() == null && game.getGrid()[2][move.fromPos.getY()].getPiece() == null &&
+                            game.getGrid()[3][move.fromPos.getY()].getPiece() == null)
                     {
-                        move.fromPosCastle = new ChessPos(0, move.fromPos.yPos);
-                        move.toPosCastle = new ChessPos(3, move.fromPos.yPos);
+                        move.fromPosCastle = new ChessPos(0, move.fromPos.getY());
+                        move.toPosCastle = new ChessPos(3, move.fromPos.getY());
                         return true;
                     }
                 }
             }
-            else if(move.toPos.xPos == 6)
+            else if(move.toPos.getX() == 6)
             {
-                if(PeerUtils.isInCheck(piece.side, move.fromPos.translate(1, 0), game.getGrid()))
+                if(PeerUtils.isInCheck(piece.getSide(), move.fromPos.translate(1, 0), game.getGrid()))
                 {
                     return false;
                 }
                 
-                test = game.getGrid()[7][move.fromPos.yPos].getPiece();
+                test = game.getGrid()[7][move.fromPos.getY()].getPiece();
                 
-                if(test != null && test.moves == 0)
+                if(test != null && test.getMoves() == 0)
                 {
-                    if(game.getGrid()[6][move.fromPos.yPos].getPiece() == null && game.getGrid()[5][move.fromPos.yPos].getPiece() == null)
+                    if(game.getGrid()[6][move.fromPos.getY()].getPiece() == null && game.getGrid()[5][move.fromPos.getY()].getPiece() == null)
                     {
-                        move.fromPosCastle = new ChessPos(7, move.fromPos.yPos);
-                        move.toPosCastle = new ChessPos(5, move.fromPos.yPos);
+                        move.fromPosCastle = new ChessPos(7, move.fromPos.getY());
+                        move.toPosCastle = new ChessPos(5, move.fromPos.getY());
                         return true;
                     }
                 }
@@ -86,7 +88,7 @@ public class PieceKing implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().side == origPos.getSquare(game.getGrid()).getPiece().side)
+			if(pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				iter.remove();
 			}
@@ -94,26 +96,26 @@ public class PieceKing implements Piece
 		
 		ChessPiece piece = origPos.getSquare(game.getGrid()).getPiece();
 		
-		if(!PeerUtils.isInCheck(piece.side, origPos, game.getGrid()) && piece.moves == 0)
+		if(!PeerUtils.isInCheck(piece.getSide(), origPos, game.getGrid()) && piece.getMoves() == 0)
 		{
-		    ChessPiece test = game.getGrid()[0][origPos.yPos].getPiece();
+		    ChessPiece test = game.getGrid()[0][origPos.getY()].getPiece();
 		    
-		    if(test != null && test.moves == 0)
+		    if(test != null && test.getMoves() == 0)
 		    {
-		        if(game.getGrid()[1][origPos.yPos].getPiece() == null && game.getGrid()[2][origPos.yPos].getPiece() == null &&
-		                game.getGrid()[3][origPos.yPos].getPiece() == null)
+		        if(game.getGrid()[1][origPos.getY()].getPiece() == null && game.getGrid()[2][origPos.getY()].getPiece() == null &&
+		                game.getGrid()[3][origPos.getY()].getPiece() == null)
 		        {
-		            possibleMoves.add(new ChessPos(2, origPos.yPos));
+		            possibleMoves.add(new ChessPos(2, origPos.getY()));
 		        }
 		    }
 		    
-		    test = game.getGrid()[7][origPos.yPos].getPiece();
+		    test = game.getGrid()[7][origPos.getY()].getPiece();
 		    
-		    if(test != null && test.moves == 0)
+		    if(test != null && test.getMoves() == 0)
 		    {
-		        if(game.getGrid()[6][origPos.yPos].getPiece() == null && game.getGrid()[5][origPos.yPos].getPiece() == null)
+		        if(game.getGrid()[6][origPos.getY()].getPiece() == null && game.getGrid()[5][origPos.getY()].getPiece() == null)
 		        {
-		            possibleMoves.add(new ChessPos(6, origPos.yPos));
+		            possibleMoves.add(new ChessPos(6, origPos.getY()));
 		        }
 		    }
 		}
@@ -126,4 +128,10 @@ public class PieceKing implements Piece
 	{
 	    return 900;
 	}
+	
+    @Override
+    public double[][] getPlacementEvaluation(Side side)
+    {
+        return side == Side.WHITE ? Constants.kingEvalWhite : Constants.kingEvalBlack;
+    }
 }

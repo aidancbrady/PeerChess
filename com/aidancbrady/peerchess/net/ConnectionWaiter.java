@@ -13,11 +13,11 @@ import com.aidancbrady.peerchess.gui.ChessPanel;
 
 public class ConnectionWaiter extends Thread
 {
-	public ChessPanel panel;
+	private ChessPanel panel;
 	
-	public PingResponder responseThread;
+	private PingResponder responseThread;
 	
-	public ServerSocket serverSocket;
+	private ServerSocket serverSocket;
 	
 	public ConnectionWaiter(ChessPanel p)
 	{
@@ -31,17 +31,18 @@ public class ConnectionWaiter extends Thread
 	{
 		try {
 			(responseThread = new PingResponder()).start();
-			serverSocket = new ServerSocket(PeerChess.instance().port);
+			serverSocket = new ServerSocket(PeerChess.instance().getPort());
 			
 			Socket connection = serverSocket.accept();
 			
 			if(connection != null)
 			{
-				(panel.connection = new PeerConnection(connection, panel, true)).start();
+				panel.setConnection(new PeerConnection(connection, panel, true));
+				panel.getConnection().start();
 				
 				PeerUtils.debug("Received connection from " + connection.getInetAddress() + ":" + connection.getPort());
 				
-				panel.frame.waiting.setVisible(false);
+				panel.frame.getWaitingFrame().setVisible(false);
 				panel.chess.host = true;
 			}
 		} catch(Exception e) {
@@ -61,6 +62,21 @@ public class ConnectionWaiter extends Thread
 		}
 	}
 	
+	public void close() throws Exception
+	{
+        if(serverSocket != null)
+        {
+            serverSocket.close();
+        }
+        
+        if(responseThread != null)
+        {
+            responseThread.socket.close();
+        }
+        
+        interrupt();
+	}
+	
 	public class PingResponder extends Thread
 	{
 		public DatagramSocket socket;
@@ -71,7 +87,7 @@ public class ConnectionWaiter extends Thread
 			try {
 				byte[] receiveData = new byte[1024];
 				
-				socket = new DatagramSocket(PeerChess.instance().port);
+				socket = new DatagramSocket(PeerChess.instance().getPort());
 				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 	
 				while(true)

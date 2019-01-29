@@ -43,12 +43,12 @@ public class ChessMove
 	
 	public boolean isValidStep(ChessSquare[][] grid)
 	{
-		if(getToSquare(grid).getPiece() != null && getToSquare(grid).getPiece().side == getFromSquare(grid).getPiece().side)
+		if(getToSquare(grid).getPiece() != null && getToSquare(grid).getPiece().getSide() == getFromSquare(grid).getPiece().getSide())
 		{
 			return false;
 		}
 		
-		return Math.abs(fromPos.xPos-toPos.xPos) <= 1 && Math.abs(fromPos.yPos-toPos.yPos) <= 1;
+		return Math.abs(fromPos.getX()-toPos.getX()) <= 1 && Math.abs(fromPos.getY()-toPos.getY()) <= 1;
 	}
 	
 	public boolean isValidStraight(ChessSquare[][] grid)
@@ -58,25 +58,25 @@ public class ChessMove
 		
 		if(toSquare.getPiece() != null)
 		{
-			if(toSquare.getPiece().side == fromSquare.getPiece().side)
+			if(toSquare.getPiece().getSide() == fromSquare.getPiece().getSide())
 			{
 				return false;
 			}
 		}
 		
-		if(fromPos.xPos == toPos.xPos)
+		if(fromPos.getX() == toPos.getX())
 		{
-			int y = fromPos.yPos;
+			int y = fromPos.getY();
 			
-			if(fromPos.yPos < toPos.yPos)
+			if(fromPos.getY() < toPos.getY())
 			{
-				while(y < toPos.yPos)
+				while(y < toPos.getY())
 				{
 					y++;
 					
-					if(y != toPos.yPos)
+					if(y != toPos.getY())
 					{
-						if(grid[toPos.xPos][y].getPiece() != null)
+						if(grid[toPos.getX()][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -84,13 +84,13 @@ public class ChessMove
 				}
 			}
 			else {
-				while(y > toPos.yPos)
+				while(y > toPos.getY())
 				{
 					y--;
 					
-					if(y != toPos.yPos)
+					if(y != toPos.getY())
 					{
-						if(grid[toPos.xPos][y].getPiece() != null)
+						if(grid[toPos.getX()][y].getPiece() != null)
 						{
 							return false;
 						}
@@ -98,19 +98,19 @@ public class ChessMove
 				}
 			}
 		}
-		else if(fromPos.yPos == toPos.yPos)
+		else if(fromPos.getY() == toPos.getY())
 		{
-			int x = fromPos.xPos;
+			int x = fromPos.getX();
 			
-			if(fromPos.xPos < toPos.xPos)
+			if(fromPos.getX() < toPos.getX())
 			{
-				while(x < toPos.xPos)
+				while(x < toPos.getX())
 				{
 					x++;
 					
-					if(x != toPos.xPos)
+					if(x != toPos.getX())
 					{
-						if(grid[x][toPos.yPos].getPiece() != null)
+						if(grid[x][toPos.getY()].getPiece() != null)
 						{
 							return false;
 						}
@@ -118,13 +118,13 @@ public class ChessMove
 				}
 			}
 			else {
-				while(x > toPos.xPos)
+				while(x > toPos.getX())
 				{
 					x--;
 					
-					if(x != toPos.xPos)
+					if(x != toPos.getX())
 					{
-						if(grid[x][toPos.yPos].getPiece() != null)
+						if(grid[x][toPos.getY()].getPiece() != null)
 						{
 							return false;
 						}
@@ -146,28 +146,28 @@ public class ChessMove
 		
 		if(toSquare.getPiece() != null)
 		{
-			if(toSquare.getPiece().side == fromSquare.getPiece().side)
+			if(toSquare.getPiece().getSide() == fromSquare.getPiece().getSide())
 			{
 				return false;
 			}
 		}
 		
-		if(Math.abs(fromPos.xPos-toPos.xPos) == Math.abs(fromPos.yPos-toPos.yPos))
+		if(Math.abs(fromPos.getX()-toPos.getX()) == Math.abs(fromPos.getY()-toPos.getY()))
 		{
-			int xDiff = fromPos.xPos-toPos.xPos;
-			int yDiff = fromPos.yPos-toPos.yPos;
+			int xDiff = fromPos.getX()-toPos.getX();
+			int yDiff = fromPos.getY()-toPos.getY();
 			
-			int x = fromPos.xPos;
-			int y = fromPos.yPos;
+			int x = fromPos.getX();
+			int y = fromPos.getY();
 			
 			if(xDiff > 0 && yDiff > 0)
 			{
-				while(x > toPos.xPos && y > toPos.yPos)
+				while(x > toPos.getX() && y > toPos.getY())
 				{
 					x--;
 					y--;
 					
-					if(x != toPos.xPos && y != toPos.yPos)
+					if(x != toPos.getX() && y != toPos.getY())
 					{
 						if(grid[x][y].getPiece() != null)
 						{
@@ -178,12 +178,12 @@ public class ChessMove
 			}
 			else if(xDiff < 0 && yDiff < 0)
 			{
-				while(x < toPos.xPos && y < toPos.yPos)
+				while(x < toPos.getX() && y < toPos.getY())
 				{
 					x++;
 					y++;
 					
-					if(x != toPos.xPos && y != toPos.yPos)
+					if(x != toPos.getX() && y != toPos.getY())
 					{
 						if(grid[x][y].getPiece() != null)
 						{
@@ -194,12 +194,12 @@ public class ChessMove
 			}
 			else if(xDiff > 0 && yDiff < 0)
 			{
-				while(x > toPos.xPos && y < toPos.yPos)
+				while(x > toPos.getX() && y < toPos.getY())
 				{
 					x--;
 					y++;
 					
-					if(x != toPos.xPos && y != toPos.yPos)
+					if(x != toPos.getX() && y != toPos.getY())
 					{
 						if(grid[x][y].getPiece() != null)
 						{
@@ -210,12 +210,12 @@ public class ChessMove
 			}
 			else if(xDiff < 0 && yDiff > 0)
 			{
-				while(x < toPos.xPos && y > toPos.yPos)
+				while(x < toPos.getX() && y > toPos.getY())
 				{
 					x++;
 					y--;
 					
-					if(x != toPos.xPos && y != toPos.yPos)
+					if(x != toPos.getX() && y != toPos.getY())
 					{
 						if(grid[x][y].getPiece() != null)
 						{
@@ -257,7 +257,7 @@ public class ChessMove
 	
 	public boolean testTakingKing()
 	{
-	    return testToPiece != null && testToPiece.type == PieceType.KING;
+	    return testToPiece != null && testToPiece.getType() == PieceType.KING;
 	}
 	
 	public void testRevertMove(ChessSquare[][] grid)
@@ -293,12 +293,12 @@ public class ChessMove
 	public boolean didTakeMaterial()
 	{
 	    if(enPassantTakePos != null) return true;
-	    return boardPreMove != null ? boardPreMove[toPos.xPos][toPos.yPos].getPiece() != null : testToPiece != null;
+	    return boardPreMove != null ? boardPreMove[toPos.getX()][toPos.getY()].getPiece() != null : testToPiece != null;
 	}
 	
 	public boolean isPawnMove()
 	{
-	    return boardPreMove != null ? boardPreMove[fromPos.xPos][fromPos.yPos].getPiece().type == PieceType.PAWN : testFromPiece.type == PieceType.PAWN;
+	    return boardPreMove != null ? boardPreMove[fromPos.getX()][fromPos.getY()].getPiece().getType() == PieceType.PAWN : testFromPiece.getType() == PieceType.PAWN;
 	}
 	
 	public String serialize()

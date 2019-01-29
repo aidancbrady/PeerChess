@@ -56,16 +56,16 @@ public class TestBoard implements IChessGame
         {
             for(int x = 0; x < 8; x++)
             {
-                if(grid[x][y].getPiece() != null && grid[x][y].getPiece().side == sideToTest)
+                if(grid[x][y].getPiece() != null && grid[x][y].getPiece().getSide() == sideToTest)
                 {
                     ChessPiece piece = grid[x][y].getPiece();
                     ChessPos origPos = new ChessPos(x, y);
                     
-                    for(ChessPos pos : piece.type.getPiece().getCurrentPossibleMoves(this, origPos))
+                    for(ChessPos pos : piece.getType().getPiece().getCurrentPossibleMoves(this, origPos))
                     {
                         ChessMove move = new ChessMove(origPos, pos);
                         
-                        if(piece.type.getPiece().validateMove(this, move))
+                        if(piece.getType().getPiece().validateMove(this, move))
                         {
                             possibleMoves.add(move);
                         }
@@ -86,34 +86,9 @@ public class TestBoard implements IChessGame
             return 0;
         }
         
-        double value = piece.type.getPiece().getPointValue();
+        double value = piece.getType().getPiece().getPointValue() + piece.getType().getPiece().getPlacementEvaluation(piece.getSide())[pos.getX()][pos.getY()];
         
-        if(piece.type == PieceType.PAWN)
-        {
-            value += piece.side == Side.WHITE ? Constants.pawnEvalWhite[pos.xPos][pos.yPos] : Constants.pawnEvalBlack[pos.xPos][pos.yPos];
-        }
-        else if(piece.type == PieceType.BISHOP)
-        {
-            value += piece.side == Side.WHITE ? Constants.bishopEvalWhite[pos.xPos][pos.yPos] : Constants.bishopEvalBlack[pos.xPos][pos.yPos];
-        }
-        else if(piece.type == PieceType.KNIGHT)
-        {
-            value += Constants.knightEval[pos.xPos][pos.yPos];
-        }
-        else if(piece.type == PieceType.CASTLE)
-        {
-            value += piece.side == Side.WHITE ? Constants.castleEvalWhite[pos.xPos][pos.yPos] : Constants.castleEvalBlack[pos.xPos][pos.yPos];
-        }
-        else if(piece.type == PieceType.QUEEN)
-        {
-            value += Constants.queenEval[pos.xPos][pos.yPos];
-        }
-        else if(piece.type == PieceType.KING)
-        {
-            value += piece.side == Side.WHITE ? Constants.kingEvalWhite[pos.xPos][pos.yPos] : Constants.kingEvalBlack[pos.xPos][pos.yPos];
-        }
-        
-        return piece.side == Side.WHITE ? value : -value;
+        return piece.getSide() == Side.WHITE ? value : -value;
     }
     
     public double applyMove(ChessMove move)
@@ -127,12 +102,12 @@ public class TestBoard implements IChessGame
         
         move.testApplyMove(grid);
         
-        if(move.getToSquare(grid).getPiece().type == PieceType.PAWN)
+        if(move.getToSquare(grid).getPiece().getType() == PieceType.PAWN)
         {
-            if(move.toPos.yPos == 0 || move.toPos.yPos == 7)
+            if(move.toPos.getY() == 0 || move.toPos.getY() == 7)
             {
                 ChessPiece oldPiece = move.getToSquare(grid).getPiece();
-                move.getToSquare(grid).setPiece(new ChessPiece(PieceType.QUEEN, oldPiece.side));
+                move.getToSquare(grid).setPiece(new ChessPiece(PieceType.QUEEN, oldPiece.getSide()));
             }
         }
         
@@ -143,9 +118,9 @@ public class TestBoard implements IChessGame
             afterScore += getSquareValue(move.fromPosCastle) + getSquareValue(move.toPosCastle);
         }
         
-        if(PeerUtils.isCheckMate(move.testFromPiece.side.getOpposite(), this))
+        if(PeerUtils.isCheckMate(move.testFromPiece.getSide().getOpposite(), this))
         {
-            afterScore += move.testFromPiece.side == Side.WHITE ? 1000 : -1000;
+            afterScore += move.testFromPiece.getSide() == Side.WHITE ? 1000 : -1000;
             checkmate = true;
         }
         

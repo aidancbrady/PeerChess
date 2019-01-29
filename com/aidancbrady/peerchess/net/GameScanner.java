@@ -7,17 +7,14 @@ import java.net.SocketTimeoutException;
 
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.gui.JoinPanel;
 
 public class GameScanner extends Thread
 {
-	public static final int MAX_PING = 2000;
+	private DatagramSocket socket;
 	
-	public boolean valid = true;
-	
-	public DatagramSocket socket;
-	
-	public JoinPanel panel;
+	private JoinPanel panel;
 	
 	public GameScanner(JoinPanel p)
 	{
@@ -35,7 +32,7 @@ public class GameScanner extends Thread
 			byte[] b = new String("PING:" + PeerChess.instance().username).getBytes();
 			DatagramPacket packet = new DatagramPacket(b, b.length);
 			packet.setAddress(InetAddress.getByAddress(new byte[] {(byte)255, (byte)255, (byte)255, (byte)255}));
-			packet.setPort(PeerChess.instance().port);
+			packet.setPort(PeerChess.instance().getPort());
 			
 			socket.send(packet);
 			socket.setBroadcast(false);
@@ -46,7 +43,7 @@ public class GameScanner extends Thread
 			{
 				try {
 					DatagramPacket response = new DatagramPacket(new byte[1024], 1024);
-					socket.setSoTimeout(MAX_PING);
+					socket.setSoTimeout(Constants.MAX_PING);
 					socket.receive(response);
 					
 					String s = new String(response.getData());

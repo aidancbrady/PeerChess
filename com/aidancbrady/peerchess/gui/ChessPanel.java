@@ -35,25 +35,24 @@ public class ChessPanel extends JPanel implements MouseListener
 
 	public ChessComponent chess;
 	
-	public JButton hintButton;
-	public JButton revertButton;
+	private PeerConnection connection;
 	
-	public JButton exitButton;
-	public JButton sendButton;
+	private JButton hintButton;
+	private JButton revertButton;
 	
-	public JLabel opponentLabel;
-	public JLabel titleLabel;
-	public JLabel turnLabel;
-	public JLabel statusLabel;
+	private JButton exitButton;
+	private JButton sendButton;
 	
-	public PeerConnection connection;
+	private JLabel opponentLabel;
+	private JLabel titleLabel;
+	private JLabel statusLabel;
 	
-	public JTextArea chatBox;
-	public JScrollPane chatScroll;
+	private JTextArea chatBox;
+	private JScrollPane chatScroll;
 	
-	public JTextField chatField;
+	private JTextField chatField;
 	
-	public int pawnReplace;
+	private int pawnReplaceIndex;
 	
 	public ChessPanel(ChessFrame f)
 	{
@@ -149,7 +148,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		    
 		    if(chess.multiplayer)
 		    {
-		        opponentName = connection != null ? connection.username : "disconnected";
+		        opponentName = connection != null ? connection.getOpponent() : "disconnected";
 		    }
 		    
 			opponentLabel.setText("Opponent: " + opponentName);
@@ -204,7 +203,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		
 		if(replace != -1)
 		{
-		    PeerUtils.getPawnReplace(replace == 0 ? Side.WHITE : Side.BLACK, pawnReplace).getTexture().draw(g, x, y, size, size);
+		    PeerUtils.getPawnReplace(replace == 0 ? Side.WHITE : Side.BLACK, pawnReplaceIndex).getTexture().draw(g, x, y, size, size);
 		}
 	}
 
@@ -280,6 +279,24 @@ public class ChessPanel extends JPanel implements MouseListener
 		return true;
 	}
 	
+	public void reset()
+	{
+	    pawnReplaceIndex = 0;
+	    chatBox.setText("");
+	    
+	    if(opponentLabel != null)
+        {
+            opponentLabel.setText("Opponent: waiting");
+        }
+        
+        if(connection != null)
+        {
+            connection.close();
+        }
+        
+        frame.getWaitingFrame().close();
+	}
+	
 	public class ChatListener implements ActionListener
 	{
 		@Override
@@ -306,6 +323,21 @@ public class ChessPanel extends JPanel implements MouseListener
 			}
 		}
 	}
+	
+	public void setConnection(PeerConnection conn)
+	{
+	    connection = conn;
+	}
+	
+	public PeerConnection getConnection()
+	{
+	    return connection;
+	}
+	
+	public int getPawnReplaceIndex()
+	{
+	    return pawnReplaceIndex;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) 
@@ -324,7 +356,7 @@ public class ChessPanel extends JPanel implements MouseListener
 			
 			if(replace != -1)
 			{
-				pawnReplace = (pawnReplace+1)%(PieceType.values().length-1);
+				pawnReplaceIndex = (pawnReplaceIndex+1)%(PieceType.values().length-1);
 				repaint();
 			}
 		}

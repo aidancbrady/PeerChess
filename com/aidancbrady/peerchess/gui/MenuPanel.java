@@ -15,15 +15,9 @@ public class MenuPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static Texture logo = Texture.load("logo.png");
+	private static Texture logo = Texture.load("logo.png");
 	
-	public ChessFrame frame;
-	
-	public JButton newButton;
-	public JButton loadButton;
-	public JButton hostButton;
-	public JButton joinButton;
-	public JButton optionsButton;
+	private ChessFrame frame;
 	
 	public MenuPanel(ChessFrame f)
 	{
@@ -33,31 +27,31 @@ public class MenuPanel extends JPanel
 		setVisible(true);
 		setLayout(null);
 		
-		newButton = new JButton("New Game");
+		JButton newButton = new JButton("New Game");
         newButton.setSize(300, 60);
         newButton.setLocation(50, 140);
         newButton.addActionListener(e -> frame.openChess(false));
         add(newButton);
 		
-		hostButton = new JButton("Host Game");
+		JButton hostButton = new JButton("Host Game");
 		hostButton.setSize(300, 60);
 		hostButton.setLocation(50, 210);
 		hostButton.addActionListener(e -> frame.openChess(true));
 		add(hostButton);
 		
-		joinButton = new JButton("Join Game");
+		JButton joinButton = new JButton("Join Game");
 		joinButton.setSize(300, 60);
 		joinButton.setLocation(50, 280);
 		joinButton.addActionListener(e -> frame.openJoin());
 		add(joinButton);
 		
-        loadButton = new JButton("Load Game");
+        JButton loadButton = new JButton("Load Game");
         loadButton.setSize(300, 60);
         loadButton.setLocation(50, 350);
         loadButton.addActionListener(e -> frame.openSavedChess());
         add(loadButton);
 		
-		optionsButton = new JButton("Options");
+		JButton optionsButton = new JButton("Options");
 		optionsButton.setSize(300, 60);
 		optionsButton.setLocation(50, 420);
 		optionsButton.addActionListener(e -> frame.openOptions());
@@ -70,7 +64,7 @@ public class MenuPanel extends JPanel
 		version.setLocation(340, 520);
 		add(version);
 		
-		JLabel copyright = new JLabel("© aidancbrady, " + PeerChess.instance().calendar.get(Calendar.YEAR));
+		JLabel copyright = new JLabel("© aidancbrady, " + PeerChess.instance().getCalendar().get(Calendar.YEAR));
 		copyright.setVisible(true);
 		copyright.setSize(200, 40);
 		copyright.setLocation(30, 520);

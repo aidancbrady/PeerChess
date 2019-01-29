@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 
 public class PieceCastle implements Piece
@@ -14,9 +16,9 @@ public class PieceCastle implements Piece
 	@Override
 	public boolean validateMove(IChessGame game, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().side, game.getGrid());
+		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().getSide(), game.getGrid());
 		
-		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().side, pos, game.getGrid(), move))
+		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), pos, game.getGrid(), move))
 		{
 			return false;
 		}
@@ -29,8 +31,8 @@ public class PieceCastle implements Piece
 	{
 		Set<ChessPos> ret = new HashSet<ChessPos>();
 		
-		int x = origPos.xPos;
-		int y = origPos.yPos;
+		int x = origPos.getX();
+		int y = origPos.getY();
 		
 		if(x != 7)
 		{
@@ -38,7 +40,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(game.getGrid()).getPiece().side)
+				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -52,8 +54,8 @@ public class PieceCastle implements Piece
 			}
 		}
 		
-		x = origPos.xPos;
-		y = origPos.yPos;
+		x = origPos.getX();
+		y = origPos.getY();
 		
 		if(x != 0)
 		{
@@ -61,7 +63,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(game.getGrid()).getPiece().side)
+				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -75,8 +77,8 @@ public class PieceCastle implements Piece
 			}
 		}
 		
-		x = origPos.xPos;
-		y = origPos.yPos;
+		x = origPos.getX();
+		y = origPos.getY();
 		
 		if(y != 7)
 		{
@@ -84,7 +86,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(game.getGrid()).getPiece().side)
+				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -98,8 +100,8 @@ public class PieceCastle implements Piece
 			}
 		}
 		
-		x = origPos.xPos;
-		y = origPos.yPos;
+		x = origPos.getX();
+		y = origPos.getY();
 		
 		if(y != 0)
 		{
@@ -107,7 +109,7 @@ public class PieceCastle implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.side == origPos.getSquare(game.getGrid()).getPiece().side)
+				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -129,4 +131,10 @@ public class PieceCastle implements Piece
 	{
 	    return 30;
 	}
+	
+    @Override
+    public double[][] getPlacementEvaluation(Side side)
+    {
+        return side == Side.WHITE ? Constants.castleEvalWhite : Constants.castleEvalBlack;
+    }
 }

@@ -136,13 +136,13 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		currentMove = null;
 		currentDrag = null;
+		currentHint = null;
 		
 		game.reset();
 	
 		selected = null;
 		moves.clear();
-		panel.pawnReplace = 0;
-		panel.chatBox.setText("");
+
 		panel.updateText();
 
 		chessAI.reset();
@@ -153,17 +153,7 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		setupBoard(false);
 		
-		if(panel.opponentLabel != null)
-		{
-			panel.opponentLabel.setText("Opponent: waiting");
-		}
-		
-		if(panel.connection != null)
-		{
-			panel.connection.close();
-		}
-		
-		panel.frame.waiting.close();
+		panel.reset();
 	}
 	
     /**
@@ -173,30 +163,30 @@ public class ChessComponent extends JComponent implements IChessGame
     {
         if(selected != null && selected.getPiece() != null)
         {
-            if(selected.getPiece().type == PieceType.PAWN)
+            if(selected.getPiece().getType() == PieceType.PAWN)
             {
-                if(selected.getPiece().side == Side.BLACK && selected.getPos().translate(0, 1).yPos == 7)
+                if(selected.getPiece().getSide() == Side.BLACK && selected.getPos().translate(0, 1).getY() == 7)
                 {
-                    Piece piece = selected.getPiece().type.getPiece();
+                    Piece piece = selected.getPiece().getType().getPiece();
                     
                     ChessMove leftMove = new ChessMove(selected.getPos(), selected.getPos().translate(-1, 1));
                     ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, 1));
                     ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, 1));
                     
-                    if((leftMove.toPos.xPos >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(this, rightMove)))
+                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(this, rightMove)))
                     {
                         return 1;
                     }
                 }
-                else if(selected.getPiece().side == Side.WHITE && selected.getPos().translate(0, -1).yPos == 0)
+                else if(selected.getPiece().getSide() == Side.WHITE && selected.getPos().translate(0, -1).getY() == 0)
                 {
-                    Piece piece = selected.getPiece().type.getPiece();
+                    Piece piece = selected.getPiece().getType().getPiece();
                     
                     ChessMove leftMove = new ChessMove(selected.getPos(), selected.getPos().translate(-1, -1));
                     ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, -1));
                     ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, -1));
                     
-                    if((leftMove.toPos.xPos >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.xPos <= 7 && piece.validateMove(this, rightMove)))
+                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(this, rightMove)))
                     {
                         return 0;
                     }

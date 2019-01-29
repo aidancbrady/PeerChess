@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
+import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 
 public interface Piece 
@@ -13,4 +14,6 @@ public interface Piece
 	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos);
 	
 	public int getPointValue();
+	
+	public double[][] getPlacementEvaluation(Side side);
 }

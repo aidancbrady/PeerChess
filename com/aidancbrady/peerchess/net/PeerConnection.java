@@ -22,22 +22,22 @@ import com.aidancbrady.peerchess.gui.ChessPanel;
 
 public class PeerConnection extends Thread
 {
-	public Socket socket;
+	private Socket socket;
 	
-	public PeerEncryptor encryptor;
+	private PeerEncryptor encryptor;
 	
-	public BufferedReader reader;
-	public PrintWriter writer;
+	private BufferedReader reader;
+	private PrintWriter writer;
 	
-	public OutThread out;
+	private OutThread out;
 	
-	public ChessPanel panel;
+	private ChessPanel panel;
 	
-	public String username;
+	private String opponentUsername;
 	
-	public boolean host = false;
+	private boolean host = false;
 	
-	public boolean disconnected = false;
+	private boolean disconnected = false;
 	
 	public PeerConnection(Socket s, ChessPanel p, boolean h)
 	{
@@ -108,19 +108,19 @@ public class PeerConnection extends Thread
 				else if(reading.startsWith("MSG"))
 				{
 					String msg = reading.substring(4);
-					panel.appendChat(username + ": " + msg);
+					panel.appendChat(opponentUsername + ": " + msg);
 				}
 				else if(reading.startsWith("USER"))
 				{
-					username = reading.substring(5);
+					opponentUsername = reading.substring(5);
 					panel.updateText();
 					
 					if(host)
 					{
-						JOptionPane.showMessageDialog(panel, username + " has connected to the game");
+						JOptionPane.showMessageDialog(panel, opponentUsername + " has connected to the game");
 					}
 					else {
-						JOptionPane.showMessageDialog(panel, "You have joined " + username + "'s game");
+						JOptionPane.showMessageDialog(panel, "You have joined " + opponentUsername + "'s game");
 					}
 				}
 				else if(reading.startsWith("MOVE"))
@@ -137,10 +137,10 @@ public class PeerConnection extends Thread
 					ChessPos oldPos = new ChessPos(Integer.parseInt(strOldPos[0]), Integer.parseInt(strOldPos[1]));
 					ChessPos newPos = new ChessPos(Integer.parseInt(strNewPos[0]), Integer.parseInt(strNewPos[1]));
 					
-					newPiece.moves = oldPos.getSquare(panel.chess.grid).getPiece().moves;
+					newPiece.setMoves(oldPos.getSquare(panel.chess.grid).getPiece().getMoves());
 					
 					ChessMove move = new ChessMove(oldPos, newPos);
-					oldPos.getSquare(panel.chess.grid).getPiece().type.getPiece().validateMove(panel.chess, move);
+					oldPos.getSquare(panel.chess.grid).getPiece().getType().getPiece().validateMove(panel.chess, move);
 					
 					panel.chess.currentMove = new MoveAction(panel.chess, move, piece, newPiece);
 					panel.updateText();
@@ -150,7 +150,7 @@ public class PeerConnection extends Thread
 				}
 			}
 			
-			JOptionPane.showMessageDialog(panel.frame, username + " has disconnected.");
+			JOptionPane.showMessageDialog(panel.frame, opponentUsername + " has disconnected.");
 			panel.frame.openMenu();
 			
 			close();
@@ -208,6 +208,16 @@ public class PeerConnection extends Thread
 		}
 	}
 	
+	protected Socket getSocket()
+	{
+	    return socket;
+	}
+	
+	public String getOpponent()
+	{
+	    return opponentUsername;
+	}
+	
 	public void write(String s)
 	{
 		out.outList.add(s);
@@ -234,7 +244,7 @@ public class PeerConnection extends Thread
 			}
 		}
 		
-		panel.connection = null;
+		panel.setConnection(null);
 		panel.updateText();
 	}
 }

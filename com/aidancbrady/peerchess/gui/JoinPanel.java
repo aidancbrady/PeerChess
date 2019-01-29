@@ -20,6 +20,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.client.Constants;
 import com.aidancbrady.peerchess.net.GameConnector;
 import com.aidancbrady.peerchess.net.GameScanner;
 import com.aidancbrady.peerchess.net.GameScanner.Server;
@@ -28,26 +29,21 @@ public class JoinPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessFrame frame;
+	private  ChessFrame frame;
 	
-	public JButton exitButton;
-	public JButton refreshButton;
-	public JButton joinButton;
-	public JButton connectButton;
+	private JButton refreshButton;
 	
-	public GameScanner scanner;
+	private GameScanner scanner;
 	
-	public JLabel refreshLabel;
+	private JLabel refreshLabel;
 	
-	public JTextField ipField;
+	private JTextField ipField;
 	
-	public JList<String> serverList;
+	private JList<String> serverList;
+	private List<Server> serversLoaded = new ArrayList<Server>();
+	private Vector<String> listVector = new Vector<String>();
 	
-	public List<Server> serversLoaded = new ArrayList<Server>();
-	
-	public Vector<String> listVector = new Vector<String>();
-	
-	public JProgressBar refreshBar;
+	private JProgressBar refreshBar;
 
 	public JoinPanel(ChessFrame f)
 	{
@@ -112,7 +108,7 @@ public class JoinPanel extends JPanel
 		ipField.addActionListener(e -> doRemoteConnect());
 		add(ipField);
 		
-		exitButton = new JButton("Exit to Menu");
+		JButton exitButton = new JButton("Exit to Menu");
 		exitButton.setSize(200, 30);
 		exitButton.setLocation(100, 540);
 		exitButton.addActionListener(e -> {
@@ -131,13 +127,13 @@ public class JoinPanel extends JPanel
 		refreshButton.addActionListener(e -> doRefresh());
 		add(refreshButton);
 		
-		joinButton = new JButton("Join");
+		JButton joinButton = new JButton("Join");
 		joinButton.setSize(100, 30);
 		joinButton.setLocation(295, 330);
 		joinButton.addActionListener(e -> doLocalConnect());
 		add(joinButton);
 		
-		connectButton = new JButton("Connect");
+		JButton connectButton = new JButton("Connect");
 		connectButton.setSize(100, 20);
 		connectButton.setLocation(190, 430);
 		connectButton.addActionListener(e -> doRemoteConnect());
@@ -152,7 +148,7 @@ public class JoinPanel extends JPanel
 		refreshBar.setSize(180, 30);
 		refreshBar.setLocation(110, 330);
 		refreshBar.setMinimum(0);
-		refreshBar.setMaximum(GameScanner.MAX_PING);
+		refreshBar.setMaximum(Constants.MAX_PING);
 		refreshBar.setVisible(false);
 		add(refreshBar);
 	}
@@ -167,10 +163,10 @@ public class JoinPanel extends JPanel
 			
 			if(server != null)
 			{
-			    synchronized(frame.connecting)
+			    synchronized(frame.getConnectingFrame())
 			    {
-    				frame.connecting.setThread(new GameConnector(server, frame.chessPanel));
-    				frame.connecting.setVisible(true);
+    				frame.getConnectingFrame().setThread(new GameConnector(server, frame.getPanel()));
+    				frame.getConnectingFrame().setVisible(true);
 			    }
 			}
 		}
@@ -182,10 +178,10 @@ public class JoinPanel extends JPanel
 		
 		if(PeerUtils.isValidIP(s))
 		{
-		    synchronized(frame.connecting)
+		    synchronized(frame.getConnectingFrame())
 		    {
-    			frame.connecting.setThread(new GameConnector(new Server(null, s.trim()), frame.chessPanel));
-    			frame.connecting.setVisible(true);
+    			frame.getConnectingFrame().setThread(new GameConnector(new Server(null, s.trim()), frame.getPanel()));
+    			frame.getConnectingFrame().setVisible(true);
 		    }
 		    
 			ipField.setText("");

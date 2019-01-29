@@ -47,21 +47,20 @@ public class DragAction
     
     public void release()
     {
-        if(hoverPanel != null && getGame().possibleMoves.contains(hoverPanel.square.getPos()))
+        if(hoverPanel != null && getGame().possibleMoves.contains(hoverPanel.getSquare().getPos()))
         {
-            ChessMove move = new ChessMove(startPiece.square.getPos(), hoverPanel.square.getPos());
+            ChessMove move = new ChessMove(startPiece.getSquare().getPos(), hoverPanel.getSquare().getPos());
             
-            if(getPiece().type.getPiece().validateMove(getGame(), move))
+            if(getPiece().getType().getPiece().validateMove(getGame(), move))
             {
                 ChessPiece newPiece = getPiece();
                 
-                if(getPiece().type == PieceType.PAWN)
+                if(getPiece().getType() == PieceType.PAWN)
                 {
-                    if((getPiece().side == Side.WHITE && move.toPos.yPos == 0) || (getPiece().side == Side.BLACK && move.toPos.yPos == 7))
+                    if((getPiece().getSide() == Side.WHITE && move.toPos.getY() == 0) || (getPiece().getSide() == Side.BLACK && move.toPos.getY() == 7))
                     {
-                        getGame().panel.pawnReplace %= PieceType.values().length-1;
-                        newPiece = PeerUtils.getPawnReplace(getPiece().side, getGame().panel.pawnReplace);
-                        newPiece.moves = getPiece().moves;
+                        newPiece = PeerUtils.getPawnReplace(getPiece().getSide(), getGame().panel.getPawnReplaceIndex());
+                        newPiece.setMoves(getPiece().getMoves());
                     }
                 }
                 
@@ -79,7 +78,7 @@ public class DragAction
         }
         else if(hoverPanel != null && hoverPanel == startPiece)
         {
-            getGame().select(startPiece.square);
+            getGame().select(startPiece.getSquare());
             getGame().currentDrag = null;
         }
         else {
@@ -98,12 +97,12 @@ public class DragAction
     
     private ChessComponent getGame()
     {
-        return startPiece.game;
+        return startPiece.getGame();
     }
     
     private ChessPiece getPiece()
     {
-        return startPiece.square.getPiece();
+        return startPiece.getSquare().getPiece();
     }
     
     private int getScale()

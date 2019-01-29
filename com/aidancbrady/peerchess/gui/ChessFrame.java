@@ -19,16 +19,16 @@ public class ChessFrame extends JFrame implements WindowListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessToolbar toolbar = new ChessToolbar(this);
+	private ChessToolbar toolbar = new ChessToolbar(this);
 	
-	public ChessPanel chessPanel;
-	public MenuPanel menu;
-	public JoinPanel join;
+	private ChessPanel chessPanel;
+	private MenuPanel menu;
+	private JoinPanel join;
 	
-	public OptionsFrame options;
+	private OptionsFrame options;
 	
-	public ConnectingFrame connecting = new ConnectingFrame(this);
-	public WaitingFrame waiting = new WaitingFrame(this);
+	private ConnectingFrame connectingFrame = new ConnectingFrame();
+	private WaitingFrame waitingFrame = new WaitingFrame(this);
 	
 	public ChessFrame()
 	{
@@ -67,14 +67,29 @@ public class ChessFrame extends JFrame implements WindowListener
 		});
 	}
 	
+	public ConnectingFrame getConnectingFrame()
+	{
+	    return connectingFrame;
+	}
+	
+	public WaitingFrame getWaitingFrame()
+	{
+	    return waitingFrame;
+	}
+	
+	public ChessPanel getPanel()
+	{
+	    return chessPanel;
+	}
+	
 	public void openChess(boolean mp)
 	{
 		forceChess(mp);
 		
 		if(mp)
 		{
-    		waiting.setThread(new ConnectionWaiter(chessPanel));
-    		waiting.setVisible(true);
+    		waitingFrame.setThread(new ConnectionWaiter(chessPanel));
+    		waitingFrame.setVisible(true);
 		}
 		else {
 		    chessPanel.updateText();
