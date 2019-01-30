@@ -132,14 +132,6 @@ public class ChessPanel extends JPanel implements MouseListener
 		add(statusLabel);
 	}
 	
-	public void initGame()
-	{
-	    if(!chess.multiplayer && chess.getGame().getSide() != chess.getGame().getTurn())
-	    {
-	        chess.chessAI.triggerMove();
-	    }
-	}
-	
 	public void updateText()
 	{
 		if(opponentLabel != null && titleLabel != null && statusLabel != null)
@@ -398,8 +390,7 @@ public class ChessPanel extends JPanel implements MouseListener
         }
         
         chess.setSize(size, size);
-        chess.chessboard.setSize(size, size);
-        chess.overlay.setSize(size, size);
+        chess.resize(size);
         
         chatScroll.setLocation(size, (int)(size*0.6));
         chatScroll.setSize(width-size, (int)(size*0.4)-30);

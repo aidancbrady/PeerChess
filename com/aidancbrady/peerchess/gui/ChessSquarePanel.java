@@ -43,7 +43,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             @Override
             public void mouseDragged(MouseEvent e)
             {
-                if(game.currentDrag == null && game.getGame().getTurn() == game.getGame().getSide()) 
+                if(!game.isDragging() && game.getGame().getTurn() == game.getGame().getSide()) 
                 {
                     List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
                     
@@ -58,7 +58,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
                     }
                 }
                 
-                if(game.currentDrag != null)
+                if(game.isDragging())
                 {
                     game.currentDrag.updateMouse(e.getLocationOnScreen());
                 }
@@ -82,7 +82,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(square.getPiece() != null && square.getPiece().getTexture() != null)
 		{
-		    if(game.currentDrag == null || game.currentDrag.getSquarePanel() != this)
+		    if(!game.isDragging() || game.currentDrag.getSquarePanel() != this)
 	        {
 		        square.getPiece().getTexture().draw(g, 0, 0, getWidth(), getHeight());
 	        }
@@ -92,7 +92,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
     	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && game.getGame().getSideInCheck() == square.getPiece().getSide())
     	    {
-    	        if(game.currentMove == null)
+    	        if(!game.isMoving())
     	        {
     	            Assets.check.draw(g, 0, 0, getWidth(), getHeight());
     	        }
@@ -109,7 +109,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		    Assets.hint.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
-		if(game.selected == square)
+		if(game.getSelected() == square)
 		{
 			Assets.select.draw(g, 0, 0, getWidth(), getHeight());
 		}
@@ -121,7 +121,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent arg0) 
 	{
-	    if(game.currentDrag != null)
+	    if(game.isDragging())
 	    {
 	        game.currentDrag.enter(this);
 	    }
@@ -130,7 +130,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent arg0) 
 	{
-	    if(game.currentDrag != null)
+	    if(game.isDragging())
         {
             game.currentDrag.exit(this);
         }
@@ -152,20 +152,20 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		    return;
 		}
 		
-		if(game.currentDrag != null)
+		if(game.isDragging())
 		{
 		    game.currentDrag.release();
 		    return;
 		}
 		
-		if(game.selected != null && game.selected.getPiece() == null)
+		if(game.getSelected() != null && game.getSelected().getPiece() == null)
 		{
 		    game.select(null);
 		}
 		
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
-			if(game.selected == null && square.getPiece() != null)
+			if(game.getSelected() == null && square.getPiece() != null)
 			{
 				if(game.getGame().getSide() != square.getPiece().getSide())
 				{
@@ -175,10 +175,10 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 				game.select(square);
 			}
 			else {
-				if(game.selected != null)
+				if(game.getSelected() != null)
 				{
-					ChessPiece piece = game.selected.getPiece();
-					ChessMove move = new ChessMove(game.selected.getPos(), square.getPos());
+					ChessPiece piece = game.getSelected().getPiece();
+					ChessMove move = new ChessMove(game.getSelected().getPos(), square.getPos());
 					
 					if(square.getPiece() != null && square.getPiece().getSide() == piece.getSide())
 					{

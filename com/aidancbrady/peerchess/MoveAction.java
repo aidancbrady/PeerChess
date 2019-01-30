@@ -104,7 +104,7 @@ public class MoveAction
 			move();
 		}
 		
-		component.overlay.repaint();
+		component.repaint();
 	}
 	
 	public void move()
@@ -161,7 +161,7 @@ public class MoveAction
 		
 		if(component.getGame().getEndgame() == null && !component.multiplayer && component.getGame().getTurn() != component.getGame().getSide())
 		{
-		    component.chessAI.triggerMove();
+		    component.getGame().getAI().triggerMove();
 		}
 	}
 	

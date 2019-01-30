@@ -86,7 +86,7 @@ public final class SaveHandler
 	
 	public static void saveToWriter(BufferedWriter writer, ChessComponent chess) throws IOException
 	{
-		if(chess.currentMove != null)
+		if(chess.isMoving())
 		{
 			chess.currentMove.move();
 		}

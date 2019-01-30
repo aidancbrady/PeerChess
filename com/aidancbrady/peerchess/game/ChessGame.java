@@ -3,6 +3,8 @@ package com.aidancbrady.peerchess.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.ai.ChessAI;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 
@@ -13,6 +15,15 @@ public class ChessGame
     private Endgame endgame = null;
     private Side sideInCheck = null;
     private List<ChessMove> moves = new ArrayList<ChessMove>();
+    private ChessAI chessAI;
+    
+    private ChessComponent component;
+    
+    public ChessGame(ChessComponent c)
+    {
+        component = c;
+        chessAI = new ChessAI(component);
+    }
     
     public Side getSide()
     {
@@ -59,6 +70,11 @@ public class ChessGame
         return moves;
     }
     
+    public ChessAI getAI()
+    {
+        return chessAI;
+    }
+    
     public void reset()
     {
         side = Side.WHITE;
@@ -68,5 +84,7 @@ public class ChessGame
         sideInCheck = null;
         
         moves.clear();
+        
+        chessAI.reset();
     }
 }

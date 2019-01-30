@@ -93,7 +93,6 @@ public class ChessFrame extends JFrame implements WindowListener
 		}
 		else {
 		    chessPanel.updateText();
-		    chessPanel.initGame();
 		}
 		
 		revalidate();

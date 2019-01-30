@@ -24,12 +24,12 @@ public class OverlayComponent extends JComponent
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		if(component.currentMove != null)
+		if(component.isMoving())
 		{
 			component.currentMove.render(g);
 		}
 		
-		if(component.currentDrag != null)
+		if(component.isDragging())
 		{
 		    component.currentDrag.render(g);
 		}

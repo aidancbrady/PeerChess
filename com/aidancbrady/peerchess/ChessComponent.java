@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.aidancbrady.peerchess.ai.ChessAI;
 import com.aidancbrady.peerchess.game.ChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
@@ -26,30 +25,26 @@ public class ChessComponent extends JComponent implements IChessGame
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ChessGame game = new ChessGame();
-	
-	public ChessAI chessAI = new ChessAI(this);
-	
-	public ChessPanel panel;
-	
-	public ChessSquare[][] grid = PeerUtils.createEmptyBoard();
-	
-	public ChessSquare selected;
-	
-	public MoveAction currentMove;
-	public DragAction currentDrag;
-	
-	public ChessMove currentHint;
-	
-	public OverlayComponent overlay;
-	
-	public JPanel chessboard;
-	
-	public Set<ChessPos> possibleMoves = new HashSet<>();
-	
-	public boolean multiplayer;
-	public boolean host;
-	
+    private ChessGame game = new ChessGame(this);
+    
+    private JPanel chessboard;
+    private ChessSquare selected;
+    private OverlayComponent overlay;
+
+    public ChessPanel panel;
+
+    public ChessSquare[][] grid = PeerUtils.createEmptyBoard();
+
+    public MoveAction currentMove;
+    public DragAction currentDrag;
+
+    public ChessMove currentHint;
+
+    public Set<ChessPos> possibleMoves = new HashSet<>();
+
+    public boolean multiplayer;
+    public boolean host;
+
 	public ChessComponent(ChessPanel p)
 	{
 		panel = p;
@@ -78,15 +73,10 @@ public class ChessComponent extends JComponent implements IChessGame
 		repaint();
 	}
 	
-	public ChessPiece getSelectedPiece()
-	{
-		if(selected == null)
-		{
-			return null;
-		}
-		
-		return selected.getPiece();
-	}
+    public ChessSquare getSelected()
+    {
+        return selected;
+    }
 	
 	public void resetMain(Side s, int y)
 	{
@@ -140,8 +130,7 @@ public class ChessComponent extends JComponent implements IChessGame
 		selected = null;
 
 		panel.updateText();
-
-		chessAI.reset();
+		
 		host = false;
 		multiplayer = false;
 		
@@ -259,8 +248,14 @@ public class ChessComponent extends JComponent implements IChessGame
 	
 	public void hint()
 	{
-	    currentHint = chessAI.minimax(true);
+	    currentHint = game.getAI().minimax(true);
 	    repaint();
+	}
+	
+	public void resize(int size)
+	{
+        chessboard.setSize(size, size);
+        overlay.setSize(size, size);
 	}
 	
 	@Override
