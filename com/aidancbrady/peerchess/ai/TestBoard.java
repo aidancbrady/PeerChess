@@ -12,6 +12,7 @@ import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.game.DrawTracker;
 
 public class TestBoard implements IChessGame
 {
@@ -23,7 +24,7 @@ public class TestBoard implements IChessGame
     public TestBoard(ChessComponent game)
     {
         grid = PeerUtils.deepCopyBoard(game.grid);
-        moves = new ArrayList<ChessMove>(game.moves);
+        moves = new ArrayList<ChessMove>(game.getGame().getMoves());
         currentEvaluation = evaluateBoard();
     }
     
@@ -118,10 +119,25 @@ public class TestBoard implements IChessGame
             afterScore += getSquareValue(move.fromPosCastle) + getSquareValue(move.toPosCastle);
         }
         
-        if(PeerUtils.isCheckMate(move.testFromPiece.getSide().getOpposite(), this))
+        if(DrawTracker.isDraw(getPastMoves())) // draw
         {
-            afterScore += move.testFromPiece.getSide() == Side.WHITE ? 1000 : -1000;
-            checkmate = true;
+            double eval = move.testFromPiece.getSide() == Side.WHITE ? getEvaluation() : -getEvaluation();
+            afterScore += eval < -50 ? 20 : -20;
+        }
+        
+        if(PeerUtils.isCheckMate(move.testFromPiece.getSide().getOpposite(), this, false))
+        {
+            ChessPos pos = PeerUtils.findKing(move.testFromPiece.getSide().getOpposite(), grid);
+            
+            if(PeerUtils.isInCheck(move.testFromPiece.getSide().getOpposite(), pos, grid)) // checkmate
+            {
+                afterScore += move.testFromPiece.getSide() == Side.WHITE ? 1000 : -1000;
+                checkmate = true;
+            }
+            else { // stalemate
+                double eval = move.testFromPiece.getSide() == Side.WHITE ? getEvaluation() : -getEvaluation();
+                afterScore += eval < -50 ? 20 : -20;
+            }
         }
         
         double delta = afterScore-beforeScore;

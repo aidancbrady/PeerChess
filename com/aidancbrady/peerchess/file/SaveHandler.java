@@ -91,23 +91,23 @@ public final class SaveHandler
 			chess.currentMove.move();
 		}
 		
-		writer.append(Integer.toString(chess.getGame().side.ordinal()));
+		writer.append(Integer.toString(chess.getGame().getSide().ordinal()));
 		writer.newLine();
-		writer.append(Integer.toString(chess.getGame().turn.ordinal()));
+		writer.append(Integer.toString(chess.getGame().getTurn().ordinal()));
 		writer.newLine();
 		writer.append(Boolean.toString(chess.multiplayer));
 		writer.newLine();
 		writer.append(Boolean.toString(chess.host));
         writer.newLine();
-		writer.append(chess.getGame().endgame != null ? Integer.toString(chess.getGame().endgame.ordinal()) : "-1");
+		writer.append(chess.getGame().getEndgame() != null ? Integer.toString(chess.getGame().getEndgame().ordinal()) : "-1");
 		writer.newLine();
-		writer.append(chess.getGame().sideInCheck != null ? Integer.toString(chess.getGame().sideInCheck.ordinal()) : "-1");
-		writer.newLine();
-		
-		writer.append(Integer.toString(chess.moves.size()));
+		writer.append(chess.getGame().getSideInCheck() != null ? Integer.toString(chess.getGame().getSideInCheck().ordinal()) : "-1");
 		writer.newLine();
 		
-		for(ChessMove move : chess.moves)
+		writer.append(Integer.toString(chess.getGame().getMoves().size()));
+		writer.newLine();
+		
+		for(ChessMove move : chess.getGame().getMoves())
 		{
 		    writer.append(move.serialize());
 		    writer.newLine();
@@ -121,22 +121,22 @@ public final class SaveHandler
 	public static void loadFromReader(BufferedReader reader, ChessComponent chess) throws IOException
 	{
 		chess.getGame().setSide(Side.values()[Integer.parseInt(reader.readLine())]);
-		chess.getGame().turn = Side.values()[Integer.parseInt(reader.readLine())];
+		chess.getGame().setTurn(Side.values()[Integer.parseInt(reader.readLine())]);
 		chess.multiplayer = Boolean.parseBoolean(reader.readLine());
 		chess.host = Boolean.parseBoolean(reader.readLine());
 		
 		int check = Integer.parseInt(reader.readLine());
-		chess.getGame().endgame = check == -1 ? null : Endgame.values()[check];
+		chess.getGame().setEndgame(check == -1 ? null : Endgame.values()[check]);
 		
 		int s = Integer.parseInt(reader.readLine());
-		chess.getGame().sideInCheck = s == -1 ? null : Side.values()[s];
+		chess.getGame().setSideInCheck(s == -1 ? null : Side.values()[s]);
 		
 		try {
     		int moveCount = Integer.parseInt(reader.readLine());
     		
     		for(int i = 0; i < moveCount; i++)
     		{
-    		    chess.moves.add(ChessMove.create(reader.readLine()));
+    		    chess.getGame().getMoves().add(ChessMove.create(reader.readLine()));
     		}
 		} catch(Exception e) {
 		    throw new IOException("Failed to read move history.", e);

@@ -1,27 +1,62 @@
 package com.aidancbrady.peerchess.game;
 
-import com.aidancbrady.peerchess.ChessComponent;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 
 public class ChessGame
 {
-    public Side side = Side.WHITE;
-    public Side turn = Side.WHITE;
-    public Endgame endgame = null;
+    private Side side = Side.WHITE;
+    private Side turn = Side.WHITE;
+    private Endgame endgame = null;
+    private Side sideInCheck = null;
+    private List<ChessMove> moves = new ArrayList<ChessMove>();
     
-    public Side sideInCheck = null;
-    
-    public ChessComponent component;
-    
-    public ChessGame(ChessComponent c)
+    public Side getSide()
     {
-        component = c;
+        return side;
     }
     
     public void setSide(Side s)
     {
         side = s;
+    }
+    
+    public Side getTurn()
+    {
+        return turn;
+    }
+    
+    public void setTurn(Side s)
+    {
+        turn = s;
+    }
+    
+    public Endgame getEndgame()
+    {
+        return endgame;
+    }
+    
+    public void setEndgame(Endgame e)
+    {
+        endgame = e;
+    }
+    
+    public Side getSideInCheck()
+    {
+        return sideInCheck;
+    }
+    
+    public void setSideInCheck(Side s)
+    {
+        sideInCheck = s;
+    }
+    
+    public List<ChessMove> getMoves()
+    {
+        return moves;
     }
     
     public void reset()
@@ -31,5 +66,7 @@ public class ChessGame
         
         endgame = null;
         sideInCheck = null;
+        
+        moves.clear();
     }
 }

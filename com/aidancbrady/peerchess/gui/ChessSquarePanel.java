@@ -43,11 +43,11 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             @Override
             public void mouseDragged(MouseEvent e)
             {
-                if(game.currentDrag == null && game.getGame().turn == game.getGame().side) 
+                if(game.currentDrag == null && game.getGame().getTurn() == game.getGame().getSide()) 
                 {
                     List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
                     
-                    if(square.getPiece() != null && square.getPiece().getSide() == game.getGame().side && !possibleMoves.isEmpty())
+                    if(square.getPiece() != null && square.getPiece().getSide() == game.getGame().getSide() && !possibleMoves.isEmpty())
                     {
                         game.select(null);
                         game.possibleMoves.addAll(possibleMoves);
@@ -90,7 +90,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(PeerChess.instance().enableVisualGuides)
 		{
-    	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && game.getGame().sideInCheck == square.getPiece().getSide())
+    	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && game.getGame().getSideInCheck() == square.getPiece().getSide())
     	    {
     	        if(game.currentMove == null)
     	        {
@@ -142,7 +142,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(game.isMoving() || game.getGame().turn != game.getGame().side || game.getGame().endgame != null)
+		if(game.isMoving() || game.getGame().getTurn() != game.getGame().getSide() || game.getGame().getEndgame() != null)
 		{
 			return;
 		}
@@ -167,7 +167,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		{
 			if(game.selected == null && square.getPiece() != null)
 			{
-				if(game.getGame().side != square.getPiece().getSide())
+				if(game.getGame().getSide() != square.getPiece().getSide())
 				{
 					return;
 				}

@@ -2,7 +2,6 @@ package com.aidancbrady.peerchess;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +26,7 @@ public class ChessComponent extends JComponent implements IChessGame
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ChessGame game = new ChessGame(this);
+	private ChessGame game = new ChessGame();
 	
 	public ChessAI chessAI = new ChessAI(this);
 	
@@ -40,6 +39,8 @@ public class ChessComponent extends JComponent implements IChessGame
 	public MoveAction currentMove;
 	public DragAction currentDrag;
 	
+	public ChessMove currentHint;
+	
 	public OverlayComponent overlay;
 	
 	public JPanel chessboard;
@@ -49,10 +50,6 @@ public class ChessComponent extends JComponent implements IChessGame
 	public boolean multiplayer;
 	public boolean host;
 	
-	public ChessMove currentHint;
-	
-	public List<ChessMove> moves = new ArrayList<ChessMove>();
-	
 	public ChessComponent(ChessPanel p)
 	{
 		panel = p;
@@ -61,8 +58,6 @@ public class ChessComponent extends JComponent implements IChessGame
 		setSize(768, 768);
 		
 		add(overlay = new OverlayComponent(this), BorderLayout.CENTER);
-		
-	    setupBoard(false);
 
 		resetGame();
 	}
@@ -126,6 +121,8 @@ public class ChessComponent extends JComponent implements IChessGame
 	
 	public void resetGame()
 	{
+	    setupBoard(false);
+	       
 		resetMain(Side.BLACK, 0);
 		resetPawns(Side.BLACK, 1);
 		
@@ -141,7 +138,6 @@ public class ChessComponent extends JComponent implements IChessGame
 		game.reset();
 	
 		selected = null;
-		moves.clear();
 
 		panel.updateText();
 
@@ -150,8 +146,6 @@ public class ChessComponent extends JComponent implements IChessGame
 		multiplayer = false;
 		
 		possibleMoves.clear();
-		
-		setupBoard(false);
 		
 		panel.reset();
 	}
@@ -203,28 +197,28 @@ public class ChessComponent extends JComponent implements IChessGame
         possibleMoves.clear();
         
         //take back opponent's last move
-        ChessMove opponentLast = moves.get(moves.size()-1);
+        ChessMove opponentLast = game.getMoves().get(game.getMoves().size()-1);
         opponentLast.doRevertMove(this);
-        moves.remove(opponentLast);
+        game.getMoves().remove(opponentLast);
         
         //take back player's last move
-        ChessMove last = moves.get(moves.size()-1);
+        ChessMove last = game.getMoves().get(game.getMoves().size()-1);
         last.doRevertMove(this);
-        moves.remove(last);
+        game.getMoves().remove(last);
         
-        ChessPos opponentKingPos = PeerUtils.findKing(getGame().side.getOpposite(), grid);
-        ChessPos kingPos = PeerUtils.findKing(getGame().side, grid);
+        ChessPos opponentKingPos = PeerUtils.findKing(getGame().getSide().getOpposite(), grid);
+        ChessPos kingPos = PeerUtils.findKing(getGame().getSide(), grid);
         
-        if(PeerUtils.isInCheck(getGame().side.getOpposite(), opponentKingPos, grid))
+        if(PeerUtils.isInCheck(getGame().getSide().getOpposite(), opponentKingPos, grid))
         {
-            getGame().sideInCheck = getGame().side.getOpposite();
+            getGame().setSideInCheck(getGame().getSide().getOpposite());
         }
-        else if(PeerUtils.isInCheck(getGame().side, kingPos, grid))
+        else if(PeerUtils.isInCheck(getGame().getSide(), kingPos, grid))
         {
-            getGame().sideInCheck = getGame().side;
+            getGame().setSideInCheck(getGame().getSide());
         }
         else {
-            getGame().sideInCheck = null;
+            getGame().setSideInCheck(null);
         }
         
         panel.updateText();
@@ -278,6 +272,6 @@ public class ChessComponent extends JComponent implements IChessGame
 	@Override
 	public List<ChessMove> getPastMoves()
 	{
-	    return moves;
+	    return game.getMoves();
 	}
 }

@@ -127,39 +127,39 @@ public class MoveAction
 		
 		Assets.moveSound.stop();
 		
-		component.getGame().turn = component.getGame().turn.getOpposite();
-		component.moves.add(move);
+		component.getGame().setTurn(component.getGame().getTurn().getOpposite());
+		component.getGame().getMoves().add(move);
 		
 		ChessPos kingPos = PeerUtils.findKing(newPiece.getSide().getOpposite(), component.grid);
         
         if(PeerUtils.isInCheck(newPiece.getSide().getOpposite(), kingPos, component.grid))
         {
-            component.getGame().sideInCheck = newPiece.getSide().getOpposite();
+            component.getGame().setSideInCheck(newPiece.getSide().getOpposite());
         }
         else {
-            component.getGame().sideInCheck = null;
+            component.getGame().setSideInCheck(null);
         }
 		
-		if(PeerUtils.isCheckMate(getSide().getOpposite(), component))
+		if(PeerUtils.isCheckMate(getSide().getOpposite(), component, false))
 		{
-		    if(component.getGame().sideInCheck == getSide().getOpposite())
+		    if(component.getGame().getSideInCheck() == getSide().getOpposite())
 		    {
-		        component.getGame().endgame = Endgame.get(getSide());
+		        component.getGame().setEndgame(Endgame.get(getSide()));
 		    }
 		    else {
-		        component.getGame().endgame = Endgame.STALEMATE;
+		        component.getGame().setEndgame(Endgame.STALEMATE);
 		    }
 		}
 		
-		if(DrawTracker.isDraw(component.moves))
+		if(DrawTracker.isDraw(component.getGame().getMoves()))
 		{
-		    component.getGame().endgame = Endgame.DRAW;
+		    component.getGame().setEndgame(Endgame.DRAW);
 		}
 		
 		component.currentMove = null;
 		component.panel.updateText();
 		
-		if(component.getGame().endgame == null && !component.multiplayer && component.getGame().turn != component.getGame().side)
+		if(component.getGame().getEndgame() == null && !component.multiplayer && component.getGame().getTurn() != component.getGame().getSide())
 		{
 		    component.chessAI.triggerMove();
 		}

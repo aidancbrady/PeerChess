@@ -70,10 +70,10 @@ public final class PeerUtils
 		}
 	}
 	
-	public static boolean isCheckMate(Side side, IChessGame game)
+	public static boolean isCheckMate(Side side, IChessGame game, boolean requiresCheck)
 	{
 		ChessPos pos = findKing(side, game.getGrid());
-		if(!PeerUtils.isInCheck(side, pos, game.getGrid())) return false;
+		if(requiresCheck && !PeerUtils.isInCheck(side, pos, game.getGrid())) return false;
 		
 		for(int x = 0; x < 8; x++)
 		{

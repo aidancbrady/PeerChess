@@ -113,7 +113,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		add(chess = new ChessComponent(this));
 		chess.setVisible(true);
 		
-		titleLabel = new JLabel("PeerChess - " + chess.getGame().side.name);
+		titleLabel = new JLabel("PeerChess - " + chess.getGame().getSide().name);
 		titleLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
 		titleLabel.setSize(300, 20);
 		titleLabel.setLocation(820, 5);
@@ -125,7 +125,7 @@ public class ChessPanel extends JPanel implements MouseListener
 		opponentLabel.setLocation(774, 40);
 		add(opponentLabel);
 		
-		statusLabel = new JLabel(chess.getGame().turn == chess.getGame().side ? "Ready for your move" : "Waiting for opponent");
+		statusLabel = new JLabel(chess.getGame().getTurn() == chess.getGame().getSide() ? "Ready for your move" : "Waiting for opponent");
 		statusLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
 		statusLabel.setLocation(815, 420);
 		statusLabel.setSize(200, 40);
@@ -134,7 +134,7 @@ public class ChessPanel extends JPanel implements MouseListener
 	
 	public void initGame()
 	{
-	    if(!chess.multiplayer && chess.getGame().side != chess.getGame().turn)
+	    if(!chess.multiplayer && chess.getGame().getSide() != chess.getGame().getTurn())
 	    {
 	        chess.chessAI.triggerMove();
 	    }
@@ -152,16 +152,16 @@ public class ChessPanel extends JPanel implements MouseListener
 		    }
 		    
 			opponentLabel.setText("Opponent: " + opponentName);
-			titleLabel.setText("PeerChess - " + chess.getGame().side.name);
+			titleLabel.setText("PeerChess - " + chess.getGame().getSide().name);
 			
-			if(chess.getGame().endgame == null)
+			if(chess.getGame().getEndgame() == null)
 			{
-				statusLabel.setText(chess.getGame().turn == chess.getGame().side ? "Ready for your move" : "Waiting for opponent");
+				statusLabel.setText(chess.getGame().getTurn() == chess.getGame().getSide() ? "Ready for your move" : "Waiting for opponent");
 				
-				if(!chess.isDragging() && !chess.isMoving() && chess.getGame().turn == chess.getGame().side)
+				if(!chess.isDragging() && !chess.isMoving() && chess.getGame().getTurn() == chess.getGame().getSide())
 				{
 			        hintButton.setEnabled(PeerChess.instance().enableHints);
-                    revertButton.setEnabled(chess.multiplayer == false && chess.moves.size() >= 2);
+                    revertButton.setEnabled(chess.multiplayer == false && chess.getGame().getMoves().size() >= 2);
 				}
 				else {
 				    hintButton.setEnabled(false);
@@ -169,16 +169,16 @@ public class ChessPanel extends JPanel implements MouseListener
 				}
 			}
 			else {
-			    if(chess.getGame().endgame == Endgame.STALEMATE)
+			    if(chess.getGame().getEndgame() == Endgame.STALEMATE)
 			    {
 			        statusLabel.setText("Stalemate!");
 			    }
-			    else if(chess.getGame().endgame == Endgame.DRAW)
+			    else if(chess.getGame().getEndgame() == Endgame.DRAW)
 			    {
 			        statusLabel.setText("Draw!");
 			    }
 			    else {
-			        statusLabel.setText(Endgame.get(chess.getGame().side) == chess.getGame().endgame ? "You win the game!" : "You lost the game.");
+			        statusLabel.setText(Endgame.get(chess.getGame().getSide()) == chess.getGame().getEndgame() ? "You win the game!" : "You lost the game.");
 			    }
 			    
 			    hintButton.setEnabled(false);
@@ -215,13 +215,13 @@ public class ChessPanel extends JPanel implements MouseListener
 	
 	public boolean exit()
 	{
-	    if(!chess.multiplayer && chess.moves.isEmpty())
+	    if(!chess.multiplayer && chess.getGame().getMoves().isEmpty())
 	    {
 	        chess.resetGame();
 	        return true;
 	    }
 	    
-	    if(chess.getGame().endgame == null && (chess.host || !chess.multiplayer))
+	    if(chess.getGame().getEndgame() == null && (chess.host || !chess.multiplayer))
 	    {
     		int returned = JOptionPane.showConfirmDialog(this, "Would you like to save your game?");
     		

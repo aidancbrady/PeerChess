@@ -101,7 +101,7 @@ public class PeerConnection extends Thread
 				if(reading.startsWith("UPDATE"))
 				{
 					SaveHandler.loadFromReader(reader, panel.chess);
-					panel.chess.getGame().setSide(panel.chess.getGame().side.getOpposite());
+					panel.chess.getGame().setSide(panel.chess.getGame().getSide().getOpposite());
 					panel.chess.host = !panel.chess.host;
 					panel.updateText();
 				}

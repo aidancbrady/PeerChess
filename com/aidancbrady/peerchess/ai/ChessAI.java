@@ -9,7 +9,6 @@ import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
-import com.aidancbrady.peerchess.game.DrawTracker;
 
 public class ChessAI 
 {
@@ -86,12 +85,6 @@ public class ChessAI
         
         List<ChessMove> possibleMoves = board.getPossibleMoves(getSide(), maximizing);
         
-        if(possibleMoves.isEmpty() || DrawTracker.isDraw(board.getPastMoves())) // stalemate penalty/bonus
-        {
-            double eval = getSide() == Side.WHITE ? board.getEvaluation() : -board.getEvaluation();
-            return eval < -15 ? board.getEvaluation()+10 : board.getEvaluation()-10;
-        }
-        
         for(ChessMove move : possibleMoves)
         {
             double delta = board.applyMove(move);
@@ -126,7 +119,7 @@ public class ChessAI
     
     public Side getSide()
     {
-        return chess.getGame().turn;
+        return chess.getGame().getTurn();
     }
     
     public void reset() 
