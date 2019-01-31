@@ -18,7 +18,7 @@ public class PieceKing implements Piece
 	{
 		if(move.isValidStep(game.getGrid()) || isValidCastle(game, move))
 		{
-		    if(!PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), move.toPos, game.getGrid(), move))
+		    if(!game.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), move.toPos, move))
 			{
 				return true;
 			}
@@ -31,13 +31,13 @@ public class PieceKing implements Piece
 	{
 	    ChessPiece piece = move.fromPos.getSquare(game.getGrid()).getPiece();
         
-        if(!PeerUtils.isInCheck(piece.getSide(), move.fromPos, game.getGrid()) && piece.getMoves() == 0)
+        if(!game.isInCheck(piece.getSide(), move.fromPos) && piece.getMoves() == 0)
         {
             ChessPiece test = null;
             
             if(move.toPos.getX() == 2)
             {
-                if(PeerUtils.isInCheck(piece.getSide(), move.fromPos.translate(-1, 0), game.getGrid()))
+                if(game.isInCheck(piece.getSide(), move.fromPos.translate(-1, 0)))
                 {
                     return false;
                 }
@@ -57,7 +57,7 @@ public class PieceKing implements Piece
             }
             else if(move.toPos.getX() == 6)
             {
-                if(PeerUtils.isInCheck(piece.getSide(), move.fromPos.translate(1, 0), game.getGrid()))
+                if(game.isInCheck(piece.getSide(), move.fromPos.translate(1, 0)))
                 {
                     return false;
                 }
@@ -96,7 +96,7 @@ public class PieceKing implements Piece
 		
 		ChessPiece piece = origPos.getSquare(game.getGrid()).getPiece();
 		
-		if(!PeerUtils.isInCheck(piece.getSide(), origPos, game.getGrid()) && piece.getMoves() == 0)
+		if(!game.isInCheck(piece.getSide(), origPos) && piece.getMoves() == 0)
 		{
 		    ChessPiece test = game.getGrid()[0][origPos.getY()].getPiece();
 		    

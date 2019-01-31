@@ -133,9 +133,9 @@ public class MoveAction
 		component.getGame().setTurn(component.getGame().getTurn().getOpposite());
 		component.getGame().getMoves().add(move);
 		
-		ChessPos kingPos = PeerUtils.findKing(newPiece.getSide().getOpposite(), component.getGame().getGrid());
+		ChessPos kingPos = component.getGame().findKing(newPiece.getSide().getOpposite());
         
-        if(PeerUtils.isInCheck(newPiece.getSide().getOpposite(), kingPos, component.getGame().getGrid()))
+        if(component.getGame().isInCheck(newPiece.getSide().getOpposite(), kingPos))
         {
             component.getGame().setSideInCheck(newPiece.getSide().getOpposite());
         }
@@ -143,7 +143,7 @@ public class MoveAction
             component.getGame().setSideInCheck(null);
         }
 		
-		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.getGame(), false))
+		if(component.getGame().isCheckMate(getSide().getOpposite(), false))
 		{
 		    if(component.getGame().getSideInCheck() == getSide().getOpposite())
 		    {

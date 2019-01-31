@@ -15,10 +15,10 @@ import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
-import com.aidancbrady.peerchess.gui.action.DragAction;
-import com.aidancbrady.peerchess.gui.action.MoveAction;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.gui.action.DragAction;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 
 public class ChessSquarePanel extends JComponent implements MouseListener
 {
@@ -44,7 +44,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             {
                 if(!component.isDragging() && component.getGame().getTurn() == component.getGame().getSide()) 
                 {
-                    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(component.getGame(), square);
+                    List<ChessPos> possibleMoves = component.getGame().getValidatedMoves(square);
                     
                     if(square.getPiece() != null && square.getPiece().getSide() == component.getGame().getSide() && !possibleMoves.isEmpty())
                     {

@@ -9,10 +9,10 @@ import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
-import com.aidancbrady.peerchess.gui.ChessComponent;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.game.DrawTracker;
+import com.aidancbrady.peerchess.gui.ChessComponent;
 
 public class TestBoard implements IChessGame
 {
@@ -125,11 +125,11 @@ public class TestBoard implements IChessGame
             afterScore += eval < -50 ? 20 : -20;
         }
         
-        if(PeerUtils.isCheckMate(move.testFromPiece.getSide().getOpposite(), this, false))
+        if(isCheckMate(move.testFromPiece.getSide().getOpposite(), false))
         {
-            ChessPos pos = PeerUtils.findKing(move.testFromPiece.getSide().getOpposite(), grid);
+            ChessPos pos = findKing(move.testFromPiece.getSide().getOpposite());
             
-            if(PeerUtils.isInCheck(move.testFromPiece.getSide().getOpposite(), pos, grid)) // checkmate
+            if(isInCheck(move.testFromPiece.getSide().getOpposite(), pos)) // checkmate
             {
                 afterScore += move.testFromPiece.getSide() == Side.WHITE ? 1000 : -1000;
                 checkmate = true;

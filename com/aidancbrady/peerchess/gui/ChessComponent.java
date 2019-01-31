@@ -8,15 +8,14 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
-import com.aidancbrady.peerchess.gui.action.DragAction;
-import com.aidancbrady.peerchess.gui.action.MoveAction;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
+import com.aidancbrady.peerchess.gui.action.DragAction;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 import com.aidancbrady.peerchess.piece.Piece;
 
 public class ChessComponent extends JComponent
@@ -61,7 +60,7 @@ public class ChessComponent extends JComponent
 		
 		if(selected != null)
 		{
-		    possibleMoves.addAll(PeerUtils.getValidatedMoves(getGame(), selected));
+		    possibleMoves.addAll(getGame().getValidatedMoves(selected));
 		}
 		
 		currentHint = null;

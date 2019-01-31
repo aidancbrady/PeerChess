@@ -15,9 +15,9 @@ public class PieceKnight implements Piece
 	@Override
 	public boolean validateMove(IChessGame game, ChessMove move)
 	{
-		ChessPos pos = PeerUtils.findKing(move.getFromSquare(game.getGrid()).getPiece().getSide(), game.getGrid());
+		ChessPos pos = game.findKing(move.getFromSquare(game.getGrid()).getPiece().getSide());
 		
-		if(PeerUtils.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), pos, game.getGrid(), move))
+		if(game.testCheck(move.getFromSquare(game.getGrid()).getPiece().getSide(), pos, move))
 		{
 			return false;
 		}

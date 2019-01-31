@@ -144,14 +144,14 @@ public class ChessGame implements IChessGame
         last.doRevertMove(this);
         getMoves().remove(last);
         
-        ChessPos opponentKingPos = PeerUtils.findKing(getSide().getOpposite(), getGrid());
-        ChessPos kingPos = PeerUtils.findKing(getSide(), getGrid());
+        ChessPos opponentKingPos = findKing(getSide().getOpposite());
+        ChessPos kingPos = findKing(getSide());
         
-        if(PeerUtils.isInCheck(getSide().getOpposite(), opponentKingPos, getGrid()))
+        if(isInCheck(getSide().getOpposite(), opponentKingPos))
         {
             setSideInCheck(getSide().getOpposite());
         }
-        else if(PeerUtils.isInCheck(getSide(), kingPos, getGrid()))
+        else if(isInCheck(getSide(), kingPos))
         {
             setSideInCheck(getSide());
         }
