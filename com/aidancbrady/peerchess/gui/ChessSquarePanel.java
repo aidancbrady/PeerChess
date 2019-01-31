@@ -8,9 +8,6 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import com.aidancbrady.peerchess.ChessComponent;
-import com.aidancbrady.peerchess.DragAction;
-import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.client.Assets;
@@ -18,6 +15,8 @@ import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.action.DragAction;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
 
@@ -25,13 +24,13 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ChessComponent game;
+	private ChessComponent component;
 	
 	private ChessSquare square;
 	
 	public ChessSquarePanel(ChessComponent com, ChessSquare s)
 	{
-		game = com;
+		component = com;
 		square = s;
 		
 		setSize(96, 96);
@@ -43,24 +42,24 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             @Override
             public void mouseDragged(MouseEvent e)
             {
-                if(!game.isDragging() && game.getGame().getTurn() == game.getGame().getSide()) 
+                if(!component.isDragging() && component.getGame().getTurn() == component.getGame().getSide()) 
                 {
-                    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(game, square);
+                    List<ChessPos> possibleMoves = PeerUtils.getValidatedMoves(component.getGame(), square);
                     
-                    if(square.getPiece() != null && square.getPiece().getSide() == game.getGame().getSide() && !possibleMoves.isEmpty())
+                    if(square.getPiece() != null && square.getPiece().getSide() == component.getGame().getSide() && !possibleMoves.isEmpty())
                     {
-                        game.select(null);
-                        game.possibleMoves.addAll(possibleMoves);
-                        game.repaint();
-                        game.currentDrag = new DragAction(ChessSquarePanel.this);
-                        game.panel.updateText();
-                        game.currentHint = null;
+                        component.select(null);
+                        component.possibleMoves.addAll(possibleMoves);
+                        component.repaint();
+                        component.currentDrag = new DragAction(ChessSquarePanel.this);
+                        component.panel.updateText();
+                        component.currentHint = null;
                     }
                 }
                 
-                if(game.isDragging())
+                if(component.isDragging())
                 {
-                    game.currentDrag.updateMouse(e.getLocationOnScreen());
+                    component.currentDrag.updateMouse(e.getLocationOnScreen());
                 }
             }
         
@@ -82,7 +81,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(square.getPiece() != null && square.getPiece().getTexture() != null)
 		{
-		    if(!game.isDragging() || game.currentDrag.getSquarePanel() != this)
+		    if(!component.isDragging() || component.currentDrag.getSquarePanel() != this)
 	        {
 		        square.getPiece().getTexture().draw(g, 0, 0, getWidth(), getHeight());
 	        }
@@ -90,26 +89,26 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 		
 		if(PeerChess.instance().enableVisualGuides)
 		{
-    	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && game.getGame().getSideInCheck() == square.getPiece().getSide())
+    	    if(square.getPiece() != null && square.getPiece().getType() == PieceType.KING && component.getGame().getSideInCheck() == square.getPiece().getSide())
     	    {
-    	        if(!game.isMoving())
+    	        if(!component.isMoving())
     	        {
     	            Assets.check.draw(g, 0, 0, getWidth(), getHeight());
     	        }
     	    }
     	    
-    	    if(game.possibleMoves.contains(square.getPos()))
+    	    if(component.possibleMoves.contains(square.getPos()))
     	    {
     	        Assets.possible.draw(g, 0, 0, getWidth(), getHeight());
     	    }
 		}
 		
-		if(game.currentHint != null && (game.currentHint.toPos.equals(square.getPos()) || game.currentHint.fromPos.equals(square.getPos())))
+		if(component.currentHint != null && (component.currentHint.toPos.equals(square.getPos()) || component.currentHint.fromPos.equals(square.getPos())))
 		{
 		    Assets.hint.draw(g, 0, 0, getWidth(), getHeight());
 		}
 		
-		if(game.getSelected() == square)
+		if(component.getSelected() == square)
 		{
 			Assets.select.draw(g, 0, 0, getWidth(), getHeight());
 		}
@@ -121,18 +120,18 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent arg0) 
 	{
-	    if(game.isDragging())
+	    if(component.isDragging())
 	    {
-	        game.currentDrag.enter(this);
+	        component.currentDrag.enter(this);
 	    }
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) 
 	{
-	    if(game.isDragging())
+	    if(component.isDragging())
         {
-            game.currentDrag.exit(this);
+            component.currentDrag.exit(this);
         }
 	}
 
@@ -142,54 +141,54 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) 
 	{
-		if(game.isMoving() || game.getGame().getTurn() != game.getGame().getSide() || game.getGame().getEndgame() != null)
+		if(component.isMoving() || component.getGame().getTurn() != component.getGame().getSide() || component.getGame().getEndgame() != null)
 		{
 			return;
 		}
 		
-		if(game.multiplayer && game.panel.getConnection() == null)
+		if(component.multiplayer && component.panel.getConnection() == null)
 		{
 		    return;
 		}
 		
-		if(game.isDragging())
+		if(component.isDragging())
 		{
-		    game.currentDrag.release();
+		    component.currentDrag.release();
 		    return;
 		}
 		
-		if(game.getSelected() != null && game.getSelected().getPiece() == null)
+		if(component.getSelected() != null && component.getSelected().getPiece() == null)
 		{
-		    game.select(null);
+		    component.select(null);
 		}
 		
 		if(arg0.getX() >= 0 && arg0.getX() <= getWidth() && arg0.getY() >= 0 && arg0.getY() <= getHeight())
 		{
-			if(game.getSelected() == null && square.getPiece() != null)
+			if(component.getSelected() == null && square.getPiece() != null)
 			{
-				if(game.getGame().getSide() != square.getPiece().getSide())
+				if(component.getGame().getSide() != square.getPiece().getSide())
 				{
 					return;
 				}
 				
-				game.select(square);
+				component.select(square);
 			}
 			else {
-				if(game.getSelected() != null)
+				if(component.getSelected() != null)
 				{
-					ChessPiece piece = game.getSelected().getPiece();
-					ChessMove move = new ChessMove(game.getSelected().getPos(), square.getPos());
+					ChessPiece piece = component.getSelected().getPiece();
+					ChessMove move = new ChessMove(component.getSelected().getPos(), square.getPos());
 					
 					if(square.getPiece() != null && square.getPiece().getSide() == piece.getSide())
 					{
-						game.select(square);
+						component.select(square);
 						repaint();
-						game.panel.repaint();
+						component.panel.repaint();
 						
 						return;
 					}
 					else {
-						if(piece.getType().getPiece().validateMove(game, move))
+						if(piece.getType().getPiece().validateMove(component.getGame(), move))
 						{
 							ChessPiece newPiece = piece;
 							
@@ -197,33 +196,33 @@ public class ChessSquarePanel extends JComponent implements MouseListener
 							{
 								if((piece.getSide() == Side.WHITE && move.toPos.getY() == 0) || (piece.getSide() == Side.BLACK && move.toPos.getY() == 7))
 								{
-									newPiece = PeerUtils.getPawnReplace(piece.getSide(), game.panel.getPawnReplaceIndex());
+									newPiece = PeerUtils.getPawnReplace(piece.getSide(), component.panel.getPawnReplaceIndex());
 									newPiece.setMoves(piece.getMoves());
 								}
 							}
 							
-							game.currentMove = new MoveAction(game, move, piece, newPiece);
-							game.panel.updateText();
+							component.currentMove = new MoveAction(component, move, piece, newPiece);
+							component.panel.updateText();
 							
-							if(game.multiplayer)
+							if(component.multiplayer)
 							{
-							    game.currentMove.broadcast();
+							    component.currentMove.broadcast();
 							}
 						}
 					}
 				}
 				
-				game.select(null);
+				component.select(null);
 			}
 			
 			repaint();
-			game.panel.repaint();
+			component.panel.repaint();
 		}
 	}
 	
-	public ChessComponent getGame()
+	public ChessComponent getComponent()
 	{
-	    return game;
+	    return component;
 	}
 	
 	public ChessSquare getSquare()

@@ -1,27 +1,25 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessGame;
 import com.aidancbrady.peerchess.game.ChessMove;
-import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.action.DragAction;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
-import com.aidancbrady.peerchess.gui.ChessPanel;
-import com.aidancbrady.peerchess.gui.ChessSquarePanel;
-import com.aidancbrady.peerchess.gui.OverlayComponent;
 import com.aidancbrady.peerchess.piece.Piece;
 
-public class ChessComponent extends JComponent implements IChessGame
+public class ChessComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -32,8 +30,6 @@ public class ChessComponent extends JComponent implements IChessGame
     private OverlayComponent overlay;
 
     public ChessPanel panel;
-
-    public ChessSquare[][] grid = PeerUtils.createEmptyBoard();
 
     public MoveAction currentMove;
     public DragAction currentDrag;
@@ -65,7 +61,7 @@ public class ChessComponent extends JComponent implements IChessGame
 		
 		if(selected != null)
 		{
-		    possibleMoves.addAll(PeerUtils.getValidatedMoves(this, selected));
+		    possibleMoves.addAll(PeerUtils.getValidatedMoves(getGame(), selected));
 		}
 		
 		currentHint = null;
@@ -78,48 +74,9 @@ public class ChessComponent extends JComponent implements IChessGame
         return selected;
     }
 	
-	public void resetMain(Side s, int y)
-	{
-		grid[0][y].setPiece(new ChessPiece(PieceType.CASTLE, s));
-		grid[1][y].setPiece(new ChessPiece(PieceType.KNIGHT, s));
-		grid[2][y].setPiece(new ChessPiece(PieceType.BISHOP, s));
-		grid[3][y].setPiece(new ChessPiece(PieceType.QUEEN, s));
-		grid[4][y].setPiece(new ChessPiece(PieceType.KING, s));
-		grid[5][y].setPiece(new ChessPiece(PieceType.BISHOP, s));
-		grid[6][y].setPiece(new ChessPiece(PieceType.KNIGHT, s));
-		grid[7][y].setPiece(new ChessPiece(PieceType.CASTLE, s));
-	}
-	
-	public void resetPawns(Side s, int y)
-	{
-		for(int x = 0; x < 8; x++)
-		{
-			grid[x][y].setPiece(new ChessPiece(PieceType.PAWN, s));
-		}
-	}
-	
-	public void resetCenter()
-	{
-		for(int x = 0; x < 8; x++)
-		{
-			for(int y = 2; y < 6; y++)
-			{
-				grid[x][y].setPiece(null);
-			}
-		}
-	}
-	
 	public void resetGame()
 	{
 	    setupBoard(false);
-	       
-		resetMain(Side.BLACK, 0);
-		resetPawns(Side.BLACK, 1);
-		
-		resetCenter();
-		
-		resetPawns(Side.WHITE, 6);
-		resetMain(Side.WHITE, 7);
 		
 		currentMove = null;
 		currentDrag = null;
@@ -156,7 +113,7 @@ public class ChessComponent extends JComponent implements IChessGame
                     ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, 1));
                     ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, 1));
                     
-                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(this, rightMove)))
+                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(getGame(), leftMove)) || piece.validateMove(getGame(), centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(getGame(), rightMove)))
                     {
                         return 1;
                     }
@@ -169,7 +126,7 @@ public class ChessComponent extends JComponent implements IChessGame
                     ChessMove centerMove = new ChessMove(selected.getPos(), selected.getPos().translate(0, -1));
                     ChessMove rightMove = new ChessMove(selected.getPos(), selected.getPos().translate(1, -1));
                     
-                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(this, leftMove)) || piece.validateMove(this, centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(this, rightMove)))
+                    if((leftMove.toPos.getX() >= 0 && piece.validateMove(getGame(), leftMove)) || piece.validateMove(getGame(), centerMove) || (rightMove.toPos.getX() <= 7 && piece.validateMove(getGame(), rightMove)))
                     {
                         return 0;
                     }
@@ -185,30 +142,7 @@ public class ChessComponent extends JComponent implements IChessGame
         currentHint = null;
         possibleMoves.clear();
         
-        //take back opponent's last move
-        ChessMove opponentLast = game.getMoves().get(game.getMoves().size()-1);
-        opponentLast.doRevertMove(this);
-        game.getMoves().remove(opponentLast);
-        
-        //take back player's last move
-        ChessMove last = game.getMoves().get(game.getMoves().size()-1);
-        last.doRevertMove(this);
-        game.getMoves().remove(last);
-        
-        ChessPos opponentKingPos = PeerUtils.findKing(getGame().getSide().getOpposite(), grid);
-        ChessPos kingPos = PeerUtils.findKing(getGame().getSide(), grid);
-        
-        if(PeerUtils.isInCheck(getGame().getSide().getOpposite(), opponentKingPos, grid))
-        {
-            getGame().setSideInCheck(getGame().getSide().getOpposite());
-        }
-        else if(PeerUtils.isInCheck(getGame().getSide(), kingPos, grid))
-        {
-            getGame().setSideInCheck(getGame().getSide());
-        }
-        else {
-            getGame().setSideInCheck(null);
-        }
+        game.doRevertMove();
         
         panel.updateText();
         repaint();
@@ -224,7 +158,7 @@ public class ChessComponent extends JComponent implements IChessGame
         {           
             for(int x = 0; x < 8; x++)
             {
-                chessboard.add(new ChessSquarePanel(this, grid[flip ? 7-x : x][flip ? 7-y : y]));
+                chessboard.add(new ChessSquarePanel(this, getGame().getGrid()[flip ? 7-x : x][flip ? 7-y : y]));
             }
         }
         
@@ -256,17 +190,5 @@ public class ChessComponent extends JComponent implements IChessGame
 	{
         chessboard.setSize(size, size);
         overlay.setSize(size, size);
-	}
-	
-	@Override
-	public ChessSquare[][] getGrid()
-	{
-	    return grid;
-	}
-	
-	@Override
-	public List<ChessMove> getPastMoves()
-	{
-	    return game.getMoves();
 	}
 }

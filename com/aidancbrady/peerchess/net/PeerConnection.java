@@ -9,7 +9,6 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
-import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
@@ -19,6 +18,7 @@ import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.gui.ChessPanel;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 
 public class PeerConnection extends Thread
 {
@@ -100,9 +100,9 @@ public class PeerConnection extends Thread
 				
 				if(reading.startsWith("UPDATE"))
 				{
-					SaveHandler.loadFromReader(reader, panel.chess);
-					panel.chess.getGame().setSide(panel.chess.getGame().getSide().getOpposite());
-					panel.chess.host = !panel.chess.host;
+					SaveHandler.loadFromReader(reader, panel.component);
+					panel.component.getGame().setSide(panel.component.getGame().getSide().getOpposite());
+					panel.component.host = !panel.component.host;
 					panel.updateText();
 				}
 				else if(reading.startsWith("MSG"))
@@ -137,12 +137,12 @@ public class PeerConnection extends Thread
 					ChessPos oldPos = new ChessPos(Integer.parseInt(strOldPos[0]), Integer.parseInt(strOldPos[1]));
 					ChessPos newPos = new ChessPos(Integer.parseInt(strNewPos[0]), Integer.parseInt(strNewPos[1]));
 					
-					newPiece.setMoves(oldPos.getSquare(panel.chess.grid).getPiece().getMoves());
+					newPiece.setMoves(oldPos.getSquare(panel.component.getGame().getGrid()).getPiece().getMoves());
 					
 					ChessMove move = new ChessMove(oldPos, newPos);
-					oldPos.getSquare(panel.chess.grid).getPiece().getType().getPiece().validateMove(panel.chess, move);
+					oldPos.getSquare(panel.component.getGame().getGrid()).getPiece().getType().getPiece().validateMove(panel.component.getGame(), move);
 					
-					panel.chess.currentMove = new MoveAction(panel.chess, move, piece, newPiece);
+					panel.component.currentMove = new MoveAction(panel.component, move, piece, newPiece);
 					panel.updateText();
 				}
 				else {
@@ -189,7 +189,7 @@ public class PeerConnection extends Thread
 						
 						if(s.equals("UPDATE"))
 						{
-							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.chess);
+							SaveHandler.saveToWriter(new BufferedWriter(writer), panel.component);
 						}
 						
 						writer.flush();

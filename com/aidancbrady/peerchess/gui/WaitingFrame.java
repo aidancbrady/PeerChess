@@ -95,7 +95,7 @@ public class WaitingFrame extends JFrame implements WindowListener
 		try {
 			thread.close();
 			thread.interrupt();
-			frame.getPanel().chess.resetGame();
+			frame.getPanel().component.resetGame();
 			frame.forceMenu();
 		} catch(Exception e) {
 			e.printStackTrace();

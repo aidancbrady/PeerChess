@@ -1,6 +1,6 @@
 package com.aidancbrady.peerchess.game;
 
-import com.aidancbrady.peerchess.ChessComponent;
+import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.file.SaveHandler;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -279,11 +279,11 @@ public class ChessMove
 	    testFromPiece = testToPiece = testFromCastle = testToCastle = enPassantTake = null;
 	}
 	
-	public boolean doRevertMove(ChessComponent component)
+	public boolean doRevertMove(IChessGame game)
 	{
 	    if(boardPreMove != null)
 	    {
-	        PeerUtils.applyBoard(boardPreMove, component.grid);
+	        PeerUtils.applyBoard(boardPreMove, game.getGrid());
 	        return true;
 	    }
 	    

@@ -2,13 +2,13 @@ package com.aidancbrady.peerchess.ai;
 
 import java.util.List;
 
-import com.aidancbrady.peerchess.ChessComponent;
-import com.aidancbrady.peerchess.MoveAction;
 import com.aidancbrady.peerchess.PeerChess;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessComponent;
+import com.aidancbrady.peerchess.gui.action.MoveAction;
 
 public class ChessAI 
 {
@@ -29,13 +29,13 @@ public class ChessAI
             public void run()
             {
                 ChessMove move = minimax(false);
-                ChessPiece piece = move.fromPos.getSquare(chess.grid).getPiece();
+                ChessPiece piece = move.fromPos.getSquare(chess.getGame().getGrid()).getPiece();
                 
                 if(!terminate)
                 {
                     ChessPiece finalPiece = piece;
                     
-                    if(move.getFromSquare(chess.grid).getPiece().getType() == PieceType.PAWN)
+                    if(move.getFromSquare(chess.getGame().getGrid()).getPiece().getType() == PieceType.PAWN)
                     {
                         if(move.toPos.getY() == 0 || move.toPos.getY() == 7)
                         {

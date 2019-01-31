@@ -465,7 +465,7 @@ public final class PeerUtils
 	    }
 	}
 	
-	public static List<ChessPos> getValidatedMoves(ChessComponent chess, ChessSquare square)
+	public static List<ChessPos> getValidatedMoves(IChessGame chess, ChessSquare square)
 	{
 	    List<ChessPos> ret = new ArrayList<>();
 	    

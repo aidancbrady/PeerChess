@@ -7,13 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessComponent;
 import com.aidancbrady.peerchess.game.ChessSquare;
 
 public final class SaveHandler 
@@ -113,7 +113,7 @@ public final class SaveHandler
 		    writer.newLine();
 		}
 		
-		writer.append(saveChessBoard(chess.grid));
+		writer.append(saveChessBoard(chess.getGame().getGrid()));
 		writer.newLine();
 		writer.flush();
 	}
@@ -142,7 +142,7 @@ public final class SaveHandler
 		    throw new IOException("Failed to read move history.", e);
 		}
 		
-		PeerUtils.applyBoard(loadChessBoard(reader.readLine()), chess.grid);
+		PeerUtils.applyBoard(loadChessBoard(reader.readLine()), chess.getGame().getGrid());
 	}
 	
 	public static String saveChessBoard(ChessSquare[][] grid)

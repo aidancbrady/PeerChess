@@ -1,12 +1,15 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui.action;
 
 import java.awt.Graphics;
 
+import com.aidancbrady.peerchess.PeerChess;
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.client.Assets;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.Endgame;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessComponent;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.DrawTracker;
 
@@ -42,15 +45,15 @@ public class MoveAction
 	
 	public void start()
 	{
-	    move.boardPreMove = PeerUtils.deepCopyBoard(component.grid);
+	    move.boardPreMove = PeerUtils.deepCopyBoard(component.getGame().getGrid());
 	       
 	    if(move.fromPosCastle != null)
         {
-            newCastle = move.fromPosCastle.getSquare(component.grid).getPiece();
-            move.fromPosCastle.getSquare(component.grid).setPiece(null);
+            newCastle = move.fromPosCastle.getSquare(component.getGame().getGrid()).getPiece();
+            move.fromPosCastle.getSquare(component.getGame().getGrid()).setPiece(null);
         }
 	    
-	    move.fromPos.getSquare(component.grid).setPiece(null);
+	    move.fromPos.getSquare(component.getGame().getGrid()).setPiece(null);
 	}
 	
 	public int getScale()
@@ -111,16 +114,16 @@ public class MoveAction
 	{
 	    newPiece.move();
 	    
-		move.toPos.getSquare(component.grid).setPiece(newPiece);
+		move.toPos.getSquare(component.getGame().getGrid()).setPiece(newPiece);
 		
 		if(move.toPosCastle != null)
 		{
-		    move.toPosCastle.getSquare(component.grid).setPiece(newCastle);
+		    move.toPosCastle.getSquare(component.getGame().getGrid()).setPiece(newCastle);
 		}
 		
 		if(move.enPassantTakePos != null)
 		{
-		    move.enPassantTakePos.getSquare(component.grid).setPiece(null);
+		    move.enPassantTakePos.getSquare(component.getGame().getGrid()).setPiece(null);
 		}
 		
 		component.repaint();
@@ -130,9 +133,9 @@ public class MoveAction
 		component.getGame().setTurn(component.getGame().getTurn().getOpposite());
 		component.getGame().getMoves().add(move);
 		
-		ChessPos kingPos = PeerUtils.findKing(newPiece.getSide().getOpposite(), component.grid);
+		ChessPos kingPos = PeerUtils.findKing(newPiece.getSide().getOpposite(), component.getGame().getGrid());
         
-        if(PeerUtils.isInCheck(newPiece.getSide().getOpposite(), kingPos, component.grid))
+        if(PeerUtils.isInCheck(newPiece.getSide().getOpposite(), kingPos, component.getGame().getGrid()))
         {
             component.getGame().setSideInCheck(newPiece.getSide().getOpposite());
         }
@@ -140,7 +143,7 @@ public class MoveAction
             component.getGame().setSideInCheck(null);
         }
 		
-		if(PeerUtils.isCheckMate(getSide().getOpposite(), component, false))
+		if(PeerUtils.isCheckMate(getSide().getOpposite(), component.getGame(), false))
 		{
 		    if(component.getGame().getSideInCheck() == getSide().getOpposite())
 		    {

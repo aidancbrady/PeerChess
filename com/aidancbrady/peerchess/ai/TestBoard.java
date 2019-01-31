@@ -3,13 +3,13 @@ package com.aidancbrady.peerchess.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aidancbrady.peerchess.ChessComponent;
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessComponent;
 import com.aidancbrady.peerchess.game.ChessPos;
 import com.aidancbrady.peerchess.game.ChessSquare;
 import com.aidancbrady.peerchess.game.DrawTracker;
@@ -23,7 +23,7 @@ public class TestBoard implements IChessGame
     
     public TestBoard(ChessComponent game)
     {
-        grid = PeerUtils.deepCopyBoard(game.grid);
+        grid = PeerUtils.deepCopyBoard(game.getGame().getGrid());
         moves = new ArrayList<ChessMove>(game.getGame().getMoves());
         currentEvaluation = evaluateBoard();
     }

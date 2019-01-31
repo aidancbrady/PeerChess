@@ -49,7 +49,7 @@ public class GameConnector extends Thread
 			
 			panel.frame.revalidate();
 	        panel.frame.onWindowResized();
-	        panel.chess.setupBoard(true);
+	        panel.component.setupBoard(true);
 		} catch(Exception e) {
 			panel.frame.getConnectingFrame().setVisible(false);
 			JOptionPane.showMessageDialog(panel, "Couldn't connect to server: " + e.getLocalizedMessage());

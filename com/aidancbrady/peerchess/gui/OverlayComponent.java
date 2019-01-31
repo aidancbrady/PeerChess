@@ -4,8 +4,6 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
-import com.aidancbrady.peerchess.ChessComponent;
-
 public class OverlayComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;

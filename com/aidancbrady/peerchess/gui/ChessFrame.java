@@ -104,7 +104,7 @@ public class ChessFrame extends JFrame implements WindowListener
 		menu.setVisible(false);
 		join.setVisible(false);
 		
-		chessPanel.chess.multiplayer = mp;
+		chessPanel.component.multiplayer = mp;
 		
 		setSize(1024, 790);
 		chessPanel.setVisible(true);
@@ -135,12 +135,12 @@ public class ChessFrame extends JFrame implements WindowListener
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			if(SaveHandler.loadGame(chessPanel.chess, chooser.getSelectedFile()))
+			if(SaveHandler.loadGame(chessPanel.component, chooser.getSelectedFile()))
 			{
-				openChess(chessPanel.chess.multiplayer);
+				openChess(chessPanel.component.multiplayer);
 			}
 			else {
-				chessPanel.chess.resetGame();
+				chessPanel.component.resetGame();
 				JOptionPane.showMessageDialog(this, "Error loading game.");
 			}
 		}

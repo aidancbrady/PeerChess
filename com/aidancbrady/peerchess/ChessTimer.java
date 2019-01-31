@@ -22,9 +22,9 @@ public final class ChessTimer extends Thread
 			try {
 				if(chess.getFrame() != null)
 				{
-					if(chess.getFrame().getPanel().chess.isMoving())
+					if(chess.getFrame().getPanel().component.isMoving())
 					{
-						chess.getFrame().getPanel().chess.currentMove.update();
+						chess.getFrame().getPanel().component.currentMove.update();
 					}
 				}
 				

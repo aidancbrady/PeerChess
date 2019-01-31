@@ -1,12 +1,14 @@
-package com.aidancbrady.peerchess;
+package com.aidancbrady.peerchess.gui.action;
 
 import java.awt.Graphics;
 import java.awt.Point;
 
+import com.aidancbrady.peerchess.PeerUtils;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
 import com.aidancbrady.peerchess.game.ChessPiece.Side;
+import com.aidancbrady.peerchess.gui.ChessComponent;
 import com.aidancbrady.peerchess.gui.ChessSquarePanel;
 
 public class DragAction
@@ -32,7 +34,7 @@ public class DragAction
     public void updateMouse(Point point)
     {
         mousePoint = point;
-        getGame().repaint();
+        getComponent().repaint();
     }
     
     public void enter(ChessSquarePanel panel)
@@ -47,11 +49,11 @@ public class DragAction
     
     public void release()
     {
-        if(hoverPanel != null && getGame().possibleMoves.contains(hoverPanel.getSquare().getPos()))
+        if(hoverPanel != null && getComponent().possibleMoves.contains(hoverPanel.getSquare().getPos()))
         {
             ChessMove move = new ChessMove(startPiece.getSquare().getPos(), hoverPanel.getSquare().getPos());
             
-            if(getPiece().getType().getPiece().validateMove(getGame(), move))
+            if(getPiece().getType().getPiece().validateMove(getComponent().getGame(), move))
             {
                 ChessPiece newPiece = getPiece();
                 
@@ -59,35 +61,35 @@ public class DragAction
                 {
                     if((getPiece().getSide() == Side.WHITE && move.toPos.getY() == 0) || (getPiece().getSide() == Side.BLACK && move.toPos.getY() == 7))
                     {
-                        newPiece = PeerUtils.getPawnReplace(getPiece().getSide(), getGame().panel.getPawnReplaceIndex());
+                        newPiece = PeerUtils.getPawnReplace(getPiece().getSide(), getComponent().panel.getPawnReplaceIndex());
                         newPiece.setMoves(getPiece().getMoves());
                     }
                 }
                 
-                getGame().currentMove = new MoveAction(getGame(), move, getPiece(), newPiece);
-                getGame().currentMove.setNoAnimation();
+                getComponent().currentMove = new MoveAction(getComponent(), move, getPiece(), newPiece);
+                getComponent().currentMove.setNoAnimation();
                 
-                if(getGame().multiplayer)
+                if(getComponent().multiplayer)
                 {
-                    getGame().currentMove.broadcast();
+                    getComponent().currentMove.broadcast();
                 }
                 
-                getGame().currentDrag = null;
-                getGame().select(null);
+                getComponent().currentDrag = null;
+                getComponent().select(null);
             }
         }
         else if(hoverPanel != null && hoverPanel == startPiece)
         {
-            getGame().select(startPiece.getSquare());
-            getGame().currentDrag = null;
+            getComponent().select(startPiece.getSquare());
+            getComponent().currentDrag = null;
         }
         else {
-            getGame().possibleMoves.clear();
-            getGame().currentDrag = null;
-            getGame().repaint();
+            getComponent().possibleMoves.clear();
+            getComponent().currentDrag = null;
+            getComponent().repaint();
         }
         
-        getGame().panel.updateText();
+        getComponent().panel.updateText();
     }
     
     public ChessSquarePanel getSquarePanel()
@@ -95,9 +97,9 @@ public class DragAction
         return startPiece;
     }
     
-    private ChessComponent getGame()
+    private ChessComponent getComponent()
     {
-        return startPiece.getGame();
+        return startPiece.getComponent();
     }
     
     private ChessPiece getPiece()
@@ -107,16 +109,16 @@ public class DragAction
     
     private int getScale()
     {
-        return (int)(96*(double)getGame().getWidth()/768D);
+        return (int)(96*(double)getComponent().getWidth()/768D);
     }
     
     private double getX()
     {
-        return mousePoint.x - getGame().getLocationOnScreen().getX() - getScale()/2;
+        return mousePoint.x - getComponent().getLocationOnScreen().getX() - getScale()/2;
     }
     
     private double getY()
     {
-        return mousePoint.y - getGame().getLocationOnScreen().getY() - getScale()/2;
+        return mousePoint.y - getComponent().getLocationOnScreen().getY() - getScale()/2;
     }
 }
