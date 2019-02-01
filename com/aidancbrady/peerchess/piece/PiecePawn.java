@@ -100,7 +100,7 @@ public class PiecePawn implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos, boolean pruneBlocked)
 	{
 		Set<ChessPos> possibleMoves = new HashSet<ChessPos>();
 		
@@ -116,7 +116,7 @@ public class PiecePawn implements Piece
 		    {
 		        possibleMoves.add(left);
 		    }
-		    else if(left.getSquare(game.getGrid()).getPiece() == null) //en passant
+		    else if(!pruneBlocked || left.getSquare(game.getGrid()).getPiece() == null) //en passant
 		    {
 		        ChessPos lower = left.translate(0, side == Side.BLACK ? -1 : 1);
 		        ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
@@ -142,7 +142,7 @@ public class PiecePawn implements Piece
 		    {
 		        possibleMoves.add(right);
 		    }
-		    else if(right.getSquare(game.getGrid()).getPiece() == null) //en passant
+		    else if(!pruneBlocked || right.getSquare(game.getGrid()).getPiece() == null) //en passant
 		    {
 		        ChessPos lower = right.translate(0, side == Side.BLACK ? -1 : 1);
                 ChessPiece lowerPiece = lower.getSquare(game.getGrid()).getPiece();
@@ -167,7 +167,7 @@ public class PiecePawn implements Piece
 			int forwardY = side == Side.BLACK ? 3 : 4;
 			int beforeY = side == Side.BLACK ? 2 : 5;
 			
-			if(game.getGrid()[origPos.getX()][forwardY].getPiece() == null && game.getGrid()[origPos.getX()][beforeY].getPiece() == null)
+			if(!pruneBlocked || (game.getGrid()[origPos.getX()][forwardY].getPiece() == null && game.getGrid()[origPos.getX()][beforeY].getPiece() == null))
 			{
 				possibleMoves.add(new ChessPos(origPos.getX(), forwardY));
 			}
@@ -175,7 +175,7 @@ public class PiecePawn implements Piece
 		
 		int forwardY = side == Side.BLACK ? origPos.getY()+1 : origPos.getY()-1;
 		
-		if(forwardY >= 0 && forwardY <= 7 && game.getGrid()[origPos.getX()][forwardY].getPiece() == null)
+		if(forwardY >= 0 && forwardY <= 7 && (!pruneBlocked || game.getGrid()[origPos.getX()][forwardY].getPiece() == null))
 		{
 			possibleMoves.add(new ChessPos(origPos.getX(), forwardY));
 		}

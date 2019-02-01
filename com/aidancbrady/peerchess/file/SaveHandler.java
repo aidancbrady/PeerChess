@@ -143,6 +143,8 @@ public final class SaveHandler
 		}
 		
 		PeerUtils.applyBoard(loadChessBoard(reader.readLine()), chess.getGame().getGrid());
+		
+		chess.getGame().getCache().updateAll();
 	}
 	
 	public static String saveChessBoard(ChessSquare[][] grid)

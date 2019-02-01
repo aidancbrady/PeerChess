@@ -33,7 +33,7 @@ public class PieceKnight implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos, boolean pruneBlocked)
 	{
 		Set<ChessPos> possibleMoves = PeerUtils.getValidKnightMoves(origPos);
 		
@@ -41,7 +41,7 @@ public class PieceKnight implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				iter.remove();
 			}

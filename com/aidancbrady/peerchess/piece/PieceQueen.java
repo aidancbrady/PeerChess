@@ -26,7 +26,7 @@ public class PieceQueen implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos, boolean pruneBlocked)
 	{
 		Set<ChessPos> ret = new HashSet<ChessPos>();
 		
@@ -39,7 +39,7 @@ public class PieceQueen implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+				if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -62,7 +62,7 @@ public class PieceQueen implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+				if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -85,7 +85,7 @@ public class PieceQueen implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+				if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -108,7 +108,7 @@ public class PieceQueen implements Piece
 			{
 				ChessPiece piece = game.getGrid()[x][y].getPiece();
 				
-				if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+				if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 				{
 					break;
 				}
@@ -132,7 +132,7 @@ public class PieceQueen implements Piece
 			
 			ChessPiece piece = game.getGrid()[x][y].getPiece();
 			
-			if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				break;
 			}
@@ -155,7 +155,7 @@ public class PieceQueen implements Piece
 			
 			ChessPiece piece = game.getGrid()[x][y].getPiece();
 			
-			if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				break;
 			}
@@ -178,7 +178,7 @@ public class PieceQueen implements Piece
 			
 			ChessPiece piece = game.getGrid()[x][y].getPiece();
 			
-			if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				break;
 			}
@@ -201,7 +201,7 @@ public class PieceQueen implements Piece
 			
 			ChessPiece piece = game.getGrid()[x][y].getPiece();
 			
-			if(piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && piece != null && piece.getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				break;
 			}

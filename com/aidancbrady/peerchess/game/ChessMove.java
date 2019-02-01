@@ -14,14 +14,13 @@ public class ChessMove
 	public ChessPos toPosCastle;
 	
 	public ChessPos enPassantTakePos;
+	public ChessPiece enPassantTake;
 	
 	public ChessPiece testFromPiece;
 	public ChessPiece testToPiece;
 	
 	public ChessPiece testFromCastle;
 	public ChessPiece testToCastle;
-	
-	public ChessPiece enPassantTake;
 	
 	public ChessSquare[][] boardPreMove;
 	
@@ -232,27 +231,29 @@ public class ChessMove
 		return true;
 	}
 	
-	public void testApplyMove(ChessSquare[][] grid)
+	public void testApplyMove(IChessGame game)
 	{
-	    testFromPiece = getFromSquare(grid).getPiece();
-	    testToPiece = getToSquare(grid).getPiece();
+	    testFromPiece = getFromSquare(game.getGrid()).getPiece();
+	    testToPiece = getToSquare(game.getGrid()).getPiece();
 	    
-	    getToSquare(grid).setPiece(getFromSquare(grid).getPiece());
-        getFromSquare(grid).setPiece(null);
+	    getToSquare(game.getGrid()).setPiece(getFromSquare(game.getGrid()).getPiece());
+        getFromSquare(game.getGrid()).setPiece(null);
         
         if(fromPosCastle != null)
         {
-            testFromCastle = fromPosCastle.getSquare(grid).getPiece();
-            testToCastle = toPosCastle.getSquare(grid).getPiece();
+            testFromCastle = fromPosCastle.getSquare(game.getGrid()).getPiece();
+            testToCastle = toPosCastle.getSquare(game.getGrid()).getPiece();
             
-            toPosCastle.getSquare(grid).setPiece(fromPosCastle.getSquare(grid).getPiece());
-            fromPosCastle.getSquare(grid).setPiece(null);
+            toPosCastle.getSquare(game.getGrid()).setPiece(fromPosCastle.getSquare(game.getGrid()).getPiece());
+            fromPosCastle.getSquare(game.getGrid()).setPiece(null);
         }
         
         if(enPassantTakePos != null)
         {
-            enPassantTake = enPassantTakePos.getSquare(grid).getPiece();
+            enPassantTake = enPassantTakePos.getSquare(game.getGrid()).getPiece();
         }
+        
+        game.getCache().applyMove(this);
 	}
 	
 	public boolean testTakingKing()
@@ -260,23 +261,25 @@ public class ChessMove
 	    return testToPiece != null && testToPiece.getType() == PieceType.KING;
 	}
 	
-	public void testRevertMove(ChessSquare[][] grid)
+	public void testRevertMove(IChessGame game)
 	{
-	    getFromSquare(grid).setPiece(testFromPiece);
-	    getToSquare(grid).setPiece(testToPiece);
+	    getFromSquare(game.getGrid()).setPiece(testFromPiece);
+	    getToSquare(game.getGrid()).setPiece(testToPiece);
 	    
 	    if(fromPosCastle != null)
 	    {
-	        fromPosCastle.getSquare(grid).setPiece(testFromCastle);
-	        toPosCastle.getSquare(grid).setPiece(testToCastle);
+	        fromPosCastle.getSquare(game.getGrid()).setPiece(testFromCastle);
+	        toPosCastle.getSquare(game.getGrid()).setPiece(testToCastle);
 	    }
 	    
 	    if(enPassantTakePos != null)
 	    {
-	        enPassantTakePos.getSquare(grid).setPiece(enPassantTake);
+	        enPassantTakePos.getSquare(game.getGrid()).setPiece(enPassantTake);
 	    }
 	    
 	    testFromPiece = testToPiece = testFromCastle = testToCastle = enPassantTake = null;
+	    
+	    game.getCache().revertMove(this);
 	}
 	
 	public boolean doRevertMove(IChessGame game)
@@ -284,6 +287,7 @@ public class ChessMove
 	    if(boardPreMove != null)
 	    {
 	        PeerUtils.applyBoard(boardPreMove, game.getGrid());
+	        game.getCache().revertMove(this);
 	        return true;
 	    }
 	    

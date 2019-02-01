@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.aidancbrady.peerchess.IChessGame;
 import com.aidancbrady.peerchess.PeerUtils;
+import com.aidancbrady.peerchess.game.BoardCache;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -20,12 +21,14 @@ public class TestBoard implements IChessGame
     private double currentEvaluation;
     private List<ChessMove> moves;
     private boolean checkmate;
+    private BoardCache boardCache;
     
     public TestBoard(ChessComponent game)
     {
         grid = PeerUtils.deepCopyBoard(game.getGame().getGrid());
         moves = new ArrayList<ChessMove>(game.getGame().getMoves());
         currentEvaluation = evaluateBoard();
+        boardCache = game.getGame().getCache().copy(this);
     }
     
     public double getEvaluation()
@@ -62,7 +65,7 @@ public class TestBoard implements IChessGame
                     ChessPiece piece = grid[x][y].getPiece();
                     ChessPos origPos = new ChessPos(x, y);
                     
-                    for(ChessPos pos : piece.getType().getPiece().getCurrentPossibleMoves(this, origPos))
+                    for(ChessPos pos : piece.getType().getPiece().getCurrentPossibleMoves(this, origPos, true))
                     {
                         ChessMove move = new ChessMove(origPos, pos);
                         
@@ -101,7 +104,7 @@ public class TestBoard implements IChessGame
             beforeScore += getSquareValue(move.fromPosCastle) + getSquareValue(move.toPosCastle);
         }
         
-        move.testApplyMove(grid);
+        move.testApplyMove(this);
         
         if(move.getToSquare(grid).getPiece().getType() == PieceType.PAWN)
         {
@@ -156,7 +159,7 @@ public class TestBoard implements IChessGame
     public void revertMove(ChessMove move, double delta)
     {
         checkmate = false;
-        move.testRevertMove(grid);
+        move.testRevertMove(this);
         moves.remove(moves.size()-1);
         currentEvaluation -= delta;
     }
@@ -171,5 +174,11 @@ public class TestBoard implements IChessGame
     public List<ChessMove> getPastMoves()
     {
         return moves;
+    }
+    
+    @Override
+    public BoardCache getCache()
+    {
+        return boardCache;
     }
 }

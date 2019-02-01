@@ -11,7 +11,7 @@ public interface Piece
 {
 	public boolean validateMove(IChessGame game, ChessMove move);
 	
-	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos);
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos, boolean pruneBlocked);
 	
 	public int getPointValue();
 	

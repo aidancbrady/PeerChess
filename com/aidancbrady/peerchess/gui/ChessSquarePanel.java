@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 
@@ -44,7 +44,7 @@ public class ChessSquarePanel extends JComponent implements MouseListener
             {
                 if(!component.isDragging() && component.getGame().getTurn() == component.getGame().getSide()) 
                 {
-                    List<ChessPos> possibleMoves = component.getGame().getValidatedMoves(square);
+                    Set<ChessPos> possibleMoves = component.getGame().getValidatedMoves(square);
                     
                     if(square.getPiece() != null && square.getPiece().getSide() == component.getGame().getSide() && !possibleMoves.isEmpty())
                     {

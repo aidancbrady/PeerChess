@@ -80,7 +80,7 @@ public class PieceKing implements Piece
 	}
 	
 	@Override
-	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos)
+	public Set<ChessPos> getCurrentPossibleMoves(IChessGame game, ChessPos origPos, boolean pruneBlocked)
 	{
 		Set<ChessPos> possibleMoves = PeerUtils.getValidStepMoves(origPos);
 		
@@ -88,7 +88,7 @@ public class PieceKing implements Piece
 		{
 			ChessPos pos = iter.next();
 			
-			if(pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
+			if(pruneBlocked && pos.getSquare(game.getGrid()).getPiece() != null && pos.getSquare(game.getGrid()).getPiece().getSide() == origPos.getSquare(game.getGrid()).getPiece().getSide())
 			{
 				iter.remove();
 			}
@@ -102,8 +102,8 @@ public class PieceKing implements Piece
 		    
 		    if(test != null && test.getMoves() == 0)
 		    {
-		        if(game.getGrid()[1][origPos.getY()].getPiece() == null && game.getGrid()[2][origPos.getY()].getPiece() == null &&
-		                game.getGrid()[3][origPos.getY()].getPiece() == null)
+		        if(!pruneBlocked || (game.getGrid()[1][origPos.getY()].getPiece() == null && game.getGrid()[2][origPos.getY()].getPiece() == null &&
+		                game.getGrid()[3][origPos.getY()].getPiece() == null))
 		        {
 		            possibleMoves.add(new ChessPos(2, origPos.getY()));
 		        }
@@ -113,7 +113,7 @@ public class PieceKing implements Piece
 		    
 		    if(test != null && test.getMoves() == 0)
 		    {
-		        if(game.getGrid()[6][origPos.getY()].getPiece() == null && game.getGrid()[5][origPos.getY()].getPiece() == null)
+		        if(!pruneBlocked || (game.getGrid()[6][origPos.getY()].getPiece() == null && game.getGrid()[5][origPos.getY()].getPiece() == null))
 		        {
 		            possibleMoves.add(new ChessPos(6, origPos.getY()));
 		        }

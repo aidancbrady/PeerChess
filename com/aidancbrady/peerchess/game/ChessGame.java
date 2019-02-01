@@ -20,6 +20,8 @@ public class ChessGame implements IChessGame
     private List<ChessMove> moves = new ArrayList<ChessMove>();
     private ChessAI chessAI;
     
+    private BoardCache boardCache = new BoardCache(this);
+    
     private ChessSquare[][] grid = PeerUtils.createEmptyBoard();
     
     private ChessComponent component;
@@ -80,6 +82,11 @@ public class ChessGame implements IChessGame
         return chessAI;
     }
     
+    public BoardCache getCache()
+    {
+        return boardCache;
+    }
+    
     public void resetMain(Side s, int y)
     {
         grid[0][y].setPiece(new ChessPiece(PieceType.CASTLE, s));
@@ -128,8 +135,8 @@ public class ChessGame implements IChessGame
         sideInCheck = null;
         
         moves.clear();
-        
         chessAI.reset();
+        boardCache.reset();
     }
     
     public void doRevertMove()

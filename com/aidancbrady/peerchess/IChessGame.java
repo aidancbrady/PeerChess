@@ -1,9 +1,10 @@
 package com.aidancbrady.peerchess;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.aidancbrady.peerchess.game.BoardCache;
 import com.aidancbrady.peerchess.game.ChessMove;
 import com.aidancbrady.peerchess.game.ChessPiece;
 import com.aidancbrady.peerchess.game.ChessPiece.PieceType;
@@ -18,6 +19,8 @@ public interface IChessGame
     
     public List<ChessMove> getPastMoves();
     
+    public BoardCache getCache();
+    
     public default boolean isCheckMate(Side side, boolean requiresCheck)
     {
         ChessPos pos = findKing(side);
@@ -31,7 +34,7 @@ public interface IChessGame
                 {
                     ChessPiece piece = getGrid()[x][y].getPiece();
                     
-                    for(ChessPos newPos : piece.getType().getPiece().getCurrentPossibleMoves(this, new ChessPos(x, y)))
+                    for(ChessPos newPos : piece.getType().getPiece().getCurrentPossibleMoves(this, new ChessPos(x, y), true))
                     {
                         ChessMove move = new ChessMove(new ChessPos(x, y), newPos);
                         ChessPos kingPos = piece.getType() == PieceType.KING ? newPos : pos;
@@ -50,9 +53,9 @@ public interface IChessGame
     
     public default boolean testCheck(Side side, ChessPos pos, ChessMove move)
     {
-        move.testApplyMove(getGrid());
+        move.testApplyMove(this);
         boolean inCheck = isInCheck(side, pos);
-        move.testRevertMove(getGrid());
+        move.testRevertMove(this);
         return inCheck;
     }
     
@@ -322,15 +325,15 @@ public interface IChessGame
         return null;
     }
     
-    public default List<ChessPos> getValidatedMoves(ChessSquare square)
+    public default Set<ChessPos> getValidatedMoves(ChessSquare square)
     {
-        List<ChessPos> ret = new ArrayList<>();
+        Set<ChessPos> ret = new HashSet<>();
         
         if(square.getPiece() == null) return ret;
         
         Piece piece = square.getPiece().getType().getPiece();
         
-        for(ChessPos pos : piece.getCurrentPossibleMoves(this, square.getPos()))
+        for(ChessPos pos : piece.getCurrentPossibleMoves(this, square.getPos(), true))
         {
             ChessMove move = new ChessMove(square.getPos(), pos);
             

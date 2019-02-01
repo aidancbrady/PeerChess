@@ -126,6 +126,8 @@ public class MoveAction
 		    move.enPassantTakePos.getSquare(component.getGame().getGrid()).setPiece(null);
 		}
 		
+		component.getGame().getCache().applyMove(move);
+		
 		component.repaint();
 		
 		Assets.moveSound.stop();
